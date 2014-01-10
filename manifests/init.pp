@@ -29,12 +29,6 @@ class certs (
   $user_groups = $certs::params::user_groups,
 
   $pki_dir = $certs::params::pki_dir,
-  $keystore = $certs::params::keystore,
-  $keystore_password_file = $certs::params::keystore_password_file,
-  $keystore_password = $certs::params::keystore_password,
-
-  $candlepin_certs_dir = $certs::params::candlepin_certs_dir,
-  $candlepin_ca_password_file = $certs::params::candlepin_ca_password_file,
   $ssl_ca_password_file = $certs::params::ssl_ca_password_file,
 
   $nss_db_password_file = $certs::params::nss_db_password_file,

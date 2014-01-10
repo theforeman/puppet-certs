@@ -1,6 +1,5 @@
 # Certs Configuration for Pulp
 class certs::config::pulp {
-  include certs::config
   include pulp::service
   include qpid::service
 
