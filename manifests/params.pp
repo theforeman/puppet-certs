@@ -10,7 +10,15 @@ class certs::params {
 
   $log_dir = '/var/log/certs'
 
+  $node_fqdn = $::fqdn
+
   $ca_common_name = $::fqdn  # we need fqdn as CA common name as candlepin uses it as a ssl cert
+
+  $generate      = true
+  $regenerate    = false
+  $regenerate_ca = false
+  $deploy        = true
+
   $country = 'US'
   $state   = 'North Carolina'
   $city    = 'Raleigh'
