@@ -73,7 +73,7 @@ class certs (
   $ssl_ca_password_file   = $certs::params::ssl_ca_password_file
   $nss_db_password_file   = $certs::params::nss_db_password_file
   $ssl_pk12_password_file = $certs::params::ssl_pk12_password_file
-
+  $nss_db_dir             = '/etc/pki/katello/nssdb'
 
   class { 'certs::install': }
 

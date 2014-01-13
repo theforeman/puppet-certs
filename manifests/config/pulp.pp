@@ -3,12 +3,6 @@ class certs::config::pulp {
   include pulp::service
   include qpid::service
 
-  $qpid_cert_name = 'qpid-broker'
-  $qpid_client_cert_name = 'qpid-client'
-  $qpid_package = "katello-${qpid_cert_name}-key-pair"
-
-  $nss_db_dir = "${certs::pki_dir}/nssdb/"
-
   exec { 'generate-ssl-qpid-broker-certificate':
     cwd     => '/root',
     path    => '/usr/bin:/bin',
@@ -22,12 +16,6 @@ class certs::config::pulp {
     command => "rpm -qp /root/ssl-build/${::fqdn}/$(grep noarch.rpm /root/ssl-build/${::fqdn}/latest.txt) | xargs rpm -q; if [ $? -ne 0 ]; then rpm -Uvh --force /root/ssl-build/${::fqdn}/$(grep ${qpid_cert_name}.*noarch.rpm /root/ssl-build/${::fqdn}/latest.txt); fi",
     creates => "/etc/pki/tls/certs/${qpid_cert_name}.crt",
     require => Exec['generate-ssl-qpid-broker-certificate'],
-  }
-
-  exec { 'generate-nss-password':
-    command => "openssl rand -base64 24 > ${certs::nss_db_password_file}",
-    path    => '/usr/bin',
-    creates => $certs::nss_db_password_file
   }
 
   file { $certs::nss_db_password_file:
@@ -83,38 +71,6 @@ class certs::config::pulp {
       Exec['add-private-key-to-nss-db'],
       Service['qpidd'],
     ];
-  }
-
-  exec { 'add-candlepin-cert-to-nss-db':
-    command     => "certutil -A -d '${nss_db_dir}' -n 'ca' -t 'TCu,Cu,Tuw' -a -i '${candlepin_pub_cert}' 2>>${certs::log_dir}/certificates.log",
-    path        => '/usr/bin',
-    require     => [Exec['create-nss-db'], Exec['deploy-candlepin-certificate-to-cp'], File[$certs::log_dir]],
-    before      => Class['qpid::service'],
-    refreshonly => true,
-  }
-
-  exec { 'add-broker-cert-to-nss-db':
-    command     => "certutil -A -d '${nss_db_dir}' -n 'broker' -t ',,' -a -i '${ssl_build_path}/${::fqdn}/${qpid_cert_name}.crt' 2>>${certs::log_dir}/certificates.log",
-    path        => '/usr/bin',
-    require     => [Exec['create-nss-db'], Exec['deploy-candlepin-certificate-to-cp'], File[$certs::log_dir]],
-    before      => Class['qpid::service'],
-    refreshonly => true,
-  }
-
-  exec { 'generate-pfx-for-nss-db':
-    command     => "openssl pkcs12 -in ${ssl_build_path}/${::fqdn}/${qpid_cert_name}.crt -inkey ${ssl_build_path}/${::fqdn}/${qpid_cert_name}.key -export -out '${ssl_build_path}/${::fqdn}/${qpid_cert_name}.pfx' -password 'file:${certs::ssl_pk12_password_file}' 2>>${certs::log_dir}/certificates.log",
-    path        => '/usr/bin',
-    require     => [Exec['create-nss-db'], File[$certs::ssl_pk12_password_file], File[$certs::log_dir]],
-    before      => Class['qpid::service'],
-    refreshonly => true,
-  }
-
-  exec { 'add-private-key-to-nss-db':
-    command     => "pk12util -i '${ssl_build_path}/${::fqdn}/${qpid_cert_name}.pfx' -d '${nss_db_dir}' -w '${certs::ssl_pk12_password_file}' -k '${certs::nss_db_password_file}' 2>>${certs::log_dir}/certificates.log",
-    path        => '/usr/bin',
-    require     => [Exec['add-broker-cert-to-nss-db'], Exec['generate-pfx-for-nss-db'], File[$certs::log_dir]],
-    before      => Class['qpid::service'],
-    refreshonly => true,
   }
 
   # qpid client certificates
