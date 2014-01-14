@@ -27,15 +27,13 @@ class certs::qpid (
 
     if $deploy {
 
-      # TODO: for some reason still not working: postponing to not block other
-      # activities
-      $nss_db_password_file = '/etc/katello/nss_db_password-file'
+      $nss_db_password_file   = $certs::params::nss_db_password_file
       $ssl_pk12_password_file = $certs::params::ssl_pk12_password_file
-      $qpid_cert_name = 'qpid-broker'
-      $client_cert = "/etc/pki/katello/${qpid_cert_name}.crt"
-      $client_key = "/etc/pki/katello/${qpid_cert_name}.key"
-      $pfx_path = "/etc/pki/katello/${qpid_cert_name}.pfx"
-      $nssdb_files = ["${::certs::nss_db_dir}/cert8.db", "${::certs::nss_db_dir}/key3.db", "${::certs::nss_db_dir}/secmod.db"]
+      $qpid_cert_name         = 'qpid-broker'
+      $client_cert            = "/etc/pki/katello/${qpid_cert_name}.crt"
+      $client_key             = "/etc/pki/katello/${qpid_cert_name}.key"
+      $pfx_path               = "/etc/pki/katello/${qpid_cert_name}.pfx"
+      $nssdb_files            = ["${::certs::nss_db_dir}/cert8.db", "${::certs::nss_db_dir}/key3.db", "${::certs::nss_db_dir}/secmod.db"]
 
       pubkey { $client_cert:
         cert => Cert["${::certs::qpid::hostname}-qpid-broker"]
