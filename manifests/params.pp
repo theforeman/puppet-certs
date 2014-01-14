@@ -43,4 +43,20 @@ class certs::params {
   $candlepin_certs_dir = '/etc/candlepin/certs'
 
   $user_groups = 'foreman'
+
+  $foreman_client_cert = '/etc/foreman/client_cert.pem'
+  $foreman_client_key = '/etc/foreman/client_key.pem'
+  $foreman_client_ca = '/etc/foreman/client_ca.pem'
+
+  $foreman_proxy_cert = '/etc/foreman-proxy/ssl_cert.pem'
+  $foreman_proxy_key = '/etc/foreman-proxy/ssl_key.pem'
+  $foreman_proxy_ca = '/etc/foreman-proxy/ssl_ca.pem'
+
+  $puppet_client_cert = '/etc/puppet/client_cert.pem'
+  $puppet_client_key = '/etc/puppet/client_key.pem'
+  $puppet_client_ca = '/etc/puppet/client_ca.pem'
+
+  $apache_ssl_cert = '/etc/pki/tls/certs/katello-node.crt'
+  $apache_ssl_key  = '/etc/pki/tls/private/katello-node.key'
+  $apache_ca_cert = '/etc/pki/tls/certs/katello-ca.crt'
 }
