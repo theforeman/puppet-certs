@@ -34,7 +34,7 @@ module Puppet::Provider::KatelloSslTool
     def self.pubkey(name)
       # TODO: just temporarily until we have this changes in katello installer as well
       if name == 'candlepin-ca'
-        '/usr/share/katello/candlepin-cert.crt'
+        '/usr/share/katello/candlepin-ca.crt'
       else
         target_path("certs/#{name}.crt")
       end

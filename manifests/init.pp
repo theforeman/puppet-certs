@@ -61,7 +61,7 @@ class certs (
   $ca_common_name = $certs::params::ca_common_name,
   $country        = $certs::params::country,
   $state          = $certs::params::state,
-  $city           = $certs::params::sity,
+  $city           = $certs::params::city,
   $org            = $certs::params::org,
   $org_unit       = $certs::params::org_unit,
 
