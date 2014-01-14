@@ -36,7 +36,7 @@ class certs::puppet (
 
     file { $client_key:
       owner => "puppet",
-      mode => "0400"
+      mode  => "0400",
     }
 
     pubkey { $client_ca:

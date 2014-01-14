@@ -8,7 +8,7 @@ class certs::qpid (
 
   Exec { logoutput => 'on_failure' }
 
-  if $qpid::ssl {
+  if $::qpid::ssl {
 
     cert { "${::certs::qpid::hostname}-qpid-broker":
       ensure      => present,

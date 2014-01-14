@@ -21,7 +21,7 @@ class certs::foreman (
     expiration  => $::certs::expiration,
     ca          => $ca,
     generate    => $generate,
-    regenerate    => $regenerate,
+    regenerate  => $regenerate,
     deploy      => $deploy,
   }
 
@@ -36,7 +36,7 @@ class certs::foreman (
 
     file { $client_key:
       owner => "foreman",
-      mode => "0400"
+      mode  => "0400"
     }
 
     pubkey { $client_ca:
