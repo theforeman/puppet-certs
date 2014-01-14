@@ -55,6 +55,6 @@ class certs::apache (
       group   => 'root',
       require => [Pubkey[$apache_ssl_cert], Privkey[$apache_ssl_key]],
       notify  => Exec['reload-apache'],
-    }
+    } -> Service['httpd']
   }
 }
