@@ -18,26 +18,22 @@ class certs::candlepin (
   Exec { logoutput => 'on_failure' }
 
   if $deploy {
+
+    File[$certs::pki_dir] ~>
     file { $keystore_password_file:
       ensure  => file,
       content => $keystore_password,
-      mode    => '0644',
+      mode    => '0600',
       owner   => 'tomcat',
-      group   => $::certs::user_groups,
+      group   => $::certs::group,
       replace => false;
-    } ~>
-    file { $pki_dir:
-      ensure => directory,
-      owner  => 'root',
-      group  => $::certs::user_groups,
-      mode   => '0750',
     } ~>
     pubkey { $ca_cert:
       cert => $ca,
     } ~>
     file { $ca_cert:
       owner   => 'root',
-      group   => $::certs::user_groups,
+      group   => $::certs::group,
       mode    => '0644';
     } ~>
     privkey { $ca_key:
@@ -46,7 +42,7 @@ class certs::candlepin (
     } ~>
     file { $ca_key:
       owner   => 'root',
-      group   => $::certs::user_groups,
+      group   => $::certs::group,
       mode    => '0640';
     } ~>
     exec { 'generate-ssl-keystore':

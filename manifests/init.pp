@@ -50,6 +50,14 @@
 # $ca_expiration::        Ca expiration attribute for managed certificates
 #                         type: string
 #
+# $custom_repo::          If set to true, no repo will be added allowing custom installation
+#                         type: boolean
+#
+# $user::               The Katello system user name;
+#                       default 'katello'
+#
+# $group::              The Katello system user group;
+#                       default 'katello'
 class certs (
 
   $log_dir        = $certs::params::log_dir,
@@ -66,16 +74,25 @@ class certs (
   $org_unit       = $certs::params::org_unit,
 
   $expiration     = $certs::params::expiration,
-  $ca_expiration  = $certs::params::ca_expiration
+  $ca_expiration  = $certs::params::ca_expiration,
+
+  $pki_dir = $::certs::params::candlepin_pki_dir,
+
+  $candlepin_keystore_password_file = $certs::params::candlepin_keystore_password_file,
+  $candlepin_keystore_password = $certs::params::candlepin_keystore_password,
+
+  $custom_repo = $certs::params::custom_repo,
+
+  $user   = $certs::params::user,
+  $group  = $certs::params::group
+
   ) inherits certs::params {
 
-  $user_groups            = $certs::params::user_groups
-  $nss_db_dir             = $certs::params::nss_db_dir
+  $nss_db_dir   = $certs::params::nss_db_dir
+  $default_ca   = Ca['candlepin-ca']
 
-  class { 'certs::install': }
-
-  $default_ca = Ca['candlepin-ca']
-
+  class { 'certs::install': } ->
+  class { 'certs::config': } ->
   ca { 'candlepin-ca':
     ensure      => present,
     common_name => $certs::ca_common_name,
