@@ -1,9 +1,12 @@
+# Handles Qpid cert configuration
 class certs::qpid (
+
   $hostname = $::certs::node_fqdn,
   $generate = $::certs::generate,
   $regenerate = $::certs::regenerate,
   $deploy   = $::certs::deploy,
   $ca       = $::certs::default_ca
+
   ){
 
   Exec { logoutput => 'on_failure' }
@@ -35,6 +38,7 @@ class certs::qpid (
       $pfx_path               = "/etc/pki/katello/${qpid_cert_name}.pfx"
       $nssdb_files            = ["${::certs::nss_db_dir}/cert8.db", "${::certs::nss_db_dir}/key3.db", "${::certs::nss_db_dir}/secmod.db"]
 
+      File[$certs::pki_dir] ~>
       pubkey { $client_cert:
         cert => Cert["${::certs::qpid::hostname}-qpid-broker"]
       } ~>
@@ -43,7 +47,7 @@ class certs::qpid (
       } ~>
       file { $client_key:
         owner   => 'root',
-        group   => $::certs::user_groups,
+        group   => $::certs::group,
         mode    => '0400',
       } ~>
       exec { 'generate-nss-password':
@@ -53,7 +57,7 @@ class certs::qpid (
       } ->
       file { $nss_db_password_file:
         owner   => 'root',
-        group   => $::certs::user_groups,
+        group   => $::certs::group,
         mode    => '0640',
       } ~>
       exec { 'generate-pk12-password':
@@ -70,7 +74,7 @@ class certs::qpid (
       file { $::certs::nss_db_dir:
         ensure => directory,
         owner  => 'root',
-        group  => $certs::user_groups,
+        group  => $certs::group,
         mode   => '0744',
       } ~>
       exec { 'create-nss-db':
@@ -80,7 +84,7 @@ class certs::qpid (
       } ~>
       file { $nssdb_files:
         owner   => 'root',
-        group   => $::certs::user_groups,
+        group   => $::certs::group,
         mode    => '0640',
       } ~>
       exec { 'add-broker-cert-to-nss-db':

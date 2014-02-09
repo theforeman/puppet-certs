@@ -1,3 +1,4 @@
+# Handles Apache cert configuration
 class certs::apache (
     $hostname        = $::certs::node_fqdn,
     $generate        = $::certs::generate,
