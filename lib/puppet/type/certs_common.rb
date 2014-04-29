@@ -51,7 +51,7 @@ module Certs
       end
     end
 
-    autorequire(:key_pair) do
+    autorequire(:cert) do
       if @parameters.has_key?(:key_pair)
         @parameters[:key_pair].value.to_hash[:name]
       end

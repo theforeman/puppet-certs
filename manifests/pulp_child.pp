@@ -9,12 +9,12 @@ class certs::pulp_child (
 
   if $deploy {
     pubkey { $pulp::consumers_ca_cert:
-      cert => $ca,
+      key_pair => $ca,
     } ~>
 
     pubkey { $pulp::ssl_ca_cert:
       # Defined in certs::apache module
-      cert => Cert["${::certs::pulp_child::hostname}-ssl"],
+      key_pair => Cert["${hostname}-apache"],
     }
   }
 }

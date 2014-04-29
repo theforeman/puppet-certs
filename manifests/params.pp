@@ -52,8 +52,6 @@ class certs::params {
   $puppet_client_key  = '/etc/puppet/client_key.pem'
   $puppet_client_ca_cert = '/etc/puppet/client_ca.pem'
 
-  $apache_cert_name = 'katello-apache'
-
   $candlepin_certs_storage          = '/etc/candlepin/certs'
   $candlepin_ca_cert                = '/etc/candlepin/certs/candlepin-ca.crt'
   $candlepin_ca_key                 = '/etc/candlepin/certs/candlepin-ca.key'
