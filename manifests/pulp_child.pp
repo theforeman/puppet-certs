@@ -13,6 +13,15 @@ class certs::pulp_child (
     } ~>
 
     pubkey { $pulp::ssl_ca_cert:
+      key_pair => $ca
+    }
+
+    pubkey { $pulp::child::ssl_cert:
+      # Defined in certs::apache module
+      key_pair => Cert["${hostname}-apache"],
+    }
+
+    privkey { $pulp::child::ssl_key:
       # Defined in certs::apache module
       key_pair => Cert["${hostname}-apache"],
     }
