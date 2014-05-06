@@ -7,7 +7,7 @@
 #
 # $capsule_fqdn::            fqdn of the capsule. REQUIRED
 #
-# $certs_tar::               path to tar file with certs to generate
+# $certs_tar::               path to tar file with certs to generate. REQUIRED
 #
 class certs::capsule (
   $parent_fqdn                  = $fqdn,
@@ -15,6 +15,9 @@ class certs::capsule (
   $certs_tar                    = $certs::params::certs_tar
   ) inherits certs::params {
 
+  # until we support again pushing the cert rpms to the Katello,
+  # make sure the certs_tar path is present
+  validate_present($certs_tar)
   validate_present($capsule_fqdn)
 
   class { 'certs::puppet':        hostname => $capsule_fqdn  }
