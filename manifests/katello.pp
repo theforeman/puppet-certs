@@ -29,5 +29,9 @@ class certs::katello ($hostname = $fqdn, $deployment_url = undef){
     ensure  => 'link',
     target  => "${katello_www_pub_dir}/${candlepin_consumer_name}-1.0-1.noarch.rpm",
   }
+  file { "${katello_www_pub_dir}/candlepin-cert-consumer-latest.noarch.rpm":
+    ensure  => 'link',
+    target  => "${katello_www_pub_dir}/${$certs::default_ca_name}-consumer-latest.noarch.rpm",
+  }
 
 }
