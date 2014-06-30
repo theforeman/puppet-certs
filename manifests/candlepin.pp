@@ -82,20 +82,23 @@ class certs::candlepin (
     } ~>
     file { $amqp_store_dir:
       ensure => directory,
+      owner  => 'tomcat',
+      group  => $::certs::group,
+      mode   => '0750',
     } ~>
-    exec { 'candlepin-create qpid exchange':
+    exec { 'create candlepin qpid exchange':
       command => "qpid-config --ssl-certificate ${client_cert} --ssl-key ${client_key} -b 'amqps://${::fqdn}:5671' add exchange topic event --durable",
       unless  => "qpid-config --ssl-certificate ${client_cert} --ssl-key ${client_key} -b 'amqps://${::fqdn}:5671' exchanges event",
     } ~>
-    exec { 'candlepin-import the CA certificate in to the trust store':
-      command  => "keytool -import -v -keystore ${amqp_truststore} -storepass:file ${password_file} -alias ${::default_ca_name} -file ${ca_cert} -noprompt",
+    exec { 'import CA into Candlepin truststore':
+      command  => "keytool -import -v -keystore ${amqp_truststore} -storepass:file ${password_file} -alias ${certs::default_ca_name} -file ${ca_cert} -noprompt",
       creates  => $amqp_truststore,
     } ~>
-    exec { 'candlepin-import the client cert, key, and CA certificate into the keystore (for client authentication)':
+    exec { 'import client certificate into Candlepin keystore':
       # Stupid keytool doesn't allow you to import a keypair.  You can only import a cert.  Hence, we have to
       # create the store as an PKCS12 and convert to JKS.  See http://stackoverflow.com/a/8224863
       command  => "openssl pkcs12 -export -name amqp-client -in ${client_cert} -inkey ${client_key} -out /tmp/keystore.p12 -passout file:${password_file} && keytool -importkeystore -destkeystore ${amqp_keystore} -srckeystore /tmp/keystore.p12 -srcstoretype pkcs12 -alias amqp-client -storepass:file ${password_file} -srcstorepass:file ${password_file} -noprompt && rm /tmp/keystore.p12",
-      unless   => "keytool -list -keystore ${amqp_keystore} -storepass:file ${password_file} -alias ${::default_ca_name}",
+      unless   => "keytool -list -keystore ${amqp_keystore} -storepass:file ${password_file} -alias ${certs::default_ca_name}",
     } ~>
     file { $amqp_keystore:
       ensure   => file,
