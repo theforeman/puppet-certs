@@ -74,4 +74,6 @@ class certs::params {
   # Pulp expects the node certificate to be located on this very location
   $nodes_cert_dir        = '/etc/pki/pulp/nodes'
   $nodes_cert_name       = 'node.crt'
+
+  $katello_entitlement_queue = 'katello-entitlements'
 }
