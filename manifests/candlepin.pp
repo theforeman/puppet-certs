@@ -78,8 +78,7 @@ class certs::candlepin (
       command     => "certutil -A -d '${::certs::nss_db_dir}' -n 'amqp-client' -t ',,' -a -i '${client_cert}'",
       refreshonly => true,
       subscribe   => Exec['create-nss-db'],
-      notify      => Service['qpidd'],
-    } ~>
+    } ->
     file { $amqp_store_dir:
       ensure => directory,
       owner  => 'tomcat',
