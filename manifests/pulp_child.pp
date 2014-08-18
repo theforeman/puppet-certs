@@ -32,6 +32,10 @@ class certs::pulp_child (
       key_pair => $::certs::default_ca
     }
 
+    pubkey { $pulp::child::server_ca_cert:
+      key_pair => $::certs::server_ca
+    }
+
     pubkey { $pulp::child::ssl_cert:
       # Defined in certs::apache module
       key_pair => Cert["${hostname}-apache"],

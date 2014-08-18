@@ -81,6 +81,8 @@ class certs::params {
   $katello_activation_key = undef
 
   $messaging_client_cert = "${pki_dir}/qpid_client_striped.crt"
+
+  $pulp_server_ca_cert   = '/etc/pki/pulp/server_ca.crt'
   # Pulp expects the node certificate to be located on this very location
   $nodes_cert_dir        = '/etc/pki/pulp/nodes'
   $nodes_cert_name       = 'node.crt'
