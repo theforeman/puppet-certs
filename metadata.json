@@ -18,7 +18,7 @@
     },
     {
        "name": "katello-common",
-       "version_requirement": ">= 0.1.0"
+       "version_requirement": ">= 0.0.1"
     }
   ]
 }
