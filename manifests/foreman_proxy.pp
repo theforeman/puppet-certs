@@ -15,6 +15,8 @@ class certs::foreman_proxy (
   ) inherits certs::params {
 
   $proxy_cert_name = "${::certs::foreman_proxy::hostname}-foreman-proxy"
+  $foreman_proxy_client_cert_name = "${::certs::foreman_proxy::hostname}-foreman-proxy-client"
+  $foreman_proxy_ssl_client_bundle = "${certs::pki_dir}/private/${foreman_proxy_client_cert_name}-bundle.pem"
 
   if $::certs::server_cert {
     cert { $proxy_cert_name:
@@ -45,8 +47,6 @@ class certs::foreman_proxy (
       password_file => $certs::ca_key_password_file,
     }
   }
-
-  $foreman_proxy_client_cert_name = "${::certs::foreman_proxy::hostname}-foreman-proxy-client"
 
   # cert for authentication of foreman_proxy against foreman
   cert { $foreman_proxy_client_cert_name:
@@ -97,6 +97,14 @@ class certs::foreman_proxy (
     } ->
     pubkey { $foreman_ssl_ca_cert:
       key_pair => $::certs::server_ca
+    } ~>
+    key_bundle { $foreman_proxy_ssl_client_bundle:
+      key_pair => Cert[$foreman_proxy_client_cert_name],
+    } ~>
+    file { $foreman_proxy_ssl_client_bundle:
+      ensure => file,
+      owner  => $::certs::group,
+      mode   => '0644'
     } ~>
     file { $foreman_ssl_key:
       ensure => file,

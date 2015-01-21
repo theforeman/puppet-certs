@@ -30,7 +30,7 @@ class certs::katello (
     owner  => 'root',
     group  => 'root',
     mode   => '0644',
-  } ->
+  } ~>
   # We need to deliver the server_ca for yum and rhsm to trust the server
   # and the default_ca for goferd to trust the qpid
   certs_bootstrap_rpm { $candlepin_consumer_name:
