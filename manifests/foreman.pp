@@ -5,15 +5,17 @@ class certs::foreman (
   $generate       = $::certs::generate,
   $regenerate     = $::certs::regenerate,
   $deploy         = $::certs::deploy,
+  $owner          = $::certs::params::foreman_owner,
   $client_cert    = $::certs::params::foreman_client_cert,
   $client_key     = $::certs::params::foreman_client_key,
-  $ssl_ca_cert    = $::certs::params::foreman_ssl_ca_cert
+  $ssl_ca_cert    = $::certs::params::foreman_ssl_ca_cert,
+  $configure_foreman = $::certs::params::foreman_configure_foreman,
 
   ) inherits certs::params {
 
   $client_cert_name = "${::certs::foreman::hostname}-foreman-client"
 
-  # cert for authentication of puppetmaster against foreman
+  # cert for authentication of puppetmaster and proxy against foreman
   cert { $client_cert_name:
     hostname      => $::certs::foreman::hostname,
     purpose       => client,
@@ -44,23 +46,24 @@ class certs::foreman (
     } ~>
     file { $client_key:
       ensure => file,
-      owner  => 'foreman',
+      owner  => $owner,
       mode   => '0400',
     }
 
-    $foreman_config_cmd = "${::foreman::app_root}/script/foreman-config\
-      -k ssl_ca_file -v '${ssl_ca_cert}'\
-      -k ssl_certificate -v '${client_cert}'\
-      -k ssl_priv_key -v '${client_key}'"
+    if $configure_foreman {
+      $foreman_config_cmd = "${::foreman::app_root}/script/foreman-config\
+        -k ssl_ca_file -v '${ssl_ca_cert}'\
+        -k ssl_certificate -v '${client_cert}'\
+        -k ssl_priv_key -v '${client_key}'"
 
-    exec { 'foreman_certs_config':
-      environment => ["HOME=${::foreman::app_root}"],
-      cwd         => $::foreman::app_root,
-      command     => $foreman_config_cmd,
-      unless      => "${foreman_config_cmd} --dry-run",
-      user        => $::foreman::user,
-      require     => Class['foreman::service']
+      exec { 'foreman_certs_config':
+        environment => ["HOME=${::foreman::app_root}"],
+        cwd         => $::foreman::app_root,
+        command     => $foreman_config_cmd,
+        unless      => "${foreman_config_cmd} --dry-run",
+        user        => $::foreman::user,
+        require     => Class['foreman::service']
+      }
     }
-
   }
 }
