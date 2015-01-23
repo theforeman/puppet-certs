@@ -51,9 +51,13 @@ class certs::params {
   $foreman_client_key     = '/etc/foreman/client_key.pem'
   # for verifying the foreman proxy https
   $foreman_ssl_ca_cert    = '/etc/foreman/proxy_ca.pem'
+  $foreman_configure_foreman = true
 
   $foreman_proxy_cert    = '/etc/foreman-proxy/ssl_cert.pem'
   $foreman_proxy_key     = '/etc/foreman-proxy/ssl_key.pem'
+  
+  $foreman_owner         = 'foreman'
+
   # for verifying the foreman client certs at the proxy side
   $foreman_proxy_ca_cert = '/etc/foreman-proxy/ssl_ca.pem'
 

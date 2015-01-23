@@ -1,15 +1,16 @@
 # Handles Foreman Proxy cert configuration
 class certs::foreman_proxy (
 
-  $hostname   = $::certs::node_fqdn,
-  $generate   = $::certs::generate,
-  $regenerate = $::certs::regenerate,
-  $deploy     = $::certs::deploy,
-  $proxy_cert = $::certs::params::foreman_proxy_cert,
-  $proxy_key  = $::certs::params::foreman_proxy_key,
-  $proxy_ca_cert = $::certs::params::foreman_proxy_ca_cert
-
-  ) inherits certs::params {
+  $hostname      = $::certs::node_fqdn,
+  $generate      = $::certs::generate,
+  $regenerate    = $::certs::regenerate,
+  $deploy        = $::certs::deploy,
+  $proxy_cert    = $::certs::params::foreman_proxy_cert,
+  $proxy_key     = $::certs::params::foreman_proxy_key,
+  $client_cert   = $::certs::params::foreman_proxy_client_cert,
+  $client_key    = $::certs::params::foreman_proxy_client_key,
+  $proxy_ca_cert = $::certs::params::foreman_proxy_ca_cert,
+) inherits certs::params {
 
   $proxy_cert_name = "${::certs::foreman_proxy::hostname}-foreman-proxy"
 
