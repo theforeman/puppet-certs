@@ -25,11 +25,12 @@ class certs::katello (
   } ->
   # Placing the CA in the pub dir for trusting by a user in their browser
   file { "${katello_www_pub_dir}/${certs::server_ca_name}.crt":
-    ensure => present,
-    source => "${certs::pki_dir}/certs/${certs::server_ca_name}.crt",
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
+    ensure  => file,
+    source  => "${certs::pki_dir}/certs/${certs::server_ca_name}.crt",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    require => File["${certs::pki_dir}/certs/${certs::server_ca_name}.crt"],
   } ~>
   # We need to deliver the server_ca for yum and rhsm to trust the server
   # and the default_ca for goferd to trust the qpid
