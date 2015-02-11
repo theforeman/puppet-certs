@@ -23,7 +23,7 @@ BASEURL=https://$KATELLO_SERVER/pulp/repos
 PREFIX=<%= @deployment_url %>
 CFG=/etc/rhsm/rhsm.conf
 CFG_BACKUP=$CFG.kat-backup
-
+CA_TRUST_ANCHORS=/etc/pki/ca-trust/source/anchors
 # Get version of RHSM
 RHSM_V="`rpm -q --queryformat='%{VERSION}' subscription-manager 2> /dev/null | tr . ' '`"
 if test $? != 0 ; then
@@ -61,6 +61,17 @@ if grep --quiet full_refresh_on_yum $CFG; then
 else
   full_refresh_config="#config for on-premise management\nfull_refresh_on_yum = 1"
   sed -i "s/baseurl.*/&\n\n$full_refresh_config/g" $CFG
+fi
+
+# also add the katello ca cert to the system wide ca cert store
+if [-d $CA_TRUST_ANCHORS]; then
+  update-ca-trust enable
+  cp %%(ca_cert_dir)skatello-server-ca.pem $CA_TRUST_ANCHORS
+  update-ca-trust
+
+  #restart if docker service is installed
+  service docker status >/dev/null && \
+    service docker restart >/dev/null 2&>1
 fi
 
 # restart goferd if it is installed and running
