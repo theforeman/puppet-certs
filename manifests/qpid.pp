@@ -14,6 +14,7 @@ class certs::qpid (
   cert { $qpid_cert_name:
     ensure        => present,
     hostname      => $::certs::qpid::hostname,
+    cname         => 'localhost',
     country       => $::certs::country,
     state         => $::certs::state,
     city          => $::certs::city,

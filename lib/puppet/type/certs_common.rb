@@ -16,6 +16,8 @@ module Certs
 
     newparam(:common_name)
 
+    newparam(:cname)
+
     newparam(:email)
 
     newparam(:country)
