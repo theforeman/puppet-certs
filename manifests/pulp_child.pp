@@ -24,7 +24,7 @@ class certs::pulp_child (
   }
 
   if $deploy {
-    pubkey { $pulp::consumers_ca_cert:
+    pubkey { $pulp::ca_cert:
       key_pair => $::certs::default_ca,
     } ~>
 
