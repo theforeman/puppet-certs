@@ -18,7 +18,7 @@ class certs::gutterball(
   $key = "${pki_dir}/gutterball.key"
   $cert = "${pki_dir}/gutterball.crt"
 
-  $gutterball_keystore_password = cache_data('gutterball_keystore_password', random_password(32))
+  $gutterball_keystore_password = cache_data('foreman_cache_data', 'gutterball_keystore_password', random_password(32))
 
   $keypair= 'gutterball-certs'
 
