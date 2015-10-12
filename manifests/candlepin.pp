@@ -39,7 +39,7 @@ class certs::candlepin (
     password_file => $certs::ca_key_password_file,
   }
 
-  $keystore_password = cache_data($keystore_password_file, random_password(32))
+  $keystore_password = cache_data('foreman_cache_data', $keystore_password_file, random_password(32))
   $password_file = "${certs::pki_dir}/keystore_password-file"
   $client_req = "${certs::pki_dir}/java-client.req"
   $client_cert = "${certs::pki_dir}/certs/${java_client_cert_name}.crt"
