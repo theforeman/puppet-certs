@@ -1,18 +1,19 @@
 # Constains certs specific configurations for candlepin
 class certs::candlepin (
 
-  $hostname               = $::certs::node_fqdn,
-  $generate               = $::certs::generate,
-  $regenerate             = $::certs::regenerate,
-  $deploy                 = $::certs::deploy,
-  $ca_cert                = $::certs::ca_cert_stripped,
-  $ca_key                 = $::certs::ca_key,
-  $pki_dir                = $::certs::params::pki_dir,
-  $keystore               = $::certs::params::candlepin_keystore,
-  $keystore_password_file = $::certs::params::keystore_password_file,
-  $amqp_truststore        = $::certs::params::candlepin_amqp_truststore,
-  $amqp_keystore          = $::certs::params::candlepin_amqp_keystore,
-  $amqp_store_dir         = $::certs::params::candlepin_amqp_store_dir,
+  $hostname                 = $::certs::node_fqdn,
+  $generate                 = $::certs::generate,
+  $regenerate               = $::certs::regenerate,
+  $deploy                   = $::certs::deploy,
+  $ca_cert                  = $::certs::ca_cert_stripped,
+  $ca_key                   = $::certs::ca_key,
+  $pki_dir                  = $::certs::params::pki_dir,
+  $keystore                 = $::certs::params::candlepin_keystore,
+  $keystore_password_file   = $::certs::params::keystore_password_file,
+  $truststore_password_file = $::certs::params::truststore_password_file,
+  $amqp_truststore          = $::certs::params::candlepin_amqp_truststore,
+  $amqp_keystore            = $::certs::params::candlepin_amqp_keystore,
+  $amqp_store_dir           = $::certs::params::candlepin_amqp_store_dir,
 
   ) inherits certs::params {
 
@@ -40,6 +41,7 @@ class certs::candlepin (
   }
 
   $keystore_password = cache_data('foreman_cache_data', $keystore_password_file, random_password(32))
+  $truststore_password = cache_data('foreman_cache_data', $truststore_password_file, random_password(32))
   $password_file = "${certs::pki_dir}/keystore_password-file"
   $client_req = "${certs::pki_dir}/java-client.req"
   $client_cert = "${certs::pki_dir}/certs/${java_client_cert_name}.crt"
