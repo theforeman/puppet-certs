@@ -38,7 +38,7 @@ class certs::pulp_client (
       key_pair => Cert[$client_cert_name],
     } ~>
     file { $client_key:
-      group => $katello::group,
+      group => $certs::group,
       owner => 'root',
       mode  => '0440',
     }
