@@ -18,6 +18,12 @@ class certs::katello (
   $candlepin_consumer_summary     = "Subscription-manager consumer certificate for Katello instance ${::fqdn}"
   $candlepin_consumer_description = 'Consumer certificate and post installation script that configures rhsm.'
 
+  include ::trusted_ca
+  trusted_ca::ca { 'katello_server-host-cert':
+    source  => $certs::katello_server_ca_cert,
+    require => File[$certs::katello_server_ca_cert],
+  }
+
   file { $katello_www_pub_dir:
     ensure => directory,
     owner  => 'apache',
