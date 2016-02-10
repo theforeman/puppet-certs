@@ -7,7 +7,7 @@ class certs::pulp_client (
   $common_name = 'admin',
   ){
 
-  $client_cert_name = "${hostname}-pulp-client"
+  $client_cert_name = 'pulp-client'
   $client_cert      = "${::certs::pki_dir}/certs/${client_cert_name}.crt"
   $client_key       = "${::certs::pki_dir}/private/${client_cert_name}.key"
   $ssl_ca_cert      = $::certs::ca_cert
@@ -43,5 +43,14 @@ class certs::pulp_client (
       mode  => '0440',
     }
   }
-}
 
+  foreman_config_entry { 'pulp_client_cert':
+    value          => $client_cert,
+    ignore_missing => false,
+  }
+
+  foreman_config_entry { 'pulp_client_key':
+    value          => $client_key,
+    ignore_missing => false,
+  }
+}
