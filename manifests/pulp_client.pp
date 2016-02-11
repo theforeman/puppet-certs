@@ -44,13 +44,4 @@ class certs::pulp_client (
     }
   }
 
-  foreman_config_entry { 'pulp_client_cert':
-    value          => $client_cert,
-    ignore_missing => false,
-  }
-
-  foreman_config_entry { 'pulp_client_key':
-    value          => $client_key,
-    ignore_missing => false,
-  }
 }
