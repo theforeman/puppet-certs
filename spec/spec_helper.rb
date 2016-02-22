@@ -2,7 +2,8 @@
 #   https://github.com/katello/foreman-installer-modulesync
 
 require 'puppetlabs_spec_helper/module_spec_helper'
-
+require 'rspec-puppet'
+require 'rspec-puppet-utils'
 require 'rspec-puppet-facts'
 include RspecPuppetFacts
 

@@ -128,6 +128,7 @@ class certs (
   $ca_key_password_file = "${certs::pki_dir}/private/${default_ca_name}.pwd"
 
   $katello_server_ca_cert = "${certs::pki_dir}/certs/${server_ca_name}.crt"
+  $katello_default_ca_cert = "${certs::pki_dir}/certs/${default_ca_name}.crt"
 
   class { '::certs::install': } ->
   class { '::certs::config': } ->
