@@ -48,6 +48,7 @@ class certs::katello (
     group   => 'root',
     mode    => '0755',
     content => template('certs/rhsm-katello-reconfigure.erb'),
+    require => Class['::certs'],
   } ~>
   certs_bootstrap_rpm { $candlepin_consumer_name:
     dir              => $katello_www_pub_dir,
