@@ -27,8 +27,8 @@ read -r -d '' KATELLO_DEFAULT_CA_DATA << EOM
 EOM
 
 KATELLO_SERVER=<%= @hostname %>
-KATELLO_SERVER_CA_CERT=<%= @server_ca_name %>.pem
-KATELLO_DEFAULT_CA_CERT=<%= @default_ca_name %>.pem
+KATELLO_SERVER_CA_CERT=<%= scope['certs::server_ca_name'] %>.pem
+KATELLO_DEFAULT_CA_CERT=<%= scope['certs::default_ca_name'] %>.pem
 KATELLO_CERT_DIR=<%= @rhsm_ca_dir %>
 PORT=<%= @rhsm_port %>
 
