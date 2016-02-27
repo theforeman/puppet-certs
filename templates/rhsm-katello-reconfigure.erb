@@ -1,31 +1,3 @@
-#!/bin/bash
-#
-# Copyright 2016 Red Hat, Inc.
-#
-# This software is licensed to you under the GNU General Public License,
-# version 2 (GPLv2). There is NO WARRANTY for this software, express or
-# implied, including the implied warranties of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2
-# along with this software; if not, see
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
-#
-# Red Hat trademarks are not licensed under GPLv2. No permission is
-# granted to use or replicate Red Hat trademarks that are incorporated
-# in this software or its documentation.
-#
-# Configures rhsm on client. Called from the certificate RPM.
-#
-
-#copy the certificate to this variable KATELLO_SERVER_CA_DATA
-read -r -d '' KATELLO_SERVER_CA_DATA << EOM
-<%= File.exist?(scope['certs::katello_server_ca_cert']) ? File.open(scope['certs::katello_server_ca_cert']).read : "" %>
-EOM
-
-#copy the default ca certificate to this variable KATELLO_DEFAULT_CA_DATA
-read -r -d '' KATELLO_DEFAULT_CA_DATA << EOM
-<%= File.exist?(scope['certs::katello_default_ca_cert']) ? File.open(scope['certs::katello_default_ca_cert']).read : "" %>
-EOM
-
 KATELLO_SERVER=<%= @hostname %>
 KATELLO_SERVER_CA_CERT=<%= scope['certs::server_ca_name'] %>.pem
 KATELLO_DEFAULT_CA_CERT=<%= scope['certs::default_ca_name'] %>.pem

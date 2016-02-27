@@ -21,6 +21,10 @@
       "version_requirement": ">= 0.10.4 < 1.0.0"
     },
     {
+      "name": "puppetlabs-concat",
+      "version_requirement": ">= 1.0.0 < 3.0.0"
+    },
+    {
       "name": "theforeman-foreman",
       "version_requirement": ">= 5.0.0 < 6.0.0"
     },

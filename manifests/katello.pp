@@ -41,14 +41,9 @@ class certs::katello (
     mode    => '0644',
     require => File[$certs::katello_server_ca_cert],
   } ~>
-  # Generate the the rhsm setup script in the pub dir for rhsm setup
-  file { "${katello_www_pub_dir}/${katello_rhsm_setup_script}":
-    ensure  => file,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    content => template('certs/rhsm-katello-reconfigure.erb'),
-    require => Class['::certs'],
+  certs::rhsm_reconfigure_script { "${katello_www_pub_dir}/${katello_rhsm_setup_script}":
+    ca_cert        => $::certs::ca_cert,
+    server_ca_cert => $::certs::katello_server_ca_cert,
   } ~>
   certs_bootstrap_rpm { $candlepin_consumer_name:
     dir              => $katello_www_pub_dir,
