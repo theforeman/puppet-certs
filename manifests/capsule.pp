@@ -26,7 +26,7 @@ class certs::capsule (
   class { '::certs::apache':        hostname => $capsule_fqdn }
   class { '::certs::qpid':          hostname => $capsule_fqdn }
   class { '::certs::qpid_router':   hostname => $capsule_fqdn }
-  class { '::certs::pulp_child':    hostname => $capsule_fqdn }
+  class { '::certs::qpid_client':   hostname => $capsule_fqdn }
 
   if $certs_tar {
     certs::tar_create { $certs_tar:
@@ -36,7 +36,7 @@ class certs::capsule (
                     Class['certs::qpid'],
                     Class['certs::qpid_router'],
                     Class['certs::apache'],
-                    Class['certs::pulp_child']],
+                    Class['certs::qpid_client']],
     }
   }
 }
