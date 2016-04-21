@@ -33,7 +33,17 @@ Puppet::Type.type(:certs_bootstrap_rpm).provide(:katello_ssl_tool) do
   protected
 
   def last_rpm
-    Dir.glob(File.join(resource[:dir], "#{resource[:name]}-*.noarch.rpm")).sort.last
+    rpms = Dir.glob(File.join(resource[:dir], "#{resource[:name]}-*.noarch.rpm"))
+
+    rpms = rpms.collect do |rpm|
+      rpm_split = rpm.split("#{resource[:name]}-")[1].split('.noarch.rpm')[0]
+      version = rpm_split.split('-')[0]
+      release = rpm_split.split('-')[1]
+
+      {'release' => release, 'rpm' => rpm}
+    end
+
+    rpms.sort { |a,b| a['release'].to_i <=> b['release'].to_i }.last
   end
 
   def next_release
