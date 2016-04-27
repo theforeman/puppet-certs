@@ -43,7 +43,7 @@ Puppet::Type.type(:certs_bootstrap_rpm).provide(:katello_ssl_tool) do
       {'release' => release, 'rpm' => rpm}
     end
 
-    rpms.sort { |a,b| a['release'].to_i <=> b['release'].to_i }.last
+    rpms.sort { |a,b| a['release'].to_i <=> b['release'].to_i }.last['rpm']
   end
 
   def next_release
