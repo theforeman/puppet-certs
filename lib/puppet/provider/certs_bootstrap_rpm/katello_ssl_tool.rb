@@ -20,9 +20,9 @@ Puppet::Type.type(:certs_bootstrap_rpm).provide(:katello_ssl_tool) do
                             '--requires', 'subscription-manager',
                             '--post', post_script_file,
                             *resource[:files])
-      if resource[:alias]
+      if (rpm = last_rpm) && resource[:alias]
         File.delete(resource[:alias]) if File.exists?(resource[:alias])
-        File.symlink(last_rpm, resource[:alias])
+        File.symlink(rpm, resource[:alias])
       end
       system('/sbin/restorecon ./*.rpm')
     end
@@ -43,7 +43,8 @@ Puppet::Type.type(:certs_bootstrap_rpm).provide(:katello_ssl_tool) do
       {'release' => release, 'rpm' => rpm}
     end
 
-    rpms.sort { |a,b| a['release'].to_i <=> b['release'].to_i }.last['rpm']
+    rpm = rpms.sort { |a,b| a['release'].to_i <=> b['release'].to_i }.last
+    rpm['rpm'] if rpm
   end
 
   def next_release
