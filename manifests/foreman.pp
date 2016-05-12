@@ -48,19 +48,19 @@ class certs::foreman (
       mode   => '0400',
     }
 
-    $foreman_config_cmd = "${::foreman::app_root}/script/foreman-rake config --\
-      -k ssl_ca_file -v '${ssl_ca_cert}'\
-      -k ssl_certificate -v '${client_cert}'\
-      -k ssl_priv_key -v '${client_key}'"
-
-    exec { 'foreman_certs_config':
-      environment => ["HOME=${::foreman::app_root}"],
-      cwd         => $::foreman::app_root,
-      command     => $foreman_config_cmd,
-      unless      => "${foreman_config_cmd} --dry-run",
-      user        => $::foreman::user,
-      require     => Class['foreman::service'],
+    foreman_config_entry { 'ssl_ca_file':
+      value   => $ssl_ca_cert,
+      require => Pubkey[$ssl_ca_cert],
     }
 
+    foreman_config_entry { 'ssl_certificate':
+      value   => $client_cert,
+      require => Pubkey[$client_cert],
+    }
+
+    foreman_config_entry { 'ssl_priv_key':
+      value   => $client_key,
+      require => Privkey[$client_key],
+    }
   }
 }
