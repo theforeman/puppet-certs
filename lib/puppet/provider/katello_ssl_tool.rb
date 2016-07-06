@@ -62,7 +62,7 @@ module Puppet::Provider::KatelloSslTool
       return false unless resource[:deploy]
       return true if resource[:regenerate]
       return true if files_to_deploy.any? { |file| ! File.exist?(file) }
-      return true if new_version_available?
+      return true if needs_deploy?
     end
 
     def files_to_deploy
@@ -71,7 +71,9 @@ module Puppet::Provider::KatelloSslTool
 
     def deploy!
       if File.exists?(rpmfile)
-        # the rpm is available locally on the file system
+        if(system("rpm -q #{rpmfile_base_name} &>/dev/null"))
+          rpm('-e', rpmfile_base_name)
+        end
         rpm('-Uvh', '--force', rpmfile)
       else
         # we search the rpm in yum repo
@@ -79,11 +81,10 @@ module Puppet::Provider::KatelloSslTool
       end
     end
 
-    def new_version_available?
+    def needs_deploy?
       if File.exists?(rpmfile)
-        current_version = version_from_name(`rpm -q #{rpmfile_base_name}`)
-        latest_version = version_from_name(`rpm -pq #{rpmfile}`)
-        (latest_version <=> current_version) > 0
+        # the installed version doesn't match the rpmfile
+        !system("rpm --verify -p #{rpmfile} &>/dev/null")
       else
         `yum check-update #{rpmfile_base_name} &>/dev/null`
         $?.exitstatus == 100

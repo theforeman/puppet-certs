@@ -71,9 +71,10 @@ class certs::qpid (
       path    => '/usr/bin',
       creates => $nssdb_files,
     } ~>
-    exec { 'add-ca-cert-to-nss-db':
-      command     => "certutil -A -d '${::certs::nss_db_dir}' -n 'ca' -t 'TCu,Cu,Tuw' -a -i '${certs::ca_cert}'",
-      path        => '/usr/bin',
+    certs::ssltools::certutil { 'ca':
+      nss_db_dir  => $::certs::nss_db_dir,
+      client_cert => $::certs::ca_cert,
+      trustargs   => 'TCu,Cu,Tuw',
       refreshonly => true,
     } ~>
     file { $nssdb_files:
@@ -81,9 +82,9 @@ class certs::qpid (
       group => $certs::qpidd_group,
       mode  => '0640',
     } ~>
-    exec { 'add-broker-cert-to-nss-db':
-      command     => "certutil -A -d '${::certs::nss_db_dir}' -n 'broker' -t ',,' -a -i '${client_cert}'",
-      path        => '/usr/bin',
+    certs::ssltools::certutil { 'broker':
+      nss_db_dir  => $::certs::nss_db_dir,
+      client_cert => $client_cert,
       refreshonly => true,
     } ~>
     exec { 'generate-pfx-for-nss-db':

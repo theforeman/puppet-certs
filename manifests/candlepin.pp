@@ -73,8 +73,9 @@ class certs::candlepin (
     privkey { $client_key:
       key_pair => Cert[$java_client_cert_name],
     } ~>
-    exec { 'candlepin-add-client-cert-to-nss-db':
-      command     => "certutil -A -d '${::certs::nss_db_dir}' -n 'amqp-client' -t ',,' -a -i '${client_cert}'",
+    certs::ssltools::certutil { 'amqp-client':
+      nss_db_dir  => $::certs::nss_db_dir,
+      client_cert => $client_cert,
       refreshonly => true,
       subscribe   => Exec['create-nss-db'],
       notify      => Service['qpidd'],
