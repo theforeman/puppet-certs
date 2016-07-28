@@ -1,10 +1,10 @@
-KATELLO_SERVER=<%= @hostname %>
+KATELLO_SERVER=<%= scope['certs::katello::hostname'] %>
 KATELLO_SERVER_CA_CERT=<%= scope['certs::server_ca_name'] %>.pem
 KATELLO_DEFAULT_CA_CERT=<%= scope['certs::default_ca_name'] %>.pem
-KATELLO_CERT_DIR=<%= @rhsm_ca_dir %>
-PORT=<%= @rhsm_port %>
+KATELLO_CERT_DIR=<%= scope['certs::katello::rhsm_ca_dir'] %>
+PORT=<%= scope['certs::katello::rhsm_port'] %>
 
-PREFIX=<%= @deployment_url %>
+PREFIX=<%= scope['certs::katello::deployment_url'] %>
 CFG=/etc/rhsm/rhsm.conf
 CFG_BACKUP=$CFG.kat-backup
 CA_TRUST_ANCHORS=/etc/pki/ca-trust/source/anchors
