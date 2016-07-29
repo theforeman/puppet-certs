@@ -4,13 +4,7 @@ describe 'certs' do
 
  context 'on redhat' do
     let :facts do
-      {
-        :concat_basedir             => '/tmp',
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '6.4',
-        :operatingsystemmajrelease  => '6.4',
-        :osfamily                   => 'RedHat',
-      }
+      on_supported_os['redhat-7-x86_64'].merge(:concat_basedir => '/tmp', :puppetversion => Puppet.version)
     end
 
     it { should contain_class('certs::install') }

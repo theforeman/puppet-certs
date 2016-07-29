@@ -62,10 +62,24 @@ class certs::params {
   # for verifying the foreman https
   $foreman_proxy_foreman_ssl_ca_cert = '/etc/foreman-proxy/foreman_ssl_ca.pem'
 
-  $puppet_client_cert = '/etc/puppet/client_cert.pem'
-  $puppet_client_key  = '/etc/puppet/client_key.pem'
+  # Puppet SSL path determination code from puppet-foreman
+  if versioncmp($::puppetversion, '4.0') < 0 {
+    $aio_package = false
+  } elsif $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/ {
+    $aio_package = true
+  } else {
+    $aio_package = false
+  }
+
+  $puppet_ssldir = $aio_package ? {
+    true    => '/etc/puppetlabs/puppet/ssl',
+    default => '/etc/puppet/ssl'
+  }
+
+  $puppet_client_cert = "${puppet_ssldir}/client_cert.pem"
+  $puppet_client_key  = "${puppet_ssldir}/client_key.pem"
   # for verifying the foreman https
-  $puppet_ssl_ca_cert = '/etc/puppet/ssl_ca.pem'
+  $puppet_ssl_ca_cert = "${puppet_ssldir}/ssl_ca.pem"
 
   $candlepin_keystore               = '/etc/pki/katello/keystore'
   $candlepin_certs_dir              = '/etc/candlepin/certs'

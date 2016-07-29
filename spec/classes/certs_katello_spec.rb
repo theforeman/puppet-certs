@@ -2,16 +2,7 @@ require 'spec_helper'
 
 describe 'certs::katello' do
   let :facts do
-    {
-      :concat_basedir             => '/tmp',
-      :interfaces                 => '',
-      :operatingsystem            => 'RedHat',
-      :operatingsystemrelease     => '6',
-      :operatingsystemmajrelease  => '6',
-      :osfamily                   => 'RedHat',
-      :fqdn                       => 'pulp.compony.net',
-      :hostname                   => 'pulp',
-    }
+    on_supported_os['redhat-7-x86_64'].merge(:concat_basedir => '/tmp', :puppetversion => Puppet.version)
   end
 
   context 'with parameters' do
