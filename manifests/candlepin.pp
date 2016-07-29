@@ -58,12 +58,12 @@ class certs::candlepin (
       command => "openssl pkcs12 -export -in ${ca_cert} -inkey ${ca_key} -out ${keystore} -name tomcat -CAfile ${ca_cert} -caname root -password \"file:${password_file}\" -passin \"file:${certs::ca_key_password_file}\" ",
       creates => $keystore,
     } ~>
-    file { "/usr/share/${candlepin::tomcat}/conf/keystore":
+    file { "/usr/share/${::candlepin::tomcat}/conf/keystore":
       ensure => link,
       target => $keystore,
       owner  => 'tomcat',
       group  => $::certs::group,
-      notify => Service[$candlepin::tomcat],
+      notify => Service[$::candlepin::tomcat],
     }
 
     Cert[$java_client_cert_name] ~>
@@ -106,7 +106,7 @@ class certs::candlepin (
       owner  => 'tomcat',
       group  => $::certs::group,
       mode   => '0640',
-      notify => Service[$candlepin::tomcat],
+      notify => Service[$::candlepin::tomcat],
     }
   }
 }
