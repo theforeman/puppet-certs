@@ -13,7 +13,7 @@ class certs::candlepin (
   $amqp_truststore        = $::certs::params::candlepin_amqp_truststore,
   $amqp_keystore          = $::certs::params::candlepin_amqp_keystore,
   $amqp_store_dir         = $::certs::params::candlepin_amqp_store_dir,
-
+  $tomcat                 = $::certs::params::tomcat,
   ) inherits certs::params {
 
   Exec {
@@ -58,12 +58,12 @@ class certs::candlepin (
       command => "openssl pkcs12 -export -in ${ca_cert} -inkey ${ca_key} -out ${keystore} -name tomcat -CAfile ${ca_cert} -caname root -password \"file:${password_file}\" -passin \"file:${certs::ca_key_password_file}\" ",
       creates => $keystore,
     } ~>
-    file { "/usr/share/${candlepin::tomcat}/conf/keystore":
+    file { "/usr/share/${tomcat}/conf/keystore":
       ensure => link,
       target => $keystore,
       owner  => 'tomcat',
       group  => $::certs::group,
-      notify => Service[$candlepin::tomcat],
+      notify => Service[$tomcat],
     }
 
     Cert[$java_client_cert_name] ~>
@@ -106,7 +106,7 @@ class certs::candlepin (
       owner  => 'tomcat',
       group  => $::certs::group,
       mode   => '0640',
-      notify => Service[$candlepin::tomcat],
+      notify => Service[$tomcat],
     }
   }
 }

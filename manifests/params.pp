@@ -114,4 +114,5 @@ class certs::params {
   $nodes_cert_name       = 'node.crt'
 
   $qpidd_group = 'qpidd'
+
 }
