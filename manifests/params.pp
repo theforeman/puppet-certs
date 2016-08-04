@@ -73,7 +73,7 @@ class certs::params {
 
   $puppet_ssldir = $aio_package ? {
     true    => '/etc/puppetlabs/puppet/ssl',
-    default => '/etc/puppet/ssl'
+    default => '/etc/puppet'
   }
 
   $puppet_client_cert = "${puppet_ssldir}/client_cert.pem"
