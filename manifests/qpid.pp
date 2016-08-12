@@ -99,6 +99,8 @@ class certs::qpid (
     } ~>
     Service['qpidd']
 
+    Pubkey[$::certs::ca_cert] ~> Certs::Ssltools::Certutil['ca']
+    Pubkey[$client_cert] ~> Certs::Ssltools::Certutil['broker']
   }
 
 }
