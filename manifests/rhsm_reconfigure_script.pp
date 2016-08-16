@@ -5,13 +5,13 @@ define certs::rhsm_reconfigure_script($ca_cert, $server_ca_cert) {
     group => 'root',
     mode  => '0755',
   }
-  
+
   concat::fragment { "${title}+script_start":
     target  => $title,
     content => "#!/bin/bash\n\n",
     order   => '01',
   }
-  
+
   concat::fragment { "${title}+default_ca_data":
     target  => $title,
     content => "read -r -d '' KATELLO_DEFAULT_CA_DATA << EOM\n",
@@ -29,7 +29,7 @@ define certs::rhsm_reconfigure_script($ca_cert, $server_ca_cert) {
     content => "EOM\n\n",
     order   => '04',
   }
-  
+
   concat::fragment { "${title}+server_ca_data":
     target  => $title,
     content => "read -r -d '' KATELLO_SERVER_CA_DATA << EOM\n",
