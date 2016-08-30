@@ -70,8 +70,6 @@
 #
 # $group::                The group who should own the certs;
 #
-# $password_file_dir::    The location to store password files
-#
 # $default_ca_name::      The name of the default CA
 #
 # $server_ca_name::       The name of the server CA (used for https)
@@ -101,8 +99,6 @@ class certs (
 
   $pki_dir = $certs::params::pki_dir,
   $ssl_build_dir = $certs::params::ssl_build_dir,
-
-  $password_file_dir = $certs::params::password_file_dir,
 
   $user   = $certs::params::user,
   $group  = $certs::params::group,
