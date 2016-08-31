@@ -23,6 +23,8 @@ Puppet::Type.newtype(:certs_bootstrap_rpm) do
 
     newparam(:bootstrap_script)
 
+    newparam(:postun_script)
+
     newparam(:files)
 
     newparam(:alias)
