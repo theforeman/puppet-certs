@@ -8,6 +8,9 @@ Puppet::Type.type(:certs_bootstrap_rpm).provide(:katello_ssl_tool) do
     post_script_file = File.join(resource[:dir], 'rhsm-katello-reconfigure')
     File.open(post_script_file, 'w') { |f| f << resource[:bootstrap_script] }
 
+    postun_script_file = File.join(resource[:dir], 'rhsm-katello-remove-reconfigure')
+    File.open(postun_script_file, 'w') { |f| f << resource[:postun_script] }
+
     Dir.chdir(resource[:dir]) do
       katello_certs_gen_rpm('--name', resource[:name],
                             '--version', '1.0',
@@ -19,6 +22,7 @@ Puppet::Type.type(:certs_bootstrap_rpm).provide(:katello_ssl_tool) do
                             '--description', resource[:description],
                             '--requires', 'subscription-manager',
                             '--post', post_script_file,
+                            '--postun', postun_script_file,
                             *resource[:files])
       if (rpm = last_rpm) && resource[:alias]
         File.delete(resource[:alias]) if File.exists?(resource[:alias])
@@ -28,6 +32,7 @@ Puppet::Type.type(:certs_bootstrap_rpm).provide(:katello_ssl_tool) do
     end
   ensure
     File.delete(post_script_file) if File.exists?(post_script_file)
+    File.delete(postun_script_file) if File.exists?(postun_script_file)
   end
 
   protected
