@@ -1,6 +1,6 @@
 # Katello specific certs settings
 class certs::katello (
-  $hostname                      = $fqdn,
+  $hostname                      = $::certs::node_fqdn,
   $deployment_url                = undef,
   $rhsm_port                     = 443,
   $candlepin_cert_rpm_alias_filename = undef,
@@ -16,8 +16,8 @@ class certs::katello (
   $katello_rhsm_setup_script      = 'katello-rhsm-consumer'
   $katello_rhsm_setup_script_location = "/usr/bin/${katello_rhsm_setup_script}"
 
-  $candlepin_consumer_name        = "katello-ca-consumer-${::fqdn}"
-  $candlepin_consumer_summary     = "Subscription-manager consumer certificate for Katello instance ${::fqdn}"
+  $candlepin_consumer_name        = "katello-ca-consumer-${hostname}"
+  $candlepin_consumer_summary     = "Subscription-manager consumer certificate for Katello instance ${hostname}"
   $candlepin_consumer_description = 'Consumer certificate and post installation script that configures rhsm.'
 
   include ::trusted_ca
