@@ -10,6 +10,7 @@ Puppet::Type.type(:cert).provide(:katello_ssl_tool, :parent => Puppet::Provider:
               '--server-cert-req', File.basename(req_file),
               '--server-key', File.basename(privkey),
               '--server-rpm', rpmfile_base_name ]
+
     if resource[:custom_pubkey]
       FileUtils.mkdir_p(build_path)
       FileUtils.cp(resource[:custom_pubkey], build_path(File.basename(pubkey)))
@@ -25,6 +26,15 @@ Puppet::Type.type(:cert).provide(:katello_ssl_tool, :parent => Puppet::Provider:
                    '--ca-key', ca_details[:privkey]])
       args.concat(common_args)
     end
+
+    if resource[:cname]
+      if resource[:cname].is_a?(String)
+        args << ['--set-cname', resource[:cname]]
+      else
+        args << resource[:cname].map { |cname| ['--set-cname', cname] }.flatten
+      end
+    end
+
     katello_ssl_tool(*args)
     super
   end
