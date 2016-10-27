@@ -1,6 +1,6 @@
 {
   "name": "katello-certs",
-  "version": "0.7.3",
+  "version": "1.0.0",
   "author": "Katello",
   "summary": "Deploys CA and required certs for a Foreman and Katello installation.",
   "license": "GPL-3.0+",
@@ -26,11 +26,11 @@
     },
     {
       "name": "theforeman-foreman",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 8.0.0"
     },
     {
       "name": "katello-common",
-      "version_requirement": ">= 0.0.1 < 1.0.0"
+      "version_requirement": ">= 1.0.0 < 2.0.0"
     }
   ],
   "requirements": [
@@ -43,21 +43,18 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "Scientific",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     }
