@@ -6,10 +6,24 @@
 #
 # === Parameters:
 #
-# $log_dir::              When the log files should go
-#
 # $node_fqdn::            The fqdn of the host the generated certificates
 #                         should be for
+#
+# $server_ca_cert::       Path to the CA that issued the ssl certificates for https
+#                         if not specified, the default CA will be used
+#
+# $server_cert::          Path to the ssl certificate for https
+#                         if not specified, the default CA will generate one
+#
+# $server_key::           Path to the ssl key for https
+#                         if not specified, the default CA will generate one
+#
+# $server_cert_req::      Path to the ssl certificate request for https
+#                         if not specified, the default CA will generate one
+#
+# === Advanced parameters:
+#
+# $log_dir::              Where the log files should go
 #
 # $generate::             Should the generation of the certs be part of the
 #                         configuration
@@ -50,25 +64,13 @@
 # $ca_expiration::        Ca expiration attribute for managed certificates
 #                         type: string
 #
-# $server_ca_cert::       Path to the CA that issued the ssl certificates for https
-#                         if not specified, the default CA will be used
-#
-# $server_cert::          Path to the ssl certificate for https
-#                         if not specified, the default CA will generate one
-#
-# $server_key::           Path to the ssl key for https
-#                         if not specified, the default CA will generate one
-#
-# $server_cert_req::       Path to the ssl certificate request for https
-#                         if not specified, the default CA will generate one
-#
 # $pki_dir::              The PKI directory under which to place certs
 #
 # $ssl_build_dir::        The directory where SSL keys, certs and RPMs will be generated
 #
-# $user::                 The system user name who should own the certs;
+# $user::                 The system user name who should own the certs
 #
-# $group::                The group who should own the certs;
+# $group::                The group who should own the certs
 #
 # $default_ca_name::      The name of the default CA
 #
