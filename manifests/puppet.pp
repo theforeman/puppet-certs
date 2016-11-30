@@ -45,7 +45,7 @@ class certs::puppet (
     } ~>
     file { $client_key:
       ensure => file,
-      owner  => 'puppet',
+      owner  => '52',
       mode   => '0400',
     }
 
