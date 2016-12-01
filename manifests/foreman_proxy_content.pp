@@ -2,12 +2,15 @@
 #
 # === Parameters:
 #
-# $parent_fqdn::                    fqdn of the parent node. Does not usually
+# $parent_fqdn::                    FQDN of the parent node. Does not usually
 #                                   need to be set.
+#                                   type:Optional[String]
 #
-# $foreman_proxy_fqdn::             fqdn of the foreman proxy. REQUIRED
+# $foreman_proxy_fqdn::             FQDN of the foreman proxy
+#                                   type:String
 #
-# $certs_tar::                      path to tar file with certs to generate. REQUIRED
+# $certs_tar::                      Path to tar file with certs to generate
+#                                   type:Optional[Stdlib::Absolutepath]
 #
 class certs::foreman_proxy_content (
   $parent_fqdn        = $fqdn,
