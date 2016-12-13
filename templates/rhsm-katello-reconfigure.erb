@@ -95,6 +95,9 @@ fi
   service goferd status >/dev/null && \
   service goferd restart >/dev/null 2&>1
 
+[ -f /bin/systemctl ] && \
+  systemctl try-restart goferd >/dev/null 2>&1
+
 
 if [ -d /etc/rhsm/facts/ ]; then
   echo "{\"network.hostname-override\":\"`hostname -f`\"}" > /etc/rhsm/facts/katello.facts
