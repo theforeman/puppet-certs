@@ -1,5 +1,5 @@
 ---
 Rakefile:
   param_docs_pattern:
-    - manifests/capsule.pp
+    - manifests/foreman_proxy_content.pp
     - manifests/init.pp

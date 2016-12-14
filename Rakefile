@@ -24,7 +24,7 @@ PuppetSyntax.exclude_paths << 'spec/static_fixtures/test_module/**/*.pp' if Pupp
 
 require 'puppet-lint-param-docs/tasks'
 PuppetLintParamDocs.define_selective do |config|
-  config.pattern = ["manifests/capsule.pp", "manifests/init.pp"]
+  config.pattern = ["manifests/foreman_proxy_content.pp", "manifests/init.pp"]
 end
 
 task :default => [:validate, :lint, :spec]
