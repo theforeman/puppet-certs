@@ -99,8 +99,9 @@ fi
   systemctl try-restart goferd >/dev/null 2>&1
 
 
-if [ -d /etc/rhsm/facts/ ]; then
-  echo "{\"network.hostname-override\":\"`hostname -f`\"}" > /etc/rhsm/facts/katello.facts
+FQDN=`hostname -f`
+if [ $? == "0" ] && [ -d /etc/rhsm/facts/ ]; then
+  echo "{\"network.hostname-override\":\"$FQDN\"}" > /etc/rhsm/facts/katello.facts
 fi
 
 exit 0
