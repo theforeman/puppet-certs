@@ -43,12 +43,11 @@ class certs::puppet (
     pubkey { $ssl_ca_cert:
       key_pair => $::certs::server_ca,
     } ~>
-    file { $client_key:
+    file { [$client_cert, $client_key, $ssl_ca_cert]:
       ensure  => file,
       owner   => 'puppet',
       mode    => '0400',
       require => Class['puppet::server::install'],
     }
-
   }
 }
