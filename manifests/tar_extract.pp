@@ -12,9 +12,15 @@
 # - The certs class
 #
 define certs::tar_extract($path = $title) {
+
+  $tar_opts = $path? {
+    /.*tar$/ => '-xf',
+    default  => '-xzf',
+  }
+
   exec { "extract ${path}":
     cwd     => '/root',
     path    => ['/usr/bin', '/bin'],
-    command => "tar -xzf ${path}",
+    command => "tar ${tar_opts} ${path}",
   }
 }
