@@ -1,6 +1,7 @@
 # Pulp Client Certs
 class certs::pulp_client (
   $hostname    = $::certs::node_fqdn,
+  $cname       = $::certs::cname,
   $generate    = $::certs::generate,
   $regenerate  = $::certs::regenerate,
   $deploy      = $::certs::deploy,
@@ -14,6 +15,7 @@ class certs::pulp_client (
 
   cert { $client_cert_name:
     hostname      => $hostname,
+    cname         => $cname,
     common_name   => $common_name,
     purpose       => client,
     country       => $::certs::country,

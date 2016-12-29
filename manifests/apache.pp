@@ -2,6 +2,7 @@
 class certs::apache (
 
   $hostname        = $::certs::node_fqdn,
+  $cname           = $::certs::cname,
   $generate        = $::certs::generate,
   $regenerate      = $::certs::regenerate,
   $deploy          = $::certs::deploy,
@@ -15,6 +16,7 @@ class certs::apache (
     cert { $apache_cert_name:
       ensure         => present,
       hostname       => $hostname,
+      cname          => $cname,
       generate       => $generate,
       deploy         => $deploy,
       regenerate     => $regenerate,
@@ -26,6 +28,7 @@ class certs::apache (
     cert { $apache_cert_name:
       ensure        => present,
       hostname      => $hostname,
+      cname         => $cname,
       country       => $::certs::country,
       state         => $::certs::state,
       city          => $::certs::city,

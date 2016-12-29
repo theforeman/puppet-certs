@@ -2,6 +2,7 @@
 class certs::qpid_client (
 
   $hostname   = $::certs::node_fqdn,
+  $cname      = $::certs::cname,
   $generate   = $::certs::generate,
   $regenerate = $::certs::regenerate,
   $deploy     = $::certs::deploy,
@@ -12,6 +13,7 @@ class certs::qpid_client (
 
   cert { "${hostname}-qpid-client-cert":
     hostname      => $hostname,
+    cname         => $cname,
     common_name   => 'pulp-qpid-client-cert',
     purpose       => client,
     country       => $::certs::country,

@@ -10,6 +10,10 @@
 #                         should be for
 #                         type:String
 #
+# $cname::                The alternative names of the host the generated certificates
+#                         should be for
+#                         type:array
+#
 # $server_ca_cert::       Path to the CA that issued the ssl certificates for https
 #                         if not specified, the default CA will be used
 #                         type:Optional[Stdlib::Absolutepath]
@@ -92,6 +96,7 @@ class certs (
 
   $log_dir        = $certs::params::log_dir,
   $node_fqdn      = $certs::params::node_fqdn,
+  $cname          = $certs::params::cname,
   $generate       = $certs::params::generate,
   $regenerate     = $certs::params::regenerate,
   $regenerate_ca  = $certs::params::regenerate_ca,
