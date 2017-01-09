@@ -1,15 +1,7 @@
 # Certs Parameters
 class certs::params {
 
-  $tomcat = $::osfamily ? {
-    /^(RedHat|Linux)/ => $::operatingsystem ? {
-      'Fedora'  => 'tomcat',
-      default   => $::operatingsystemrelease ? {
-        /^7\./  => 'tomcat',
-        default => 'tomcat6'
-      }
-    }
-  }
+  $tomcat = 'tomcat'
 
   $log_dir = '/var/log/certs'
   $pki_dir = '/etc/pki/katello'
