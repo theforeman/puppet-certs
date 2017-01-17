@@ -1,6 +1,7 @@
 # Constains certs specific configurations for qpid dispatch router
 class certs::qpid_router(
   $hostname               = $::certs::node_fqdn,
+  $cname                  = $::certs::cname,
   $generate               = $::certs::generate,
   $regenerate             = $::certs::regenerate,
   $deploy                 = $::certs::deploy,
@@ -18,6 +19,7 @@ class certs::qpid_router(
   cert { $server_keypair:
     ensure        => present,
     hostname      => $hostname,
+    cname         => $cname,
     country       => $::certs::country,
     state         => $::certs::state,
     city          => $::certs::city,
@@ -35,6 +37,7 @@ class certs::qpid_router(
   cert { $client_keypair:
     ensure        => present,
     hostname      => $hostname,
+    cname         => $cname,
     country       => $::certs::country,
     state         => $::certs::state,
     city          => $::certs::city,

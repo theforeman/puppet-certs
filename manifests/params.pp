@@ -8,6 +8,7 @@ class certs::params {
   $ssl_build_dir = '/root/ssl-build'
 
   $node_fqdn = $::fqdn
+  $cname = []
 
   $custom_repo = false
 

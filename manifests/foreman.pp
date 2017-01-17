@@ -2,6 +2,7 @@
 class certs::foreman (
 
   $hostname       = $::certs::node_fqdn,
+  $cname          = $::certs::cname,
   $generate       = $::certs::generate,
   $regenerate     = $::certs::regenerate,
   $deploy         = $::certs::deploy,
@@ -16,6 +17,7 @@ class certs::foreman (
   # cert for authentication of puppetmaster against foreman
   cert { $client_cert_name:
     hostname      => $::certs::foreman::hostname,
+    cname         => $::certs::foreman::cname,
     purpose       => client,
     country       => $::certs::country,
     state         => $::certs::state,

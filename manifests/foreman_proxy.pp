@@ -2,6 +2,7 @@
 class certs::foreman_proxy (
 
   $hostname            = $::certs::node_fqdn,
+  $cname               = $::certs::cname,
   $generate            = $::certs::generate,
   $regenerate          = $::certs::regenerate,
   $deploy              = $::certs::deploy,
@@ -22,6 +23,7 @@ class certs::foreman_proxy (
     cert { $proxy_cert_name:
       ensure         => present,
       hostname       => $::certs::foreman_proxy::hostname,
+      cname          => $::certs::foreman_proxy::cname,
       generate       => $generate,
       regenerate     => $regenerate,
       deploy         => $deploy,
@@ -33,6 +35,7 @@ class certs::foreman_proxy (
     # cert for ssl of foreman-proxy
     cert { $proxy_cert_name:
       hostname      => $::certs::foreman_proxy::hostname,
+      cname         => $::certs::foreman_proxy::cname,
       purpose       => server,
       country       => $::certs::country,
       state         => $::certs::state,
@@ -51,6 +54,7 @@ class certs::foreman_proxy (
   # cert for authentication of foreman_proxy against foreman
   cert { $foreman_proxy_client_cert_name:
     hostname      => $::certs::foreman_proxy::hostname,
+    cname         => $::certs::foreman_proxy::cname,
     purpose       => client,
     country       => $::certs::country,
     state         => $::certs::state,

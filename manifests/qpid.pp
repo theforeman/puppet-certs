@@ -2,6 +2,7 @@
 class certs::qpid (
 
   $hostname   = $::certs::node_fqdn,
+  $cname      = $::certs::cname,
   $generate   = $::certs::generate,
   $regenerate = $::certs::regenerate,
   $deploy     = $::certs::deploy,
@@ -14,7 +15,7 @@ class certs::qpid (
   cert { $qpid_cert_name:
     ensure        => present,
     hostname      => $::certs::qpid::hostname,
-    cname         => 'localhost',
+    cname         => concat($::certs::qpid::cname, 'localhost'),
     country       => $::certs::country,
     state         => $::certs::state,
     city          => $::certs::city,
