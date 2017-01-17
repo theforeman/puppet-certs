@@ -54,10 +54,10 @@ class certs::params {
   # for verifying the foreman https
   $foreman_proxy_foreman_ssl_ca_cert = '/etc/foreman-proxy/foreman_ssl_ca.pem'
 
-  $puppet_client_cert = "${pki_dir}/certs/puppet_client.crt"
-  $puppet_client_key  = "${pki_dir}/private/puppet_client.key"
+  $puppet_client_cert = "${pki_dir}/puppet/puppet_client.crt"
+  $puppet_client_key  = "${pki_dir}/puppet/puppet_client.key"
   # for verifying the foreman https
-  $puppet_ssl_ca_cert = "${pki_dir}/certs/puppet_client_ca.crt"
+  $puppet_ssl_ca_cert = "${pki_dir}/puppet/puppet_client_ca.crt"
 
   $candlepin_keystore               = '/etc/pki/katello/keystore'
   $candlepin_certs_dir              = '/etc/candlepin/certs'
