@@ -34,7 +34,12 @@ class certs::puppet (
   }
 
   if $deploy {
-
+    file { "${certs::pki_dir}/puppet":
+      ensure  => directory,
+      owner   => 'puppet',
+      mode    => '0700',
+      require => Class['puppet::server::install'],
+    } ->
     Cert[$puppet_client_cert_name] ~>
     pubkey { $client_cert:
       key_pair => Cert[$puppet_client_cert_name],
@@ -45,12 +50,10 @@ class certs::puppet (
     pubkey { $ssl_ca_cert:
       key_pair => $::certs::server_ca,
     } ~>
-    file { $client_key:
-      ensure  => file,
-      owner   => 'puppet',
-      mode    => '0400',
-      require => Class['puppet::server::install'],
+    file { [$client_cert, $client_key, $ssl_ca_cert]:
+      ensure => file,
+      owner  => 'puppet',
+      mode   => '0400',
     }
-
   }
 }
