@@ -17,8 +17,8 @@
 #
 class certs::foreman_proxy_content (
   $parent_fqdn          = $fqdn,
-  $foreman_proxy_fqdn   = $certs::node_fqdn,
-  $foreman_proxy_cname  = $certs::cname,
+  $foreman_proxy_fqdn   = $certs::params::node_fqdn,
+  $foreman_proxy_cname  = $certs::params::cname,
   $certs_tar            = $certs::params::certs_tar
   ) inherits certs::params {
 
