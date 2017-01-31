@@ -80,8 +80,7 @@ class certs::candlepin (
       client_cert => $client_cert,
       refreshonly => true,
       subscribe   => Exec['create-nss-db'],
-      notify      => Service['qpidd'],
-    } ~>
+    } ->
     file { $amqp_store_dir:
       ensure => directory,
       owner  => 'tomcat',
