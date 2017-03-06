@@ -128,10 +128,9 @@ class certs (
 
   if $server_cert {
     validate_absolute_path($server_cert)
-    validate_absolute_path($server_cert_req)
     validate_absolute_path($server_key)
     validate_absolute_path($server_ca_cert)
-    validate_file_exists($server_cert, $server_cert_req, $server_key, $server_ca_cert)
+    validate_file_exists($server_cert, $server_key, $server_ca_cert)
   }
 
   $nss_db_dir   = "${pki_dir}/nssdb"

@@ -15,7 +15,6 @@ Puppet::Type.type(:cert).provide(:katello_ssl_tool, :parent => Puppet::Provider:
       FileUtils.mkdir_p(build_path)
       FileUtils.cp(resource[:custom_pubkey], build_path(File.basename(pubkey)))
       FileUtils.cp(resource[:custom_privkey], build_path(File.basename(privkey)))
-      FileUtils.cp(resource[:custom_req], build_path(File.basename(req_file)))
       args << '--rpm-only'
     else
       resource[:common_name] ||= resource[:hostname]
