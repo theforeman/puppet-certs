@@ -42,15 +42,16 @@ module Certs
 
     newparam(:ca) do
       validate do |value|
-        if value && !value.is_a?(Puppet::Resource) || value.resource_type.name != :ca
-          raise ArgumentError, "Expected Ca resource"
+        ca_resource = resource.catalog.resource(value.to_s)
+        if ca_resource && ca_resource.class.to_s != 'Puppet::Type::Ca'
+          raise ArgumentError, "Expected Ca resource, got #{ca_resource.class} #{ca_resource.inspect}"
         end
       end
     end
 
     autorequire(:ca) do
       if @parameters.has_key?(:ca)
-        @parameters[:ca].value.to_hash[:name]
+        catalog.resource(@parameters[:ca].value.to_s).to_hash[:name]
       end
     end
   end
@@ -67,15 +68,17 @@ module Certs
 
     newparam(:key_pair) do
       validate do |value|
-        unless value.is_a?(Puppet::Resource) && (value.resource_type.name == :ca || value.resource_type.name == :cert)
-          raise ArgumentError, "Expected Ca or Cert resource"
+        param_resource = resource.catalog.resource(value.to_s)
+        if param_resource && !['Puppet::Type::Ca', 'Puppet::Type::Cert'].include?(param_resource.class.to_s)
+          raise ArgumentError, "Expected Ca or Cert resource, got #{param_resource.class} #{param_resource.inspect}"
         end
       end
     end
 
     define_method(:autorequire_cert) do |type|
-      if @parameters.has_key?(:key_pair) && @parameters[:key_pair].value.type == type
-        @parameters[:key_pair].value.to_hash[:name]
+      if @parameters.has_key?(:key_pair)
+        key_pair = catalog.resource(@parameters[:key_pair].value.to_s)
+        key_pair.to_hash[:name] if key_pair && key_pair.type == type
       end
     end
 

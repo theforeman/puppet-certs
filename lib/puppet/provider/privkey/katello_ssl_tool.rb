@@ -22,10 +22,11 @@ Puppet::Type.type(:privkey).provide(:katello_ssl_tool, :parent => Puppet::Provid
   end
 
   def source_path
-    if @resource[:key_pair].type == 'Cert'
+    key_pair = resource.catalog.resource(@resource[:key_pair].to_s)
+    if key_pair.type.to_s == 'cert'
       cert_details[:privkey]
-    elsif @resource[:key_pair].type == 'Ca'
-      Puppet::Type::Ca::ProviderKatello_ssl_tool.privkey(@resource[:key_pair].to_hash[:name])
+    elsif key_pair.type.to_s == 'ca'
+      Puppet::Type::Ca::ProviderKatello_ssl_tool.privkey(key_pair.to_hash[:name])
     end
   end
 

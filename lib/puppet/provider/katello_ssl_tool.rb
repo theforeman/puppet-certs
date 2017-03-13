@@ -156,7 +156,7 @@ module Puppet::Provider::KatelloSslTool
 
     def ca_details
       return @ca_details if defined? @ca_details
-      if ca_resource = @resource[:ca]
+      if ca_resource = resource.catalog.resource(@resource[:ca].to_s)
         name = ca_resource.to_hash[:name]
         @ca_details = Puppet::Provider::KatelloSslTool::Cert.details(name)
       else
@@ -207,7 +207,7 @@ module Puppet::Provider::KatelloSslTool
 
     def cert_details
       return @cert_details if defined? @cert_details
-      if cert_resource = @resource[:key_pair]
+      if cert_resource = resource.catalog.resource(@resource[:key_pair].to_s)
         name = cert_resource.to_hash[:name]
         @cert_details = Puppet::Provider::KatelloSslTool::Cert.details(name)
       else
