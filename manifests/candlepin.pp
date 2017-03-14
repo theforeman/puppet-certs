@@ -1,6 +1,5 @@
 # Constains certs specific configurations for candlepin
 class certs::candlepin (
-
   $hostname               = $::certs::node_fqdn,
   $cname                  = $::certs::cname,
   $generate               = $::certs::generate,
@@ -15,7 +14,19 @@ class certs::candlepin (
   $amqp_keystore          = $::certs::candlepin_amqp_keystore,
   $amqp_store_dir         = $::certs::candlepin_amqp_store_dir,
   $tomcat                 = $::certs::tomcat,
-) inherits certs::params {
+  $country                = $::certs::country,
+  $state                  = $::certs::state,
+  $city                   = $::certs::city,
+  $org                    = $::certs::org,
+  $org_unit               = $::certs::org_unit,
+  $expiration             = $::certs::expiration,
+  $default_ca             = $::certs::default_ca,
+  $ca_key_password_file   = $::certs::ca_key_password_file,
+  $user                   = $::certs::user,
+  $group                  = $::certs::group,
+  $nss_db_dir             = $::certs::nss_db_dir,
+  $qpid_exchange          = $::certs::candlepin_qpid_exchange,
+) inherits certs {
 
   Exec {
     logoutput => 'on_failure',
@@ -28,17 +39,17 @@ class certs::candlepin (
     ensure        => present,
     hostname      => $hostname,
     cname         => $cname,
-    country       => $::certs::country,
-    state         => $::certs::state,
-    city          => $::certs::city,
+    country       => $country,
+    state         => $state,
+    city          => $city,
     org           => 'candlepin',
-    org_unit      => $::certs::org_unit,
-    expiration    => $::certs::expiration,
-    ca            => $::certs::default_ca,
+    org_unit      => $org_unit,
+    expiration    => $expiration,
+    ca            => $default_ca,
     generate      => $generate,
     regenerate    => $regenerate,
     deploy        => $deploy,
-    password_file => $::certs::ca_key_password_file,
+    password_file => $ca_key_password_file,
   }
 
   $tomcat_cert_name = "${hostname}-tomcat"
@@ -49,17 +60,17 @@ class certs::candlepin (
     ensure        => present,
     hostname      => $hostname,
     cname         => $cname,
-    country       => $::certs::country,
-    state         => $::certs::state,
-    city          => $::certs::city,
-    org           => $::certs::org,
-    org_unit      => $::certs::org_unit,
-    expiration    => $::certs::expiration,
-    ca            => $::certs::default_ca,
+    country       => $country,
+    state         => $state,
+    city          => $city,
+    org           => $org,
+    org_unit      => $org_unit,
+    expiration    => $expiration,
+    ca            => $default_ca,
     generate      => $generate,
     regenerate    => $regenerate,
     deploy        => $deploy,
-    password_file => $::certs::ca_key_password_file,
+    password_file => $ca_key_password_file,
   }
 
   $keystore_password = cache_data('foreman_cache_data', $keystore_password_file, random_password(32))
@@ -81,19 +92,19 @@ class certs::candlepin (
     file { $password_file:
       ensure  => file,
       content => $keystore_password,
-      owner   => $::certs::user,
-      group   => $::certs::group,
+      owner   => $user,
+      group   => $group,
       mode    => '0440',
     } ~>
     exec { 'candlepin-generate-ssl-keystore':
-      command => "openssl pkcs12 -export -in ${tomcat_cert} -inkey ${tomcat_key} -out ${keystore} -name tomcat -CAfile ${ca_cert} -caname root -password \"file:${password_file}\" -passin \"file:${::certs::ca_key_password_file}\" ",
+      command => "openssl pkcs12 -export -in ${tomcat_cert} -inkey ${tomcat_key} -out ${keystore} -name tomcat -CAfile ${ca_cert} -caname root -password \"file:${password_file}\" -passin \"file:${ca_key_password_file}\" ",
       creates => $keystore,
     } ~>
     file { "/usr/share/${tomcat}/conf/keystore":
       ensure => link,
       target => $keystore,
       owner  => 'tomcat',
-      group  => $::certs::group,
+      group  => $group,
     }
 
     certs::keypair { 'candlepin':
@@ -102,7 +113,7 @@ class certs::candlepin (
       cert_file => $client_cert,
     } ~>
     certs::ssltools::certutil { 'amqp-client':
-      nss_db_dir  => $::certs::nss_db_dir,
+      nss_db_dir  => $nss_db_dir,
       client_cert => $client_cert,
       refreshonly => true,
       subscribe   => Exec['create-nss-db'],
@@ -110,7 +121,7 @@ class certs::candlepin (
     file { $amqp_store_dir:
       ensure => directory,
       owner  => 'tomcat',
-      group  => $::certs::group,
+      group  => $group,
       mode   => '0750',
     } ~>
     exec { 'import CA into Candlepin truststore':
@@ -126,7 +137,7 @@ class certs::candlepin (
     file { $amqp_keystore:
       ensure => file,
       owner  => 'tomcat',
-      group  => $::certs::group,
+      group  => $group,
       mode   => '0640',
     }
   }

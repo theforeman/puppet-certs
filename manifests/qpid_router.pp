@@ -1,5 +1,5 @@
 # Constains certs specific configurations for qpid dispatch router
-class certs::qpid_router(
+class certs::qpid_router (
   $hostname               = $::certs::node_fqdn,
   $cname                  = $::certs::cname,
   $generate               = $::certs::generate,
@@ -11,7 +11,15 @@ class certs::qpid_router(
   $client_key             = $::certs::qpid_router_client_key,
   $owner                  = $::certs::qpid_router_owner,
   $group                  = $::certs::qpid_router_group,
-) inherits certs::params {
+
+  $country               = $::certs::country,
+  $state                 = $::certs::state,
+  $city                  = $::certs::city,
+  $org_unit              = $::certs::org_unit,
+  $expiration            = $::certs::expiration,
+  $default_ca            = $::certs::default_ca,
+  $ca_key_password_file  = $::certs::ca_key_password_file,
+) inherits certs {
 
   $server_keypair = "${hostname}-qpid-router-server"
   $client_keypair = "${hostname}-qpid-router-client"
@@ -20,36 +28,36 @@ class certs::qpid_router(
     ensure        => present,
     hostname      => $hostname,
     cname         => $cname,
-    country       => $::certs::country,
-    state         => $::certs::state,
-    city          => $::certs::city,
+    country       => $country,
+    state         => $state,
+    city          => $city,
     org           => 'dispatch server',
-    org_unit      => $::certs::org_unit,
-    expiration    => $::certs::expiration,
-    ca            => $::certs::default_ca,
+    org_unit      => $org_unit,
+    expiration    => $expiration,
+    ca            => $default_ca,
     generate      => $generate,
     regenerate    => $regenerate,
     deploy        => $deploy,
     purpose       => 'server',
-    password_file => $::certs::ca_key_password_file,
+    password_file => $ca_key_password_file,
   }
 
   cert { $client_keypair:
     ensure        => present,
     hostname      => $hostname,
     cname         => $cname,
-    country       => $::certs::country,
-    state         => $::certs::state,
-    city          => $::certs::city,
+    country       => $country,
+    state         => $state,
+    city          => $city,
     org           => 'dispatch client',
-    org_unit      => $::certs::org_unit,
-    expiration    => $::certs::expiration,
-    ca            => $::certs::default_ca,
+    org_unit      => $org_unit,
+    expiration    => $expiration,
+    ca            => $default_ca,
     generate      => $generate,
     regenerate    => $regenerate,
     deploy        => $deploy,
     purpose       => 'client',
-    password_file => $::certs::ca_key_password_file,
+    password_file => $ca_key_password_file,
   }
 
   if $deploy {

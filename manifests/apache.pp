@@ -1,18 +1,30 @@
 # Certs configurations for Apache
 class certs::apache (
-
-  $hostname        = $::certs::node_fqdn,
-  $cname           = $::certs::cname,
-  $generate        = $::certs::generate,
-  $regenerate      = $::certs::regenerate,
-  $deploy          = $::certs::deploy,
-) inherits certs::params {
+  $hostname             = $::certs::node_fqdn,
+  $cname                = $::certs::cname,
+  $generate             = $::certs::generate,
+  $regenerate           = $::certs::regenerate,
+  $deploy               = $::certs::deploy,
+  $pki_dir              = $::certs::pki_dir,
+  $server_cert          = $::certs::server_cert,
+  $server_key           = $::certs::server_key,
+  $server_cert_req      = $::certs::server_cert_req,
+  $country              = $::certs::country,
+  $state                = $::certs::state,
+  $city                 = $::certs::city,
+  $org                  = $::certs::org,
+  $org_unit             = $::certs::org_unit,
+  $expiration           = $::certs::expiration,
+  $default_ca           = $::certs::default_ca,
+  $ca_key_password_file = $::certs::ca_key_password_file,
+  $group                = $::certs::group,
+) inherits certs {
 
   $apache_cert_name = "${hostname}-apache"
-  $apache_cert = "${::certs::pki_dir}/certs/katello-apache.crt"
-  $apache_key  = "${::certs::pki_dir}/private/katello-apache.key"
+  $apache_cert = "${pki_dir}/certs/katello-apache.crt"
+  $apache_key  = "${pki_dir}/private/katello-apache.key"
 
-  if $::certs::server_cert {
+  if $server_cert {
     cert { $apache_cert_name:
       ensure         => present,
       hostname       => $hostname,
@@ -20,26 +32,26 @@ class certs::apache (
       generate       => $generate,
       deploy         => $deploy,
       regenerate     => $regenerate,
-      custom_pubkey  => $::certs::server_cert,
-      custom_privkey => $::certs::server_key,
-      custom_req     => $::certs::server_cert_req,
+      custom_pubkey  => $server_cert,
+      custom_privkey => $server_key,
+      custom_req     => $server_cert_req,
     }
   } else {
     cert { $apache_cert_name:
       ensure        => present,
       hostname      => $hostname,
       cname         => $cname,
-      country       => $::certs::country,
-      state         => $::certs::state,
-      city          => $::certs::city,
-      org           => $::certs::org,
-      org_unit      => $::certs::org_unit,
-      expiration    => $::certs::expiration,
-      ca            => $::certs::default_ca,
+      country       => $country,
+      state         => $state,
+      city          => $city,
+      org           => $org,
+      org_unit      => $org_unit,
+      expiration    => $expiration,
+      ca            => $default_ca,
       generate      => $generate,
       regenerate    => $regenerate,
       deploy        => $deploy,
-      password_file => $::certs::ca_key_password_file,
+      password_file => $ca_key_password_file,
     }
   }
 
@@ -53,7 +65,7 @@ class certs::apache (
       manage_key => true,
       key_owner  => $::apache::user,
       key_mode   => '0400',
-      key_group  => $::certs::group,
+      key_group  => $group,
       cert_file  => $apache_cert,
       notify     => Service['httpd'],
     }
