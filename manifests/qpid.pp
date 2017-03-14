@@ -37,7 +37,7 @@ class certs::qpid (
     $pfx_path               = "${certs::pki_dir}/${qpid_cert_name}.pfx"
     $nssdb_files            = ["${::certs::nss_db_dir}/cert8.db", "${::certs::nss_db_dir}/key3.db", "${::certs::nss_db_dir}/secmod.db"]
 
-    Package['httpd'] -> Package['qpid-cpp-server'] ->
+    Package['qpid-cpp-server'] ->
     Cert[$qpid_cert_name] ~>
     pubkey { $client_cert:
       key_pair => Cert["${::certs::qpid::hostname}-qpid-broker"],
@@ -48,13 +48,13 @@ class certs::qpid (
     file { $client_key:
       ensure => file,
       owner  => 'root',
-      group  => 'apache',
+      group  => $::certs::qpidd_group,
       mode   => '0440',
     } ~>
     file { $::certs::nss_db_dir:
       ensure => directory,
       owner  => 'root',
-      group  => $certs::qpidd_group,
+      group  => $::certs::qpidd_group,
       mode   => '0755',
     } ~>
     exec { 'generate-nss-password':
@@ -65,7 +65,7 @@ class certs::qpid (
     file { $nss_db_password_file:
       ensure => file,
       owner  => 'root',
-      group  => $certs::qpidd_group,
+      group  => $::certs::qpidd_group,
       mode   => '0640',
     } ~>
     exec { 'create-nss-db':
@@ -81,7 +81,7 @@ class certs::qpid (
     } ~>
     file { $nssdb_files:
       owner => 'root',
-      group => $certs::qpidd_group,
+      group => $::certs::qpidd_group,
       mode  => '0640',
     } ~>
     certs::ssltools::certutil { 'broker':
