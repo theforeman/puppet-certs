@@ -101,7 +101,7 @@ class certs::candlepin (
       # Stupid keytool doesn't allow you to import a keypair.  You can only import a cert.  Hence, we have to
       # create the store as an PKCS12 and convert to JKS.  See http://stackoverflow.com/a/8224863
       command => "openssl pkcs12 -export -name amqp-client -in ${client_cert} -inkey ${client_key} -out /tmp/keystore.p12 -passout file:${password_file} && keytool -importkeystore -destkeystore ${amqp_keystore} -srckeystore /tmp/keystore.p12 -srcstoretype pkcs12 -alias amqp-client -storepass ${keystore_password} -srcstorepass ${keystore_password} -noprompt && rm /tmp/keystore.p12",
-      unless  => "keytool -list -keystore ${amqp_keystore} -storepass ${keystore_password} -alias ${certs::default_ca_name}",
+      unless  => "keytool -list -keystore ${amqp_keystore} -storepass ${keystore_password} -alias amqp-client",
     } ~>
     file { $amqp_keystore:
       ensure => file,
