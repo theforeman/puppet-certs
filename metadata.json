@@ -9,7 +9,7 @@
   "issues_url": "http://projects.theforeman.org/projects/katello/issues",
   "dependencies": [
     {
-      "name": "evenup-trusted_ca",
+      "name": "jlambert121-trusted_ca",
       "version_requirement": ">= 1.0.1 < 2.0.0"
     },
     {
@@ -18,7 +18,7 @@
     },
     {
       "name": "puppet-extlib",
-      "version_requirement": ">= 0.10.4 < 1.0.0"
+      "version_requirement": ">= 0.10.4 < 2.0.0"
     },
     {
       "name": "puppetlabs-concat",

@@ -1,12 +1,10 @@
 fixtures:
   repositories:
     stdlib:            "https://github.com/puppetlabs/puppetlabs-stdlib.git"
-    extlib:
-      repo: 'https://github.com/puppet-community/puppet-extlib'
-      ref:  'v0.11.3'
+    extlib:            "https://github.com/puppet-community/puppet-extlib"
     foreman:           "https://github.com/theforeman/puppet-foreman.git"
     common:            "https://github.com/katello/puppet-common.git"
-    trusted_ca:        "https://github.com/evenup/evenup-trusted_ca.git"
+    trusted_ca:        "https://github.com/jlambert121/jlambert121-trusted_ca"
     concat:            "https://github.com/puppetlabs/puppetlabs-concat"
     apache:            "https://github.com/puppetlabs/puppetlabs-apache"
     puppet:            "https://github.com/theforeman/puppet-puppet"
