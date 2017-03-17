@@ -7,9 +7,8 @@ class certs::qpid_client (
   $regenerate = $::certs::regenerate,
   $deploy     = $::certs::deploy,
 
-  $messaging_client_cert = $certs::params::messaging_client_cert
-
-  ) {
+  $messaging_client_cert = $::certs::messaging_client_cert,
+) {
 
   cert { "${hostname}-qpid-client-cert":
     hostname      => $hostname,
@@ -26,7 +25,7 @@ class certs::qpid_client (
     generate      => $generate,
     regenerate    => $regenerate,
     deploy        => $deploy,
-    password_file => $certs::ca_key_password_file,
+    password_file => $::certs::ca_key_password_file,
   }
 
   if $deploy {

@@ -1,21 +1,20 @@
 # Handles Qpid cert configuration
 class certs::qpid (
-
   $hostname   = $::certs::node_fqdn,
   $cname      = $::certs::cname,
   $generate   = $::certs::generate,
   $regenerate = $::certs::regenerate,
   $deploy     = $::certs::deploy,
-  ){
+) {
 
   Exec { logoutput => 'on_failure' }
 
-  $qpid_cert_name = "${certs::qpid::hostname}-qpid-broker"
+  $qpid_cert_name = "${hostname}-qpid-broker"
 
   cert { $qpid_cert_name:
     ensure        => present,
-    hostname      => $::certs::qpid::hostname,
-    cname         => concat($::certs::qpid::cname, 'localhost'),
+    hostname      => $hostname,
+    cname         => concat($cname, 'localhost'),
     country       => $::certs::country,
     state         => $::certs::state,
     city          => $::certs::city,
@@ -26,24 +25,24 @@ class certs::qpid (
     generate      => $generate,
     regenerate    => $regenerate,
     deploy        => $deploy,
-    password_file => $certs::ca_key_password_file,
+    password_file => $::certs::ca_key_password_file,
   }
 
   if $deploy {
 
-    $nss_db_password_file   = "${certs::nss_db_dir}/nss_db_password-file"
-    $client_cert            = "${certs::pki_dir}/certs/${qpid_cert_name}.crt"
-    $client_key             = "${certs::pki_dir}/private/${qpid_cert_name}.key"
-    $pfx_path               = "${certs::pki_dir}/${qpid_cert_name}.pfx"
+    $nss_db_password_file   = "${::certs::nss_db_dir}/nss_db_password-file"
+    $client_cert            = "${::certs::pki_dir}/certs/${qpid_cert_name}.crt"
+    $client_key             = "${::certs::pki_dir}/private/${qpid_cert_name}.key"
+    $pfx_path               = "${::certs::pki_dir}/${qpid_cert_name}.pfx"
     $nssdb_files            = ["${::certs::nss_db_dir}/cert8.db", "${::certs::nss_db_dir}/key3.db", "${::certs::nss_db_dir}/secmod.db"]
 
     Package['httpd'] -> Package['qpid-cpp-server'] ->
     Cert[$qpid_cert_name] ~>
     pubkey { $client_cert:
-      key_pair => Cert["${::certs::qpid::hostname}-qpid-broker"],
+      key_pair => Cert[$qpid_cert_name],
     } ~>
     privkey { $client_key:
-      key_pair => Cert["${::certs::qpid::hostname}-qpid-broker"],
+      key_pair => Cert[$qpid_cert_name],
     } ~>
     file { $client_key:
       ensure => file,
@@ -54,7 +53,7 @@ class certs::qpid (
     file { $::certs::nss_db_dir:
       ensure => directory,
       owner  => 'root',
-      group  => $certs::qpidd_group,
+      group  => $::certs::qpidd_group,
       mode   => '0755',
     } ~>
     exec { 'generate-nss-password':
@@ -65,7 +64,7 @@ class certs::qpid (
     file { $nss_db_password_file:
       ensure => file,
       owner  => 'root',
-      group  => $certs::qpidd_group,
+      group  => $::certs::qpidd_group,
       mode   => '0640',
     } ~>
     exec { 'create-nss-db':
@@ -81,7 +80,7 @@ class certs::qpid (
     } ~>
     file { $nssdb_files:
       owner => 'root',
-      group => $certs::qpidd_group,
+      group => $::certs::qpidd_group,
       mode  => '0640',
     } ~>
     certs::ssltools::certutil { 'broker':

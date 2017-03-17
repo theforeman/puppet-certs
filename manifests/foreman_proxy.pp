@@ -1,6 +1,5 @@
 # Handles Foreman Proxy cert configuration
 class certs::foreman_proxy (
-
   $hostname            = $::certs::node_fqdn,
   $cname               = $::certs::cname,
   $generate            = $::certs::generate,
@@ -12,18 +11,17 @@ class certs::foreman_proxy (
   $foreman_ssl_cert    = $::certs::params::foreman_proxy_foreman_ssl_cert,
   $foreman_ssl_key     = $::certs::params::foreman_proxy_foreman_ssl_key,
   $foreman_ssl_ca_cert = $::certs::params::foreman_proxy_foreman_ssl_ca_cert
+) inherits certs::params {
 
-  ) inherits certs::params {
-
-  $proxy_cert_name = "${::certs::foreman_proxy::hostname}-foreman-proxy"
-  $foreman_proxy_client_cert_name = "${::certs::foreman_proxy::hostname}-foreman-proxy-client"
-  $foreman_proxy_ssl_client_bundle = "${certs::pki_dir}/private/${foreman_proxy_client_cert_name}-bundle.pem"
+  $proxy_cert_name = "${hostname}-foreman-proxy"
+  $foreman_proxy_client_cert_name = "${hostname}-foreman-proxy-client"
+  $foreman_proxy_ssl_client_bundle = "${::certs::pki_dir}/private/${foreman_proxy_client_cert_name}-bundle.pem"
 
   if $::certs::server_cert {
     cert { $proxy_cert_name:
       ensure         => present,
-      hostname       => $::certs::foreman_proxy::hostname,
-      cname          => $::certs::foreman_proxy::cname,
+      hostname       => $hostname,
+      cname          => $cname,
       generate       => $generate,
       regenerate     => $regenerate,
       deploy         => $deploy,
@@ -34,9 +32,9 @@ class certs::foreman_proxy (
   } else {
     # cert for ssl of foreman-proxy
     cert { $proxy_cert_name:
-      hostname      => $::certs::foreman_proxy::hostname,
-      cname         => $::certs::foreman_proxy::cname,
-      purpose       => server,
+      hostname      => $hostname,
+      cname         => $cname,
+      purpose       => 'server',
       country       => $::certs::country,
       state         => $::certs::state,
       city          => $::certs::city,
@@ -47,15 +45,15 @@ class certs::foreman_proxy (
       generate      => $generate,
       regenerate    => $regenerate,
       deploy        => $deploy,
-      password_file => $certs::ca_key_password_file,
+      password_file => $::certs::ca_key_password_file,
     }
   }
 
   # cert for authentication of foreman_proxy against foreman
   cert { $foreman_proxy_client_cert_name:
-    hostname      => $::certs::foreman_proxy::hostname,
-    cname         => $::certs::foreman_proxy::cname,
-    purpose       => client,
+    hostname      => $hostname,
+    cname         => $cname,
+    purpose       => 'client',
     country       => $::certs::country,
     state         => $::certs::state,
     city          => $::certs::city,
@@ -66,7 +64,7 @@ class certs::foreman_proxy (
     generate      => $generate,
     regenerate    => $regenerate,
     deploy        => $deploy,
-    password_file => $certs::ca_key_password_file,
+    password_file => $::certs::ca_key_password_file,
   }
 
   if $deploy {
@@ -81,13 +79,13 @@ class certs::foreman_proxy (
       notify   => Service['foreman-proxy'],
     } ->
     pubkey { $proxy_ca_cert:
-      key_pair => $certs::default_ca,
+      key_pair => $::certs::default_ca,
       notify   => Service['foreman-proxy'],
     } ~>
     file { $proxy_key:
       ensure => file,
       owner  => 'foreman-proxy',
-      group  => $certs::group,
+      group  => $::certs::group,
       mode   => '0400',
     } ~>
     Service['foreman-proxy']

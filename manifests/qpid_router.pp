@@ -30,8 +30,8 @@ class certs::qpid_router(
     generate      => $generate,
     regenerate    => $regenerate,
     deploy        => $deploy,
-    purpose       => server,
-    password_file => $certs::ca_key_password_file,
+    purpose       => 'server',
+    password_file => $::certs::ca_key_password_file,
   }
 
   cert { $client_keypair:
@@ -48,8 +48,8 @@ class certs::qpid_router(
     generate      => $generate,
     regenerate    => $regenerate,
     deploy        => $deploy,
-    purpose       => client,
-    password_file => $certs::ca_key_password_file,
+    purpose       => 'client',
+    password_file => $::certs::ca_key_password_file,
   }
 
   if $deploy {

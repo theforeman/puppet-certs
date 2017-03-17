@@ -6,11 +6,11 @@ class certs::apache (
   $generate        = $::certs::generate,
   $regenerate      = $::certs::regenerate,
   $deploy          = $::certs::deploy,
-  ) inherits certs::params {
+) inherits certs::params {
 
   $apache_cert_name = "${hostname}-apache"
-  $apache_cert = "${certs::pki_dir}/certs/katello-apache.crt"
-  $apache_key  = "${certs::pki_dir}/private/katello-apache.key"
+  $apache_cert = "${::certs::pki_dir}/certs/katello-apache.crt"
+  $apache_key  = "${::certs::pki_dir}/private/katello-apache.key"
 
   if $::certs::server_cert {
     cert { $apache_cert_name:
@@ -39,7 +39,7 @@ class certs::apache (
       generate      => $generate,
       regenerate    => $regenerate,
       deploy        => $deploy,
-      password_file => $certs::ca_key_password_file,
+      password_file => $::certs::ca_key_password_file,
     }
   }
 

@@ -22,8 +22,8 @@ class certs::katello (
 
   include ::trusted_ca
   trusted_ca::ca { 'katello_server-host-cert':
-    source  => $certs::katello_server_ca_cert,
-    require => File[$certs::katello_server_ca_cert],
+    source  => $::certs::katello_server_ca_cert,
+    require => File[$::certs::katello_server_ca_cert],
   }
 
   file { $katello_www_pub_dir:
@@ -33,13 +33,13 @@ class certs::katello (
     mode   => '0755',
   } ->
   # Placing the CA in the pub dir for trusting by a user in their browser
-  file { "${katello_www_pub_dir}/${certs::server_ca_name}.crt":
+  file { "${katello_www_pub_dir}/${::certs::server_ca_name}.crt":
     ensure  => file,
-    source  => $certs::katello_server_ca_cert,
+    source  => $::certs::katello_server_ca_cert,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => File[$certs::katello_server_ca_cert],
+    require => File[$::certs::katello_server_ca_cert],
   } ~>
   certs::rhsm_reconfigure_script { "${katello_www_pub_dir}/${katello_rhsm_setup_script}":
     ca_cert        => $::certs::ca_cert,

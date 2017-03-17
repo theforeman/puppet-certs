@@ -1,6 +1,5 @@
 # Handles Foreman certs configuration
 class certs::foreman (
-
   $hostname       = $::certs::node_fqdn,
   $cname          = $::certs::cname,
   $generate       = $::certs::generate,
@@ -9,16 +8,15 @@ class certs::foreman (
   $client_cert    = $::certs::params::foreman_client_cert,
   $client_key     = $::certs::params::foreman_client_key,
   $ssl_ca_cert    = $::certs::params::foreman_ssl_ca_cert
+) inherits certs::params {
 
-  ) inherits certs::params {
-
-  $client_cert_name = "${::certs::foreman::hostname}-foreman-client"
+  $client_cert_name = "${hostname}-foreman-client"
 
   # cert for authentication of puppetmaster against foreman
   cert { $client_cert_name:
-    hostname      => $::certs::foreman::hostname,
-    cname         => $::certs::foreman::cname,
-    purpose       => client,
+    hostname      => $hostname,
+    cname         => $cname,
+    purpose       => 'client',
     country       => $::certs::country,
     state         => $::certs::state,
     city          => $::certs::city,
@@ -29,7 +27,7 @@ class certs::foreman (
     generate      => $generate,
     regenerate    => $regenerate,
     deploy        => $deploy,
-    password_file => $certs::ca_key_password_file,
+    password_file => $::certs::ca_key_password_file,
   }
 
   if $deploy {

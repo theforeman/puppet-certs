@@ -1,6 +1,5 @@
 # Class for handling Puppet cert configuration
 class certs::puppet (
-
   $hostname    = $::certs::node_fqdn,
   $cname       = $::certs::cname,
   $generate    = $::certs::generate,
@@ -10,16 +9,15 @@ class certs::puppet (
   $client_cert = $::certs::params::puppet_client_cert,
   $client_key  = $::certs::params::puppet_client_key,
   $ssl_ca_cert = $::certs::params::puppet_ssl_ca_cert
+) inherits certs::params {
 
-  ) inherits certs::params {
-
-  $puppet_client_cert_name = "${::certs::puppet::hostname}-puppet-client"
+  $puppet_client_cert_name = "${hostname}-puppet-client"
 
   # cert for authentication of puppetmaster against foreman
   cert { $puppet_client_cert_name:
-    hostname      => $::certs::puppet::hostname,
-    cname         => $::certs::puppet::cname,
-    purpose       => client,
+    hostname      => $hostname,
+    cname         => $cname,
+    purpose       => 'client',
     country       => $::certs::country,
     state         => $::certs::state,
     city          => $::certs::city,
@@ -30,11 +28,11 @@ class certs::puppet (
     generate      => $generate,
     regenerate    => $regenerate,
     deploy        => $deploy,
-    password_file => $certs::ca_key_password_file,
+    password_file => $::certs::ca_key_password_file,
   }
 
   if $deploy {
-    file { "${certs::pki_dir}/puppet":
+    file { "${::certs::pki_dir}/puppet":
       ensure  => directory,
       owner   => 'puppet',
       mode    => '0700',
