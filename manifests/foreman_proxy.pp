@@ -107,7 +107,6 @@ class certs::foreman_proxy (
     } ~>
     file { $foreman_proxy_ssl_client_bundle:
       ensure => file,
-      owner  => $::certs::group,
       mode   => '0644',
     } ~>
     file { $foreman_ssl_key:
