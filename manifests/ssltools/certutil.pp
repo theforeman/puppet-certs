@@ -1,6 +1,8 @@
 # type to append cert to nssdb
 define certs::ssltools::certutil($nss_db_dir, $client_cert, $cert_name=$title, $refreshonly = true, $trustargs = ',,') {
-  Exec['create-nss-db'] ->
+  include ::certs::ssltools::nssdb
+
+  Class['::certs::ssltools::nssdb'] ->
   exec { "delete ${cert_name}":
     path        => ['/bin', '/usr/bin'],
     command     => "certutil -D -d ${nss_db_dir} -n '${cert_name}'",

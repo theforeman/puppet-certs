@@ -29,12 +29,12 @@ class certs::qpid (
   }
 
   if $deploy {
+    include ::certs::ssltools::nssdb
+    $nss_db_password_file = $::certs::ssltools::nssdb::nss_db_password_file
 
-    $nss_db_password_file   = "${::certs::nss_db_dir}/nss_db_password-file"
     $client_cert            = "${::certs::pki_dir}/certs/${qpid_cert_name}.crt"
     $client_key             = "${::certs::pki_dir}/private/${qpid_cert_name}.key"
     $pfx_path               = "${::certs::pki_dir}/${qpid_cert_name}.pfx"
-    $nssdb_files            = ["${::certs::nss_db_dir}/cert8.db", "${::certs::nss_db_dir}/key3.db", "${::certs::nss_db_dir}/secmod.db"]
 
     Package['qpid-cpp-server'] ->
     certs::keypair { 'qpid':
@@ -46,38 +46,12 @@ class certs::qpid (
       key_mode   => '0440',
       cert_file  => $client_cert,
     } ~>
-    file { $::certs::nss_db_dir:
-      ensure => directory,
-      owner  => 'root',
-      group  => $::certs::qpidd_group,
-      mode   => '0755',
-    } ~>
-    exec { 'generate-nss-password':
-      command => "openssl rand -base64 24 > ${nss_db_password_file}",
-      path    => '/usr/bin',
-      creates => $nss_db_password_file,
-    } ->
-    file { $nss_db_password_file:
-      ensure => file,
-      owner  => 'root',
-      group  => $::certs::qpidd_group,
-      mode   => '0640',
-    } ~>
-    exec { 'create-nss-db':
-      command => "certutil -N -d '${::certs::nss_db_dir}' -f '${nss_db_password_file}'",
-      path    => '/usr/bin',
-      creates => $nssdb_files,
-    } ~>
+    Class['::certs::ssltools::nssdb'] ~>
     certs::ssltools::certutil { 'ca':
       nss_db_dir  => $::certs::nss_db_dir,
       client_cert => $::certs::ca_cert,
       trustargs   => 'TCu,Cu,Tuw',
       refreshonly => true,
-    } ~>
-    file { $nssdb_files:
-      owner => 'root',
-      group => $::certs::qpidd_group,
-      mode  => '0640',
     } ~>
     certs::ssltools::certutil { 'broker':
       nss_db_dir  => $::certs::nss_db_dir,
@@ -98,5 +72,4 @@ class certs::qpid (
     Pubkey[$::certs::ca_cert] ~> Certs::Ssltools::Certutil['ca']
     Pubkey[$client_cert] ~> Certs::Ssltools::Certutil['broker']
   }
-
 }

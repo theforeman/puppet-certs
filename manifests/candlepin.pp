@@ -48,6 +48,7 @@ class certs::candlepin (
   $client_key = "${::certs::pki_dir}/private/${java_client_cert_name}.key"
 
   if $deploy {
+    include ::certs::ssltools::nssdb
 
     file { $password_file:
       ensure  => file,
