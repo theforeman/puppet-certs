@@ -32,18 +32,14 @@ class certs::pulp_client (
   }
 
   if $deploy {
-    Cert[$client_cert_name] ~>
-    pubkey { $client_cert:
-      key_pair => Cert[$client_cert_name],
-    } ~>
-    privkey { $client_key:
-      key_pair => Cert[$client_cert_name],
-    } ~>
-    file { $client_key:
-      group => $::certs::group,
-      owner => 'root',
-      mode  => '0440',
+    certs::keypair { 'pulp_client':
+      key_pair   => $client_cert_name,
+      key_file   => $client_key,
+      manage_key => true,
+      key_group  => $::certs::group,
+      key_owner  => 'root',
+      key_mode   => '0440',
+      cert_file  => $client_cert,
     }
   }
-
 }

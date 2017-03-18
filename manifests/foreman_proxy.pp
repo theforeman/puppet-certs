@@ -69,29 +69,26 @@ class certs::foreman_proxy (
 
   if $deploy {
 
-    Cert[$proxy_cert_name] ~>
-    pubkey { $proxy_cert:
-      key_pair => Cert[$proxy_cert_name],
-    } ~>
-    privkey { $proxy_key:
-      key_pair => Cert[$proxy_cert_name],
+    certs::keypair { 'foreman_proxy':
+      key_pair   => $proxy_cert_name,
+      key_file   => $proxy_key,
+      manage_key => true,
+      key_owner  => 'foreman-proxy',
+      key_mode   => '0400',
+      key_group  => $::certs::group,
+      cert_file  => $proxy_cert,
     } ->
     pubkey { $proxy_ca_cert:
       key_pair => $::certs::default_ca,
-    } ~>
-    file { $proxy_key:
-      ensure => file,
-      owner  => 'foreman-proxy',
-      group  => $::certs::group,
-      mode   => '0400',
     }
 
-    Cert[$foreman_proxy_client_cert_name] ~>
-    pubkey { $foreman_ssl_cert:
-      key_pair => Cert[$foreman_proxy_client_cert_name],
-    } ~>
-    privkey { $foreman_ssl_key:
-      key_pair => Cert[$foreman_proxy_client_cert_name],
+    certs::keypair { 'foreman_proxy_client':
+      key_pair   => $foreman_proxy_client_cert_name,
+      key_file   => $foreman_ssl_key,
+      manage_key => true,
+      key_owner  => 'foreman-proxy',
+      key_mode   => '0400',
+      cert_file  => $foreman_ssl_cert,
     } ->
     pubkey { $foreman_ssl_ca_cert:
       key_pair => $::certs::server_ca,
@@ -102,11 +99,6 @@ class certs::foreman_proxy (
     file { $foreman_proxy_ssl_client_bundle:
       ensure => file,
       mode   => '0644',
-    } ~>
-    file { $foreman_ssl_key:
-      ensure => file,
-      owner  => 'foreman-proxy',
-      mode   => '0400',
     }
 
   }

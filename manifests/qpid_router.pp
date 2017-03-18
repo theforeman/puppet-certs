@@ -53,40 +53,32 @@ class certs::qpid_router(
   }
 
   if $deploy {
-    Cert[$server_keypair] ~>
-    privkey { $server_key:
-      key_pair => Cert[$server_keypair],
-    } ~>
-    file { $server_key:
-      owner => $owner,
-      group => $group,
-      mode  => '0640',
-    } ~>
-    pubkey { $server_cert:
-      key_pair => Cert[$server_keypair],
-    } ~>
-    file { $server_cert:
-      owner => $owner,
-      group => $group,
-      mode  => '0640',
+    certs::keypair { 'qpid_router_server':
+      key_pair    => $server_keypair,
+      key_file    => $server_key,
+      manage_key  => true,
+      key_owner   => $owner,
+      key_group   => $group,
+      key_mode    => '0640',
+      cert_file   => $server_cert,
+      manage_cert => true,
+      cert_owner  => $owner,
+      cert_group  => $group,
+      cert_mode   => '0640',
     }
 
-    Cert[$client_keypair] ~>
-    privkey { $client_key:
-      key_pair => Cert[$client_keypair],
-    } ~>
-    file { $client_key:
-      owner => $owner,
-      group => $group,
-      mode  => '0640',
-    } ~>
-    pubkey { $client_cert:
-      key_pair => Cert[$client_keypair],
-    } ~>
-    file { $client_cert:
-      owner => $owner,
-      group => $group,
-      mode  => '0640',
+    certs::keypair { 'qpid_router_client':
+      key_pair    => $client_keypair,
+      key_file    => $client_key,
+      manage_key  => true,
+      key_owner   => $owner,
+      key_group   => $group,
+      key_mode    => '0640',
+      cert_file   => $client_cert,
+      manage_cert => true,
+      cert_owner  => $owner,
+      cert_group  => $group,
+      cert_mode   => '0640',
     }
   }
 }

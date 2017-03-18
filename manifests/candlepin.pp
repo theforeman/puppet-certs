@@ -67,12 +67,10 @@ class certs::candlepin (
       group  => $::certs::group,
     }
 
-    Cert[$java_client_cert_name] ~>
-    pubkey { $client_cert:
-      key_pair => Cert[$java_client_cert_name],
-    } ~>
-    privkey { $client_key:
-      key_pair => Cert[$java_client_cert_name],
+    certs::keypair { 'candlepin':
+      key_pair  => $java_client_cert_name,
+      key_file  => $client_key,
+      cert_file => $client_cert,
     } ~>
     certs::ssltools::certutil { 'amqp-client':
       nss_db_dir  => $::certs::nss_db_dir,
