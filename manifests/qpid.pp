@@ -37,18 +37,14 @@ class certs::qpid (
     $nssdb_files            = ["${::certs::nss_db_dir}/cert8.db", "${::certs::nss_db_dir}/key3.db", "${::certs::nss_db_dir}/secmod.db"]
 
     Package['qpid-cpp-server'] ->
-    Cert[$qpid_cert_name] ~>
-    pubkey { $client_cert:
-      key_pair => Cert[$qpid_cert_name],
-    } ~>
-    privkey { $client_key:
-      key_pair => Cert[$qpid_cert_name],
-    } ~>
-    file { $client_key:
-      ensure => file,
-      owner  => 'root',
-      group  => $::certs::qpidd_group,
-      mode   => '0440',
+    certs::keypair { 'qpid':
+      key_pair   => $qpid_cert_name,
+      key_file   => $client_key,
+      manage_key => true,
+      key_owner  => 'root',
+      key_group  => 'apache',
+      key_mode   => '0440',
+      cert_file  => $client_cert,
     } ~>
     file { $::certs::nss_db_dir:
       ensure => directory,

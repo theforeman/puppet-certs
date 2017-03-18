@@ -47,23 +47,15 @@ class certs::apache (
 
     include ::apache
 
-    Cert[$apache_cert_name] ~>
-    pubkey { $apache_cert:
-      ensure   => present,
-      key_pair => Cert[$apache_cert_name],
-      notify   => Service['httpd'],
-    } ~>
-    privkey { $apache_key:
-      ensure   => present,
-      key_pair => Cert[$apache_cert_name],
-      notify   => Service['httpd'],
-    } ->
-    file { $apache_key:
-      owner => $::apache::user,
-      group => $::certs::group,
-      mode  => '0440',
-    } ->
-    Service['httpd']
-
+    certs::keypair { 'apache':
+      key_pair   => $apache_cert_name,
+      key_file   => $apache_key,
+      manage_key => true,
+      key_owner  => $::apache::user,
+      key_mode   => '0400',
+      key_group  => $::certs::group,
+      cert_file  => $apache_cert,
+      notify     => Service['httpd'],
+    }
   }
 }

@@ -31,21 +31,13 @@ class certs::foreman (
   }
 
   if $deploy {
-
-    Cert[$client_cert_name] ~>
-    pubkey { $client_cert:
-      key_pair => Cert[$client_cert_name],
-    } ~>
-    privkey { $client_key:
-      key_pair => Cert[$client_cert_name],
-    } ->
-    pubkey { $ssl_ca_cert:
-      key_pair => $::certs::server_ca,
-    } ~>
-    file { $client_key:
-      ensure => file,
-      owner  => 'foreman',
-      mode   => '0400',
+    certs::keypair { 'foreman':
+      key_pair   => $client_cert_name,
+      key_file   => $client_key,
+      manage_key => true,
+      key_owner  => 'foreman',
+      key_mode   => '0400',
+      cert_file  => $client_cert,
     }
   }
 }

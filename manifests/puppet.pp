@@ -38,17 +38,21 @@ class certs::puppet (
       mode    => '0700',
       require => Class['puppet::server::install'],
     } ->
-    Cert[$puppet_client_cert_name] ~>
-    pubkey { $client_cert:
-      key_pair => Cert[$puppet_client_cert_name],
-    } ~>
-    privkey { $client_key:
-      key_pair => Cert[$puppet_client_cert_name],
+    certs::keypair { 'puppet':
+      key_pair    => $puppet_client_cert_name,
+      key_file    => $client_key,
+      manage_key  => true,
+      key_owner   => 'puppet',
+      key_mode    => '0400',
+      cert_file   => $client_cert,
+      manage_cert => true,
+      cert_owner  => 'puppet',
+      cert_mode   => '0400',
     } ->
     pubkey { $ssl_ca_cert:
       key_pair => $::certs::server_ca,
-    } ~>
-    file { [$client_cert, $client_key, $ssl_ca_cert]:
+    } ->
+    file { $ssl_ca_cert:
       ensure => file,
       owner  => 'puppet',
       mode   => '0400',
