@@ -85,11 +85,6 @@ class certs::candlepin (
       group  => $::certs::group,
       mode   => '0750',
     } ~>
-    exec { 'create candlepin qpid exchange':
-      command => "qpid-config --ssl-certificate ${client_cert} --ssl-key ${client_key} -b 'amqps://localhost:5671' add exchange topic ${::certs::candlepin_qpid_exchange} --durable",
-      unless  => "qpid-config --ssl-certificate ${client_cert} --ssl-key ${client_key} -b 'amqps://localhost:5671' exchanges ${::certs::candlepin_qpid_exchange}",
-      require => Service['qpidd'],
-    } ~>
     exec { 'import CA into Candlepin truststore':
       command => "keytool -import -v -keystore ${amqp_truststore} -storepass ${keystore_password} -alias ${::certs::default_ca_name} -file ${ca_cert} -noprompt",
       creates => $amqp_truststore,
