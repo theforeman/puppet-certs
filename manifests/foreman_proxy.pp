@@ -72,23 +72,19 @@ class certs::foreman_proxy (
     Cert[$proxy_cert_name] ~>
     pubkey { $proxy_cert:
       key_pair => Cert[$proxy_cert_name],
-      notify   => Service['foreman-proxy'],
     } ~>
     privkey { $proxy_key:
       key_pair => Cert[$proxy_cert_name],
-      notify   => Service['foreman-proxy'],
     } ->
     pubkey { $proxy_ca_cert:
       key_pair => $::certs::default_ca,
-      notify   => Service['foreman-proxy'],
     } ~>
     file { $proxy_key:
       ensure => file,
       owner  => 'foreman-proxy',
       group  => $::certs::group,
       mode   => '0400',
-    } ~>
-    Service['foreman-proxy']
+    }
 
     Cert[$foreman_proxy_client_cert_name] ~>
     pubkey { $foreman_ssl_cert:

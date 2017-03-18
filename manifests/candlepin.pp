@@ -65,7 +65,6 @@ class certs::candlepin (
       target => $keystore,
       owner  => 'tomcat',
       group  => $::certs::group,
-      notify => Service[$tomcat],
     }
 
     Cert[$java_client_cert_name] ~>
@@ -108,7 +107,6 @@ class certs::candlepin (
       owner  => 'tomcat',
       group  => $::certs::group,
       mode   => '0640',
-      notify => Service[$tomcat],
     }
   }
 }
