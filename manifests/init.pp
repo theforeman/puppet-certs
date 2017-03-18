@@ -93,36 +93,36 @@
 #                         type:String
 #
 class certs (
-  $log_dir        = $::certs::params::log_dir,
-  $node_fqdn      = $::certs::params::node_fqdn,
-  $cname          = $::certs::params::cname,
-  $generate       = $::certs::params::generate,
-  $regenerate     = $::certs::params::regenerate,
-  $regenerate_ca  = $::certs::params::regenerate_ca,
-  $deploy         = $::certs::params::deploy,
-  $ca_common_name = $::certs::params::ca_common_name,
-  $country        = $::certs::params::country,
-  $state          = $::certs::params::state,
-  $city           = $::certs::params::city,
-  $org            = $::certs::params::org,
-  $org_unit       = $::certs::params::org_unit,
+  $log_dir         = $::certs::params::log_dir,
+  $node_fqdn       = $::certs::params::node_fqdn,
+  $cname           = $::certs::params::cname,
+  $generate        = $::certs::params::generate,
+  $regenerate      = $::certs::params::regenerate,
+  $regenerate_ca   = $::certs::params::regenerate_ca,
+  $deploy          = $::certs::params::deploy,
+  $ca_common_name  = $::certs::params::ca_common_name,
+  $country         = $::certs::params::country,
+  $state           = $::certs::params::state,
+  $city            = $::certs::params::city,
+  $org             = $::certs::params::org,
+  $org_unit        = $::certs::params::org_unit,
 
-  $expiration     = $::certs::params::expiration,
-  $ca_expiration  = $::certs::params::ca_expiration,
+  $expiration      = $::certs::params::expiration,
+  $ca_expiration   = $::certs::params::ca_expiration,
 
   $server_cert     = $::certs::params::server_cert,
   $server_key      = $::certs::params::server_key,
   $server_cert_req = $::certs::params::server_cert_req,
   $server_ca_cert  = $::certs::params::server_ca_cert,
 
-  $pki_dir       = $::certs::params::pki_dir,
-  $ssl_build_dir = $::certs::params::ssl_build_dir,
+  $pki_dir         = $::certs::params::pki_dir,
+  $ssl_build_dir   = $::certs::params::ssl_build_dir,
 
-  $user   = $::certs::params::user,
-  $group  = $::certs::params::group,
+  $user            = $::certs::params::user,
+  $group           = $::certs::params::group,
 
   $default_ca_name = $::certs::params::default_ca_name,
-  $server_ca_name  = $::certs::params::server_ca_name
+  $server_ca_name  = $::certs::params::server_ca_name,
 ) inherits certs::params {
 
   if $server_cert {
@@ -146,95 +146,8 @@ class certs (
 
   class { '::certs::install': } ->
   class { '::certs::config': } ->
-  file { $ca_key_password_file:
-    ensure  => file,
-    content => $ca_key_password,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0400',
-  } ~>
-  ca { $default_ca_name:
-    ensure        => present,
-    common_name   => $ca_common_name,
-    country       => $country,
-    state         => $state,
-    city          => $city,
-    org           => $org,
-    org_unit      => $org_unit,
-    expiration    => $ca_expiration,
-    generate      => $generate,
-    deploy        => $deploy,
-    password_file => $ca_key_password_file,
-  }
+  class { '::certs::ca': }
 
-  $default_ca = Ca[$default_ca_name]
-
-  if $server_cert {
-    ca { $server_ca_name:
-      ensure        => present,
-      generate      => $generate,
-      deploy        => $deploy,
-      custom_pubkey => $server_ca_cert,
-    }
-  } else {
-    ca { $server_ca_name:
-      ensure   => present,
-      generate => $generate,
-      deploy   => $deploy,
-      ca       => $default_ca,
-    }
-  }
-  $server_ca = Ca[$server_ca_name]
-
-  if $generate {
-    file { "${ssl_build_dir}/KATELLO-TRUSTED-SSL-CERT":
-      ensure  => link,
-      target  => "${ssl_build_dir}/${server_ca_name}.crt",
-      require => $server_ca,
-    }
-  }
-
-  if $deploy {
-
-    Ca[$default_ca_name] ~>
-    pubkey { $ca_cert:
-      key_pair => $default_ca,
-    } ~>
-    pubkey { $ca_cert_stripped:
-      strip    => true,
-      key_pair => $default_ca,
-    } ~>
-    file { $ca_cert:
-      ensure => file,
-      owner  => 'root',
-      group  => $group,
-      mode   => '0644',
-    }
-
-    Ca[$server_ca_name] ~>
-    pubkey { $katello_server_ca_cert:
-      key_pair => $server_ca,
-    } ~>
-    file { $katello_server_ca_cert:
-      ensure => file,
-      owner  => 'root',
-      group  => $group,
-      mode   => '0644',
-    }
-
-    if $generate {
-      Ca[$default_ca_name] ~>
-      privkey { $ca_key:
-        key_pair      => $default_ca,
-        unprotect     => true,
-        password_file => $ca_key_password_file,
-      } ~>
-      file { $ca_key:
-        ensure => file,
-        owner  => 'root',
-        group  => $group,
-        mode   => '0440',
-      }
-    }
-  }
+  $default_ca = $::certs::ca::default_ca
+  $server_ca = $::certs::ca::server_ca
 }
