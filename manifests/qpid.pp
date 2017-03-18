@@ -97,8 +97,7 @@ class certs::qpid (
       command     => "pk12util -i '${pfx_path}' -d '${::certs::nss_db_dir}' -w '${nss_db_password_file}' -k '${nss_db_password_file}'",
       path        => '/usr/bin',
       refreshonly => true,
-    } ~>
-    Service['qpidd']
+    }
 
     Pubkey[$::certs::ca_cert] ~> Certs::Ssltools::Certutil['ca']
     Pubkey[$client_cert] ~> Certs::Ssltools::Certutil['broker']
