@@ -42,7 +42,7 @@ class certs::qpid (
       key_file   => $client_key,
       manage_key => true,
       key_owner  => 'root',
-      key_group  => 'apache',
+      key_group  => $::certs::qpidd_group,
       key_mode   => '0440',
       cert_file  => $client_cert,
     } ~>
