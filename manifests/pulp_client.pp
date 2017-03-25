@@ -6,7 +6,7 @@ class certs::pulp_client (
   $regenerate  = $::certs::regenerate,
   $deploy      = $::certs::deploy,
   $common_name = 'admin',
-  ){
+) {
 
   $client_cert_name = 'pulp-client'
   $client_cert      = "${::certs::pki_dir}/certs/${client_cert_name}.crt"

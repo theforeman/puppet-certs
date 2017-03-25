@@ -19,7 +19,7 @@ class certs::foreman_proxy_content (
   $parent_fqdn          = $::fqdn,
   $foreman_proxy_fqdn   = $::certs::params::node_fqdn,
   $foreman_proxy_cname  = $::certs::params::cname,
-  $certs_tar            = $::certs::params::certs_tar
+  $certs_tar            = $::certs::params::certs_tar,
 ) inherits certs::params {
 
   # until we support again pushing the cert rpms to the Katello,
@@ -37,13 +37,7 @@ class certs::foreman_proxy_content (
 
   if $certs_tar {
     certs::tar_create { $certs_tar:
-      subscribe => [Class['certs::puppet'],
-                    Class['certs::foreman'],
-                    Class['certs::foreman_proxy'],
-                    Class['certs::qpid'],
-                    Class['certs::qpid_router'],
-                    Class['certs::apache'],
-                    Class['certs::qpid_client']],
+      subscribe => Class['certs::puppet', 'certs::foreman', 'certs::foreman_proxy', 'certs::qpid', 'certs::qpid_router', 'certs::apache', 'certs::qpid_client'],
     }
   }
 }
