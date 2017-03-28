@@ -80,6 +80,9 @@ class certs::params {
 
   $messaging_client_cert = "${pki_dir}/qpid_client_striped.crt"
 
+  $qpid_client_cert = "${pki_dir}/certs/qpid-ssl-client.crt"
+  $qpid_client_key = "${pki_dir}/private/qpid-ssl-key.key"
+
   $qpid_router_server_cert = "${pki_dir}/qpid_router_server.crt"
   $qpid_router_client_cert = "${pki_dir}/qpid_router_client.crt"
   $qpid_router_server_key  = "${pki_dir}/qpid_router_server.key"
