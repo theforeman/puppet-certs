@@ -144,9 +144,13 @@ class certs (
   $katello_server_ca_cert = "${pki_dir}/certs/${server_ca_name}.crt"
   $katello_default_ca_cert = "${pki_dir}/certs/${default_ca_name}.crt"
 
-  class { '::certs::install': } ->
-  class { '::certs::config': } ->
-  class { '::certs::ca': }
+  contain ::certs::install
+  contain ::certs::config
+  contain ::certs::ca
+
+  Class['::certs::install'] ->
+  Class['::certs::config'] ->
+  Class['::certs::ca']
 
   $default_ca = $::certs::ca::default_ca
   $server_ca = $::certs::ca::server_ca
