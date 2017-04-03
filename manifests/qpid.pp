@@ -51,11 +51,13 @@ class certs::qpid (
       client_cert => $::certs::ca_cert,
       trustargs   => 'TCu,Cu,Tuw',
       refreshonly => true,
+      subscribe   => Pubkey[$::certs::ca_cert],
     } ~>
     certs::ssltools::certutil { 'broker':
       nss_db_dir  => $::certs::nss_db_dir,
       client_cert => $client_cert,
       refreshonly => true,
+      subscribe   => Pubkey[$client_cert],
     } ~>
     exec { 'generate-pfx-for-nss-db':
       command     => "openssl pkcs12 -in ${client_cert} -inkey ${client_key} -export -out '${pfx_path}' -password 'file:${nss_db_password_file}'",
@@ -67,8 +69,5 @@ class certs::qpid (
       path        => '/usr/bin',
       refreshonly => true,
     }
-
-    Pubkey[$::certs::ca_cert] ~> Certs::Ssltools::Certutil['ca']
-    Pubkey[$client_cert] ~> Certs::Ssltools::Certutil['broker']
   }
 }
