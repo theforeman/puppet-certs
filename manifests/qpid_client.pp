@@ -10,7 +10,9 @@ class certs::qpid_client (
   $messaging_client_cert = $::certs::messaging_client_cert,
 ) {
 
-  cert { "${hostname}-qpid-client-cert":
+  $qpid_client_cert_name = "${hostname}-qpid-client-cert"
+
+  cert { $qpid_client_cert_name:
     hostname      => $hostname,
     cname         => $cname,
     common_name   => 'pulp-qpid-client-cert',
@@ -30,9 +32,9 @@ class certs::qpid_client (
 
   if $deploy {
 
-    Cert["${hostname}-qpid-client-cert"] ~>
+    Cert[$qpid_client_cert_name] ~>
     key_bundle { $messaging_client_cert:
-      key_pair => Cert["${hostname}-qpid-client-cert"],
+      key_pair => Cert[$qpid_client_cert_name],
     } ~>
     file { $messaging_client_cert:
       owner => 'apache',
