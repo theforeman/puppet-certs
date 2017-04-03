@@ -36,7 +36,6 @@ class certs::qpid (
     $client_key             = "${::certs::pki_dir}/private/${qpid_cert_name}.key"
     $pfx_path               = "${::certs::pki_dir}/${qpid_cert_name}.pfx"
 
-    Package['qpid-cpp-server'] ->
     certs::keypair { 'qpid':
       key_pair   => $qpid_cert_name,
       key_file   => $client_key,
