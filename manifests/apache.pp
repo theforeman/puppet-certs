@@ -22,7 +22,6 @@ class certs::apache (
       regenerate     => $regenerate,
       custom_pubkey  => $::certs::server_cert,
       custom_privkey => $::certs::server_key,
-      custom_req     => $::certs::server_cert_req,
     }
   } else {
     cert { $apache_cert_name:
