@@ -8,10 +8,6 @@ describe 'certs::qpid' do
       end
 
       describe "without parameters" do
-        let :pre_condition do
-          'include ::certs'
-        end
-
         it { is_expected.to compile.with_all_deps }
 
         it do
