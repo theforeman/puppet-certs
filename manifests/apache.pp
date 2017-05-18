@@ -64,7 +64,7 @@ class certs::apache (
       key_file   => $apache_key,
       manage_key => true,
       key_owner  => $::apache::user,
-      key_mode   => '0400',
+      key_mode   => '0440',
       key_group  => $group,
       cert_file  => $apache_cert,
       notify     => Service['httpd'],
