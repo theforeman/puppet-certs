@@ -105,8 +105,7 @@ class certs::candlepin (
       target => $keystore,
       owner  => 'tomcat',
       group  => $group,
-    }
-
+    } ->
     certs::keypair { 'candlepin':
       key_pair  => $java_client_cert_name,
       key_file  => $client_key,
