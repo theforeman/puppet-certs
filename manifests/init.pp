@@ -67,6 +67,9 @@
 #
 # $group::                The group who should own the certs
 #
+# $other_default_ca_certs:: Certificates to be included with ours, Generally this would be
+#                           the Public CA certificates from the other nodes in a Katello cluster
+#
 # $default_ca_name::      The name of the default CA
 #
 # $server_ca_name::       The name of the server CA (used for https)
@@ -98,6 +101,7 @@ class certs (
   String $default_ca_name = $certs::params::default_ca_name,
   String $server_ca_name = $certs::params::server_ca_name,
   Optional[Stdlib::Absolutepath] $tar_file = $certs::params::tar_file,
+  Array[Stdlib::Absolutepath] $other_default_ca_certs = $::certs::params::other_default_ca_certs,
 ) inherits certs::params {
 
   if $server_cert {

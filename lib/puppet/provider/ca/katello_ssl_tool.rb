@@ -6,14 +6,17 @@ Puppet::Type.type(:ca).provide(:katello_ssl_tool, :parent => Puppet::Provider::K
   protected
 
   def generate!
-    if existing_pubkey
+    extra_args = []
+    extra_args += [ '--other-ca-certs', resource[:other_certs].join(',') ] unless resource[:other_certs].empty?
+    if existing_pubkey || resource[:other_certs].any?
       FileUtils.mkdir_p(build_path)
-      FileUtils.cp(existing_pubkey, build_path(File.basename(pubkey)))
+      FileUtils.cp(existing_pubkey, build_path(File.basename(pubkey))) if existing_pubkey
       katello_ssl_tool('--gen-ca',
                        '--ca-cert-dir', target_path('certs'),
                        '--ca-cert', File.basename(pubkey),
                        '--ca-cert-rpm', rpmfile_base_name,
-                       '--rpm-only')
+                       '--rpm-only',
+                       extra_args)
     else
       katello_ssl_tool('--gen-ca',
                        '-p', "file:#{resource[:password_file]}",
@@ -23,6 +26,7 @@ Puppet::Type.type(:ca).provide(:katello_ssl_tool, :parent => Puppet::Provider::K
                        '--ca-cert', File.basename(pubkey),
                        '--ca-key', File.basename(privkey),
                        '--ca-cert-rpm', rpmfile_base_name,
+                       extra_args,
                        *common_args)
 
     end

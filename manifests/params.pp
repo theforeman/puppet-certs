@@ -16,6 +16,7 @@ class certs::params {
   $regenerate_ca = false
   $deploy        = true
 
+  $other_default_ca_certs = []
   $default_ca_name = 'katello-default-ca'
   $server_ca_name  = 'katello-server-ca'
 

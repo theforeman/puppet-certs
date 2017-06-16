@@ -21,6 +21,7 @@ class certs::ca (
   $ca_cert_stripped        = $certs::ca_cert_stripped,
   $ca_key_password         = $certs::ca_key_password,
   $ca_key_password_file    = $certs::ca_key_password_file,
+  $other_default_ca_certs  = $::certs::other_default_ca_certs,
 ) {
 
   file { $ca_key_password_file:
@@ -42,6 +43,7 @@ class certs::ca (
     generate      => $generate,
     deploy        => $deploy,
     password_file => $ca_key_password_file,
+    other_certs   => $other_default_ca_certs,
   }
   $default_ca = Ca[$default_ca_name]
 

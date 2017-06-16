@@ -51,6 +51,16 @@ module Puppet::Provider::KatelloSslTool
       return false unless resource[:generate]
       return true if resource[:regenerate]
       return true if File.exists?(update_file)
+      return true if needs_generate?
+    end
+
+    def needs_generate?
+      if resource.class == Puppet::Type::Ca && resource[:other_certs].any?
+        default_ca = IO.read(pubkey)
+        resource[:other_certs].each do |cert|
+          return true unless default_ca.include? IO.read(cert)
+        end
+      end
       return files_to_generate.any? { |file| ! File.exist?(file) }
     end
 
