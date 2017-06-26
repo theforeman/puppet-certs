@@ -13,7 +13,7 @@
 #                                   type:Array
 #
 # $certs_tar::                      Path to tar file with certs to generate
-#                                   type:Optional[Certs::Relativeunixpath]
+#                                   type:Optional[String]
 #
 class certs::foreman_proxy_content (
   $parent_fqdn          = $::fqdn,
