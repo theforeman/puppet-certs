@@ -4,22 +4,18 @@
 #
 # $parent_fqdn::                    FQDN of the parent node. Does not usually
 #                                   need to be set.
-#                                   type:Optional[String]
 #
 # $foreman_proxy_fqdn::             FQDN of the foreman proxy
-#                                   type:String
 #
 # $foreman_proxy_cname::            additional names of the foreman proxy
-#                                   type:Array
 #
 # $certs_tar::                      Path to tar file with certs to generate
-#                                   type:Optional[String]
 #
 class certs::foreman_proxy_content (
-  $parent_fqdn          = $::fqdn,
-  $foreman_proxy_fqdn   = $::certs::params::node_fqdn,
-  $foreman_proxy_cname  = $::certs::params::cname,
-  $certs_tar            = $::certs::params::certs_tar,
+  Optional[String] $parent_fqdn = $::fqdn,
+  String $foreman_proxy_fqdn = $::certs::params::node_fqdn,
+  Array[String] $foreman_proxy_cname = $::certs::params::cname,
+  Optional[String] $certs_tar = $::certs::params::certs_tar,
 ) inherits certs::params {
 
   # until we support again pushing the cert rpms to the Katello,
