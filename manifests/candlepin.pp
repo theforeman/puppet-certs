@@ -82,12 +82,10 @@ class certs::candlepin (
   if $deploy {
     include ::certs::ssltools::nssdb
 
-    Cert[$tomcat_cert_name] ~>
-    pubkey { $tomcat_cert:
-      key_pair => Cert[$tomcat_cert_name],
-    } ~>
-    privkey { $tomcat_key:
-      key_pair => Cert[$tomcat_cert_name],
+    certs::keypair { 'tomcat':
+      key_pair  => $tomcat_cert_name,
+      key_file  => $tomcat_key,
+      cert_file => $tomcat_cert,
     } ~>
     file { $password_file:
       ensure  => file,
