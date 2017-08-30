@@ -62,7 +62,7 @@ class certs::qpid (
       client_cert => $ca_cert,
       trustargs   => 'TCu,Cu,Tuw',
       refreshonly => true,
-      subscribe   => Pubkey[$::certs::ca_cert],
+      subscribe   => Pubkey[$ca_cert],
     } ~>
     certs::ssltools::certutil { 'broker':
       nss_db_dir  => $nss_db_dir,
