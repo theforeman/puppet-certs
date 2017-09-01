@@ -37,6 +37,17 @@ then
     --server.port="$PORT" \
     --rhsm.repo_ca_cert="%(ca_cert_dir)s$KATELLO_SERVER_CA_CERT" \
     --rhsm.baseurl="$BASEURL"
+elif uname -v | grep -qi debian
+then
+  # Debian setup
+  BASEURL=https://$KATELLO_SERVER/pulp/deb
+
+  subscription-manager config \
+    --server.hostname="$KATELLO_SERVER" \
+    --server.prefix="$PREFIX" \
+    --server.port="$PORT" \
+    --rhsm.repo_ca_cert="%(ca_cert_dir)s$KATELLO_SERVER_CA_CERT" \
+    --rhsm.baseurl="$BASEURL"
 else
   # rhel setup
   BASEURL=https://$KATELLO_SERVER/pulp/repos
