@@ -7,20 +7,14 @@ class certs::katello (
   $hostname                          = $::certs::node_fqdn,
   $deployment_url                    = undef,
   $rhsm_port                         = 443,
-  $candlepin_cert_rpm_alias_filename = undef,
+  $rhsm_ca_dir                       = '/etc/rhsm/ca',
+  $candlepin_cert_rpm_alias_filename = 'katello-ca-consumer-latest.noarch.rpm',
+  $katello_www_pub_dir               = '/var/www/html/pub',
   $katello_server_ca_cert            = $::certs::katello_server_ca_cert,
   $server_ca_name                    = $::certs::server_ca_name,
   $ca_cert                           = $::certs::ca_cert,
   $server_ca                         = $::certs::server_ca,
 ) inherits certs {
-
-  $candlepin_cert_rpm_alias = $candlepin_cert_rpm_alias_filename ? {
-    undef   => 'katello-ca-consumer-latest.noarch.rpm',
-    default => $candlepin_cert_rpm_alias_filename,
-  }
-
-  $katello_www_pub_dir            = '/var/www/html/pub'
-  $rhsm_ca_dir                    = '/etc/rhsm/ca'
   $katello_rhsm_setup_script      = 'katello-rhsm-consumer'
   $katello_rhsm_setup_script_location = "/usr/bin/${katello_rhsm_setup_script}"
 
@@ -62,7 +56,7 @@ class certs::katello (
     files            => ["${katello_rhsm_setup_script_location}:755=${katello_www_pub_dir}/${katello_rhsm_setup_script}"],
     bootstrap_script => "/bin/bash ${katello_rhsm_setup_script_location}",
     postun_script    => 'test -f /etc/rhsm/rhsm.conf.kat-backup && command cp /etc/rhsm/rhsm.conf.kat-backup /etc/rhsm/rhsm.conf',
-    alias            => $candlepin_cert_rpm_alias,
+    alias            => $candlepin_cert_rpm_alias_filename,
     subscribe        => $server_ca,
   }
 }
