@@ -1,4 +1,8 @@
-# Katello specific certs settings
+# == Class: certs::katello
+#
+# This class builds an RPM containing the bootstrap for a candlepin consumer.
+# This file is placed in $katello_www_pub_dir.
+#
 class certs::katello (
   $hostname                          = $::certs::node_fqdn,
   $deployment_url                    = undef,
