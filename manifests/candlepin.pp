@@ -25,7 +25,6 @@ class certs::candlepin (
   $user                   = $::certs::user,
   $group                  = $::certs::group,
   $nss_db_dir             = $::certs::nss_db_dir,
-  $qpid_exchange          = $::certs::candlepin_qpid_exchange,
 ) inherits certs {
 
   Exec {
