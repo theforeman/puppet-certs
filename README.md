@@ -3,34 +3,20 @@
 #### Table of Contents
 
 1. [Overview](#overview)
-2. [Setup - The basics of getting started with certs](#setup)
     * [What certs affects](#what-certs-affects)
-    * [Setup requirements](#setup-requirements)
-    * [Beginning with certs](#beginning-with-certs)
-3. [Usage - Configuration options and additional functionality](#usage)
-4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Development - Guide for contributing to the module](#development)
+2. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+3. [Limitations - OS compatibility, etc.](#limitations)
+4. [Development - Guide for contributing to the module](#development)
 
 ## Overview
 
 This module is responsible for generating a CA and certificate used
 for communication between services inside the Katello deployment.
 
-## Setup
-
 ### What certs affects
 
 * Installs and deploys a CA
 * Deploys certificates generated from the CA
-
-### Beginning with certs
-
-The very basic steps needed for a user to get the module up and running.
-
-If your most recent release breaks compatibility or requires particular steps for upgrading, you may wish to include an additional section here: Upgrading (For an example, see http://forge.puppetlabs.com/puppetlabs/firewall).
-
-## Usage
 
 ## Reference
 
@@ -101,7 +87,6 @@ certificates are located in `/etc/pki/katello-certs-tools/` directory
 
 ## Limitations
 
-* EL6 (RHEL 6 / CentOS 6)
 * EL7 (RHEL 7 / CentOS 7)
 
 ## Development
