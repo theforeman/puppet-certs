@@ -8,6 +8,8 @@ class certs::ssltools::nssdb (
   $nss_db_password_file   = "${nss_db_dir}/nss_db_password-file"
   $nssdb_files            = ["${nss_db_dir}/cert8.db", "${nss_db_dir}/key3.db", "${nss_db_dir}/secmod.db"]
 
+  ensure_packages(['openssl', 'nss-tools'])
+
   file { $nss_db_dir:
     ensure => directory,
     owner  => 'root',
@@ -20,6 +22,7 @@ class certs::ssltools::nssdb (
     umask   => '0027',
     group   => $group,
     creates => $nss_db_password_file,
+    require => Package['openssl'],
   } ->
   file { $nss_db_password_file:
     ensure => file,
@@ -33,6 +36,7 @@ class certs::ssltools::nssdb (
     umask   => '0027',
     group   => $group,
     creates => $nssdb_files,
+    require => Package['nss-tools'],
   } ->
   file { $nssdb_files:
     owner => 'root',
