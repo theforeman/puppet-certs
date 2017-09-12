@@ -32,11 +32,11 @@ describe 'certs' do
         ensure => installed,
       }
 
-      include certs::candlepin
+      class { 'certs::candlepin':
+        keystore_password => 'supersecret',
+      }
       EOS
     end
-
-    keystore_password_file = '/etc/pki/katello/keystore_password-file'
 
     it_behaves_like 'a idempotent resource'
 
@@ -70,14 +70,7 @@ describe 'certs' do
       it { should have_matching_certificate('/etc/pki/katello/certs/java-client.crt') }
     end
 
-    describe file(keystore_password_file) do
-      it { should be_file }
-      it { should be_mode 440 }
-      it { should be_owned_by 'root' }
-      it { should be_grouped_into 'root' }
-    end
-
-    describe file('/etc/candlepin/certs/keystore') do
+    describe file('/etc/pki/katello/keystore') do
       it { should be_file }
       it { should be_mode 644 }
       it { should be_owned_by 'root' }
@@ -98,23 +91,23 @@ describe 'certs' do
       it { should be_grouped_into 'tomcat' }
     end
 
-    describe command("keytool -list -keystore /etc/candlepin/certs/keystore -storepass $(cat #{keystore_password_file})") do
+    describe command("keytool -list -keystore /etc/candlepin/certs/keystore -storepass supersecret") do
       its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/^Keystore type: JKS$/i) }
+      its(:stdout) { should match(/^Keystore type: PKCS12$/) }
       its(:stdout) { should match(/^Your keystore contains 1 entry$/) }
       its(:stdout) { should match(/^tomcat, .+, PrivateKeyEntry, $/) }
     end
 
-    describe command("keytool -list -keystore /etc/candlepin/certs/amqp/candlepin.truststore -storepass $(cat #{keystore_password_file})") do
+    describe command("keytool -list -keystore /etc/candlepin/certs/amqp/candlepin.truststore -storepass supersecret") do
       its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/^Keystore type: JKS$/i) }
+      its(:stdout) { should match(/^Keystore type: PKCS12$/) }
       its(:stdout) { should match(/^Your keystore contains 1 entry$/) }
       its(:stdout) { should match(/^candlepin-ca, .+, trustedCertEntry, $/) }
     end
 
-    describe command("keytool -list -keystore /etc/candlepin/certs/amqp/candlepin.jks -storepass $(cat #{keystore_password_file})") do
+    describe command("keytool -list -keystore /etc/candlepin/certs/amqp/candlepin.jks -storepass supersecret") do
       its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/^Keystore type: JKS$/i) }
+      its(:stdout) { should match(/^Keystore type: PKCS12$/) }
       its(:stdout) { should match(/^Your keystore contains 1 entry$/) }
       its(:stdout) { should match(/^amqp-client, .+, PrivateKeyEntry, $/) }
     end

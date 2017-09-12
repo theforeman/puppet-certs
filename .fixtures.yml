@@ -2,5 +2,6 @@ fixtures:
   repositories:
     concat:            "https://github.com/puppetlabs/puppetlabs-concat"
     extlib:            "https://github.com/voxpupuli/puppet-extlib"
+    java_ks:           "https://github.com/puppetlabs/puppetlabs-java_ks"
     stdlib:            "https://github.com/puppetlabs/puppetlabs-stdlib"
     trusted_ca:        "https://github.com/voxpupuli/puppet-trusted_ca"

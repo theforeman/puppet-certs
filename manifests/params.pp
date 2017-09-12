@@ -27,8 +27,6 @@ class certs::params {
   $expiration    = '7300' # 20 years
   $ca_expiration = '36500' # 100 years
 
-  $keystore_password_file = 'keystore_password-file'
-
   $user = 'root'
   $group = 'root'
 
@@ -59,6 +57,7 @@ class certs::params {
 
   $candlepin_certs_dir              = '/etc/candlepin/certs'
   $candlepin_keystore               = "${candlepin_certs_dir}/keystore"
+  $candlepin_keystore_password      = cache_data('foreman_cache_data', 'keystore_password-file', random_password(32))
   $candlepin_ca_cert                = "${candlepin_certs_dir}/candlepin-ca.crt"
   $candlepin_ca_key                 = "${candlepin_certs_dir}/candlepin-ca.key"
   $candlepin_amqp_store_dir         = "${candlepin_certs_dir}/amqp"
