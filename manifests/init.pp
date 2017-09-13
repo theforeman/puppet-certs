@@ -96,7 +96,10 @@ class certs (
 ) inherits certs::params {
 
   if $server_cert {
-    validate_file_exists($server_cert, $server_cert_req, $server_key, $server_ca_cert)
+    validate_file_exists($server_cert, $server_key, $server_ca_cert)
+    if $server_cert_req {
+      validate_file_exists($server_cert_req)
+    }
   }
 
   $nss_db_dir   = "${pki_dir}/nssdb"
