@@ -17,7 +17,6 @@ class certs::apache (
   $expiration           = $::certs::expiration,
   $default_ca           = $::certs::default_ca,
   $ca_key_password_file = $::certs::ca_key_password_file,
-  $group                = $::certs::group,
 ) inherits certs {
 
   $apache_cert_name = "${hostname}-apache"
@@ -56,18 +55,14 @@ class certs::apache (
   }
 
   if $deploy {
-
-    include ::apache
-
     certs::keypair { 'apache':
       key_pair   => $apache_cert_name,
       key_file   => $apache_key,
       manage_key => true,
-      key_owner  => $::apache::user,
+      key_owner  => 'root',
+      key_group  => 'root',
       key_mode   => '0440',
-      key_group  => $group,
       cert_file  => $apache_cert,
-      notify     => Service['httpd'],
     }
   }
 }
