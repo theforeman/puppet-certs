@@ -79,8 +79,6 @@ class certs::candlepin (
   $client_key = "${pki_dir}/private/${java_client_cert_name}.key"
 
   if $deploy {
-    include ::certs::ssltools::nssdb
-
     certs::keypair { 'tomcat':
       key_pair  => $tomcat_cert_name,
       key_file  => $tomcat_key,
@@ -107,12 +105,6 @@ class certs::candlepin (
       key_pair  => $java_client_cert_name,
       key_file  => $client_key,
       cert_file => $client_cert,
-    } ~>
-    certs::ssltools::certutil { 'amqp-client':
-      nss_db_dir  => $nss_db_dir,
-      client_cert => $client_cert,
-      refreshonly => true,
-      subscribe   => Exec['create-nss-db'],
     } ~>
     file { $amqp_store_dir:
       ensure => directory,

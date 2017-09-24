@@ -21,10 +21,6 @@ describe 'certs' do
         ensure => present,
       }
 
-      group { 'qpidd':
-        ensure => present,
-      }
-
       ['/usr/share/tomcat/conf', '/etc/candlepin/certs/amqp'].each |$dir| {
         exec { "mkdir -p ${dir}":
           creates => $dir,
