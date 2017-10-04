@@ -13,7 +13,6 @@ class certs::candlepin (
   $amqp_truststore        = $::certs::candlepin_amqp_truststore,
   $amqp_keystore          = $::certs::candlepin_amqp_keystore,
   $amqp_store_dir         = $::certs::candlepin_amqp_store_dir,
-  $tomcat                 = $::certs::tomcat,
   $country                = $::certs::country,
   $state                  = $::certs::state,
   $city                   = $::certs::city,
@@ -97,12 +96,6 @@ class certs::candlepin (
       command => "openssl pkcs12 -export -in ${tomcat_cert} -inkey ${tomcat_key} -out ${keystore} -name tomcat -CAfile ${ca_cert} -caname root -password \"file:${password_file}\" -passin \"file:${ca_key_password_file}\" ",
       creates => $keystore,
     } ~>
-    file { "/usr/share/${tomcat}/conf/keystore":
-      ensure => link,
-      target => $keystore,
-      owner  => 'tomcat',
-      group  => $group,
-    } ->
     certs::keypair { 'candlepin':
       key_pair  => $java_client_cert_name,
       key_file  => $client_key,
