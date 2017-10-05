@@ -5,7 +5,5 @@ fixtures:
     common:            "https://github.com/katello/puppet-common.git"
     trusted_ca:        "https://github.com/jlambert121/jlambert121-trusted_ca"
     concat:            "https://github.com/puppetlabs/puppetlabs-concat"
-    apache:            "https://github.com/puppetlabs/puppetlabs-apache"
-    puppet:            "https://github.com/theforeman/puppet-puppet"
   symlinks:
     certs: "#{source_dir}"
