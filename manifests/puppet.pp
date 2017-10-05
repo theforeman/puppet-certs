@@ -43,10 +43,9 @@ class certs::puppet (
 
   if $deploy {
     file { "${pki_dir}/puppet":
-      ensure  => directory,
-      owner   => 'puppet',
-      mode    => '0700',
-      require => Class['puppet::server::install'],
+      ensure => directory,
+      owner  => 'puppet',
+      mode   => '0700',
     } ->
     certs::keypair { 'puppet':
       key_pair    => $puppet_client_cert_name,
