@@ -1,8 +1,14 @@
 ---
+.puppet-lint.rc:
+  extra_disabled_lint_checks:
+    - arrow_on_right_operand_line
 .travis.yml:
   beaker_sets:
   - docker/centos-7
+  test_all_rvms: false
 Rakefile:
   param_docs_pattern:
     - manifests/foreman_proxy_content.pp
     - manifests/init.pp
+spec/spec_helper_acceptance.rb:
+  install_epel: true
