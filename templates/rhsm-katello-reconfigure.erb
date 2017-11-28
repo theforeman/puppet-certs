@@ -8,6 +8,7 @@ PREFIX=<%= scope['certs::katello::deployment_url'] %>
 CFG=/etc/rhsm/rhsm.conf
 CFG_BACKUP=$CFG.kat-backup
 CA_TRUST_ANCHORS=/etc/pki/ca-trust/source/anchors
+OSFAMILY=$(sed -n -e "s/ID\s*=\s*\(.*\)/\1/p" /etc/os-release)
 
 # exit on non-RHEL systems or when rhsm.conf is not found
 test -f $CFG || exit
@@ -23,10 +24,10 @@ chmod 644 $KATELLO_CERT_DIR/$KATELLO_SERVER_CA_CERT
 echo "$KATELLO_DEFAULT_CA_DATA" > $KATELLO_CERT_DIR/$KATELLO_DEFAULT_CA_CERT
 chmod 644 $KATELLO_CERT_DIR/$KATELLO_DEFAULT_CA_CERT
 
-# if atomic machine handle it the atomic way, else handle the regular rhel way
+# if atomic or debian machine handle it the special way, else handle the regular rhel way
 if [ -n "${IS_ATOMIC+1}" ] || [ -e "/run/ostree-booted" ]
 then
-  #atomic setup
+  # atomic setup
   BASEURL=https://$KATELLO_SERVER/pulp/ostree/web/
 
   # configure rhsm
@@ -37,7 +38,7 @@ then
     --server.port="$PORT" \
     --rhsm.repo_ca_cert="%(ca_cert_dir)s$KATELLO_SERVER_CA_CERT" \
     --rhsm.baseurl="$BASEURL"
-elif uname -v | grep -qi debian
+elif [ "${OSFAMILY}" = "debian" ]
 then
   # Debian setup
   BASEURL=https://$KATELLO_SERVER/pulp/deb
@@ -81,7 +82,7 @@ else
     sed -i "s/full_refresh_on_yum\s*=.*$/full_refresh_on_yum = 1/g" $CFG
   else
     full_refresh_config="#config for on-premise management\nfull_refresh_on_yum = 1"
-    sed -i "s/baseurl.*/&\n\n$full_refresh_config/g" $CFG
+    sed -i "/baseurl/a\n$full_refresh_config" $CFG
   fi
 fi
 
