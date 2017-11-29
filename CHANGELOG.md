@@ -2,7 +2,7 @@
 
 ## [3.1.0](https://github.com/theforeman/puppet-certs/tree/3.1.0)
 
-[Full Changelog](https://github.com/theforeman/puppet-certs/compare/3.0.0...3.1.0)
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/3.0.1...3.1.0)
 
 **Merged pull requests:**
 
@@ -17,13 +17,17 @@
 - Document & parametrize certs::katello [\#166](https://github.com/theforeman/puppet-certs/pull/166) ([ekohl](https://github.com/ekohl))
 - Add an acceptance test for candlepin [\#145](https://github.com/theforeman/puppet-certs/pull/145) ([ekohl](https://github.com/ekohl))
 
+## [3.0.1](https://github.com/theforeman/puppet-certs/tree/3.0.0) (2017-11-29)
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/3.0.0...3.0.1)
+
+- Fixes \#20642 - don't set hostname-override when localhost [\#164](https://github.com/theforeman/puppet-certs/pull/164) ([iNecas](https://github.com/iNecas))
+
 ## [3.0.0](https://github.com/theforeman/puppet-certs/tree/3.0.0) (2017-08-30)
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/2.0.1...3.0.0)
 
 **Merged pull requests:**
 
 - Simplify variable access [\#165](https://github.com/theforeman/puppet-certs/pull/165) ([ekohl](https://github.com/ekohl))
-- Fixes \#20642 - don't set hostname-override when localhost [\#164](https://github.com/theforeman/puppet-certs/pull/164) ([iNecas](https://github.com/iNecas))
 - Allow puppetlabs-concat 4.0 [\#163](https://github.com/theforeman/puppet-certs/pull/163) ([ekohl](https://github.com/ekohl))
 - msync: Puppet 5, parallel tests, .erb templates, cleanups, facter fix [\#162](https://github.com/theforeman/puppet-certs/pull/162) ([ekohl](https://github.com/ekohl))
 - \#19578 - Switch to custom datatype for path validation [\#161](https://github.com/theforeman/puppet-certs/pull/161) ([NeilHanlon](https://github.com/NeilHanlon))
