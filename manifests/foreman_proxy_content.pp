@@ -23,6 +23,10 @@ class certs::foreman_proxy_content (
   validate_present($certs_tar)
   validate_present($foreman_proxy_fqdn)
 
+  if $foreman_proxy_fqdn == $::fqdn {
+    warning('The hostname is the same as the foreman-proxy')
+  }
+
   class { '::certs::puppet':        hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
   class { '::certs::foreman':       hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
   class { '::certs::foreman_proxy': hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
