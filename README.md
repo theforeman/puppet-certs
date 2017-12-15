@@ -38,7 +38,7 @@ for communication between services inside the Katello deployment.
 | ${hostname}-parent-cert       | a client certificate to read content from Pulp parent (distributed to the child over qpid) | default |
 | ${hostname}-qpid-broker       | a client certificate for qpid broker                                                       | default |
 | ${hostname}-qpid-client-cert  | a client certificate for Pulp to connect to qpid                                           | default |
-| java-client                   | a client certificate for Candlpin to connect to qpid                                       | default |
+| java-client                   | a client certificate for Candlepin to connect to qpid                                      | default |
 
 # Phases
 
