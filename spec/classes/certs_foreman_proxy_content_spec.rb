@@ -7,7 +7,8 @@ describe 'certs::foreman_proxy_content' do
 
   let :params do
     {
-      :certs_tar => '/tmp/tar'
+      :certs_tar => '/tmp/tar',
+      :foreman_proxy_fqdn => 'bar.example.com'
     }
   end
 
