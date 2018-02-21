@@ -8,7 +8,6 @@ PREFIX=<%= scope['certs::katello::deployment_url'] %>
 CFG=/etc/rhsm/rhsm.conf
 CFG_BACKUP=$CFG.kat-backup
 CA_TRUST_ANCHORS=/etc/pki/ca-trust/source/anchors
-OSFAMILY=$(sed -n -e "s/ID\s*=\s*\(.*\)/\1/p" /etc/os-release)
 
 # exit on non-RHEL systems or when rhsm.conf is not found
 test -f $CFG || exit
@@ -38,7 +37,7 @@ then
     --server.port="$PORT" \
     --rhsm.repo_ca_cert="%(ca_cert_dir)s$KATELLO_SERVER_CA_CERT" \
     --rhsm.baseurl="$BASEURL"
-elif [ "${OSFAMILY}" = "debian" ]
+elif [ -r "/etc/os-release" ] && [ "$(sed -n -e "s/^ID\s*=\s*\(.*\)/\1/p" /etc/os-release)" = "debian" ]
 then
   # Debian setup
   BASEURL=https://$KATELLO_SERVER/pulp/deb
