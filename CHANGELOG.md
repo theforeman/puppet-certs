@@ -1,5 +1,13 @@
 # Change Log
 
+## [4.0.1](https://github.com/theforeman/puppet-certs/tree/4.0.1) (2018-02-28)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.0.0...4.0.1)
+
+**Fixed bugs:**
+
+- Fix debian OS determination [\#193](https://github.com/theforeman/puppet-certs/pull/193) ([jturel](https://github.com/jturel))
+
 ## [4.0.0](https://github.com/theforeman/puppet-certs/tree/4.0.0) (2018-01-25)
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/3.0.1...4.0.0)
 
