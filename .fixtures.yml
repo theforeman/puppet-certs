@@ -2,7 +2,6 @@ fixtures:
   repositories:
     stdlib:            "https://github.com/puppetlabs/puppetlabs-stdlib.git"
     extlib:            "https://github.com/puppet-community/puppet-extlib"
-    common:            "https://github.com/theforeman/puppet-common.git"
     trusted_ca:        "https://github.com/jlambert121/jlambert121-trusted_ca"
     concat:            "https://github.com/puppetlabs/puppetlabs-concat"
   symlinks:
