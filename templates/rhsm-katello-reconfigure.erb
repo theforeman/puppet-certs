@@ -16,7 +16,7 @@ type -P subscription-manager >/dev/null || type -P subscription-manager-cli >/de
 # backup configuration during the first run
 test -f $CFG_BACKUP || cp $CFG $CFG_BACKUP
 
-#create the cert
+# create the cert
 echo "$KATELLO_SERVER_CA_DATA" > $KATELLO_CERT_DIR/$KATELLO_SERVER_CA_CERT
 chmod 644 $KATELLO_CERT_DIR/$KATELLO_SERVER_CA_CERT
 

@@ -26,7 +26,7 @@ define certs::rhsm_reconfigure_script($ca_cert, $server_ca_cert) {
 
   concat::fragment { "${title}+end_ca_cert":
     target  => $title,
-    content => "EOM\n\n",
+    content => "\nEOM\n\n",
     order   => '04',
   }
 
@@ -44,7 +44,7 @@ define certs::rhsm_reconfigure_script($ca_cert, $server_ca_cert) {
 
   concat::fragment { "${title}+end_server_ca_cert":
     target  => $title,
-    content => "EOM\n\n",
+    content => "\nEOM\n\n",
     order   => '07',
   }
 
