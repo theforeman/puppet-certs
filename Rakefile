@@ -20,12 +20,12 @@ PuppetLint.configuration.log_format = '%{path}:%{line}:%{KIND}: %{message}'
 
 require 'puppet-lint-param-docs/tasks'
 PuppetLintParamDocs.define_selective do |config|
-  config.pattern = ["manifests/foreman_proxy_content.pp", "manifests/init.pp"]
+  config.pattern = ["manifests/foreman_proxy_content.pp", "manifests/generate_archive.pp", "manifests/init.pp"]
 end
 
 require 'kafo_module_lint/tasks'
 KafoModuleLint::RakeTask.new do |config|
-  config.pattern = ["manifests/foreman_proxy_content.pp", "manifests/init.pp"]
+  config.pattern = ["manifests/foreman_proxy_content.pp", "manifests/generate_archive.pp", "manifests/init.pp"]
 end
 
 task :default => [:release_checks]
