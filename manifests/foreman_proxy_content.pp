@@ -12,25 +12,18 @@
 # $certs_tar::                      Path to tar file with certs to generate
 #
 class certs::foreman_proxy_content (
+  String[1] $certs_tar,
   String[1] $parent_fqdn = $facts['fqdn'],
   String $foreman_proxy_fqdn = $facts['fqdn'],
   Array[String] $foreman_proxy_cname = [],
-  String[1] $certs_tar = undef,
 ) {
 
-  if $foreman_proxy_fqdn == $facts['fqdn'] {
-    fail('The hostname is the same as the provided hostname for the foreman-proxy')
-  }
+  notify {'DEPRECATION WARNING: certs::foreman_proxy_content has been deprecated, consider using certs::generate_archive with foreman_proxy => true':}
 
-  class { '::certs::puppet':        hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { '::certs::foreman':       hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { '::certs::foreman_proxy': hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { '::certs::apache':        hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { '::certs::qpid':          hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { '::certs::qpid_router':   hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { '::certs::qpid_client':   hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-
-  certs::tar_create { $certs_tar:
-    subscribe => Class['certs::puppet', 'certs::foreman', 'certs::foreman_proxy', 'certs::qpid', 'certs::qpid_router', 'certs::apache', 'certs::qpid_client'],
+  class { 'certs::generate_archive':
+    server_fqdn   => $foreman_proxy_fqdn,
+    server_cname  => $foreman_proxy_cname,
+    certs_tar     => $certs_tar,
+    foreman_proxy => true,
   }
 }
