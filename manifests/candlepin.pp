@@ -23,7 +23,6 @@ class certs::candlepin (
   $ca_key_password_file   = $::certs::ca_key_password_file,
   $user                   = $::certs::user,
   $group                  = $::certs::group,
-  $nss_db_dir             = $::certs::nss_db_dir,
 ) inherits certs {
 
   Exec {
