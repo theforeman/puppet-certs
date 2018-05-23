@@ -32,12 +32,12 @@
 #                         configuration
 #
 # $regenerate::           Force regeneration of the certificates (excluding
-#                         ca certificates)
+#                         CA certificates)
 #
-# $regenerate_ca::        Force regeneration of the ca certificate
+# $regenerate_ca::        Force regeneration of the CA certificate
 #
 # $deploy::               Deploy the certs on the configured system. False means
-#                         we want apply it on a different system
+#                         we want to apply it to a different system
 #
 # $ca_common_name::       Common name for the generated CA certificate
 #
