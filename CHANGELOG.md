@@ -1,5 +1,21 @@
 # Change Log
 
+## [4.1.0](https://github.com/theforeman/puppet-certs/tree/4.1.0) (2018-05-29)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.0.1...4.1.0)
+
+**Implemented enhancements:**
+
+- Remove katello-common dependency [\#202](https://github.com/theforeman/puppet-certs/pull/202) ([jturel](https://github.com/jturel))
+- Remove dependency on puppet-common [\#197](https://github.com/theforeman/puppet-certs/pull/197) ([jturel](https://github.com/jturel))
+- candlepin: remove nssdb dependency [\#174](https://github.com/theforeman/puppet-certs/pull/174) ([timogoebel](https://github.com/timogoebel))
+
+**Fixed bugs:**
+
+- Refs [\#15963](https://projects.theforeman.org/issues/15963) - Fix documentation typos [\#203](https://github.com/theforeman/puppet-certs/pull/203) ([itsbill](https://github.com/itsbill))
+- Fixes [\#22725](https://projects.theforeman.org/issues/22725) - Add newline to CA to prevent EOM error on registration. [\#198](https://github.com/theforeman/puppet-certs/pull/198) ([chris1984](https://github.com/chris1984))
+- Fixes [\#22884](https://projects.theforeman.org/issues/22884) - Check RHSM version for hostname-override [\#195](https://github.com/theforeman/puppet-certs/pull/195) ([johnpmitsch](https://github.com/johnpmitsch))
+
 ## [4.0.1](https://github.com/theforeman/puppet-certs/tree/4.0.1) (2018-02-28)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.0.0...4.0.1)
@@ -274,7 +290,7 @@
 - Refs [\#5815](https://projects.theforeman.org/issues/5815) - generate certs for node qpid [\#14](https://github.com/theforeman/puppet-certs/pull/14) ([iNecas](https://github.com/iNecas))
 - fixes [\#5486](https://projects.theforeman.org/issues/5486)  prefix and candlepin url incorrect for rhsm template on dev... [\#13](https://github.com/theforeman/puppet-certs/pull/13) ([dustints](https://github.com/dustints))
 - Refs [\#5423](https://projects.theforeman.org/issues/5423) - fix certs generation for capsule usage [\#12](https://github.com/theforeman/puppet-certs/pull/12) ([iNecas](https://github.com/iNecas))
-- Fixing \#5299: variables not used properly. [\#11](https://github.com/theforeman/puppet-certs/pull/11) ([omaciel](https://github.com/omaciel))
+- Fixing [\#5299](https://projects.theforeman.org/issues/5299): variables not used properly. [\#11](https://github.com/theforeman/puppet-certs/pull/11) ([omaciel](https://github.com/omaciel))
 - Parameterize node certs and removes reliance on directories not yet crea... [\#10](https://github.com/theforeman/puppet-certs/pull/10) ([ehelms](https://github.com/ehelms))
 - Addresses changes made to katello-certs-tools regarding location of [\#9](https://github.com/theforeman/puppet-certs/pull/9) ([ehelms](https://github.com/ehelms))
 - Capsule related certs settings [\#8](https://github.com/theforeman/puppet-certs/pull/8) ([iNecas](https://github.com/iNecas))
