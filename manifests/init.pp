@@ -71,6 +71,58 @@
 #
 # $server_ca_name::       The name of the server CA (used for https)
 #
+# $repomd_gpg::                  Path to a directory containing a keyring to use
+#                                for repository metadata signing
+#                                If not specified, a GPG key will be generated
+#
+# $repomd_gpg_name::             Name attribute for the GPG key generated for
+#                                repository metadata signing
+#
+# $repomd_gpg_comment::          Comment attribute for the GPG key generated
+#                                for repository metadata signing
+#
+# $repomd_gpg_email::            Email attribute for the GPG key generated for
+#                                repository metadata signing
+#
+# $repomd_gpg_key_type::         OpenPGP algorithm number or name for the GPG
+#                                key generated for repository metadata signing
+#
+# $repomd_gpg_key_length::       Length of the GPG key generated for repository
+#                                metadata signing
+#
+# $repomd_gpg_expire_date::      Expiration date of the GPG key generated for
+#                                repository metadata signing
+#
+# $repomd_gpg_use_subkeys::      Should a GPG subkey be generated for each host
+#                                Note that yum does not currently support
+#                                subkeys
+#
+# $repomd_gpg_sub::              Path to a directory containing a subkey keyring
+#                                to use for repository metadata signing
+#                                If not specified, a GPG subkey will be
+#                                generated
+#
+# $repomd_gpg_sub_key_type::     Input value for the interactive gpg key type
+#                                prompt for the GPG subkey generated for
+#                                repository metadata signing
+#
+# $repomd_gpg_sub_key_length::   Length of the GPG subkey generated for
+#                                repository metadata signing
+#
+# $repomd_gpg_sub_expire_date::  Expiration date of the GPG subkey generated for
+#                                repository metadata signing
+#
+# $repomd_gpg_dir::              The directory where the GPG key for repository
+#                                metadata signing will be deployed
+#
+# $repomd_gpg_user::             The user who should own the deployed GPG key
+#                                for repository metadata signing
+#
+# $repomd_gpg_group::            The group who should own the deployed GPG key
+#                                for repository metadata signing
+#
+# $repomd_gpg_pub_file::         Filename for the deployed public GPG key
+#
 class certs (
   Stdlib::Absolutepath $log_dir = $certs::params::log_dir,
   Stdlib::Fqdn $node_fqdn = $certs::params::node_fqdn,
@@ -98,6 +150,22 @@ class certs (
   String $default_ca_name = $certs::params::default_ca_name,
   String $server_ca_name = $certs::params::server_ca_name,
   Optional[Stdlib::Absolutepath] $tar_file = $certs::params::tar_file,
+  Optional[Stdlib::Absolutepath] $repomd_gpg = $certs::params::repomd_gpg,
+  Optional[String] $repomd_gpg_name = $certs::params::repomd_gpg_name,
+  Optional[String] $repomd_gpg_comment = $certs::params::repomd_gpg_comment,
+  Optional[String] $repomd_gpg_email = $certs::params::repomd_gpg_email,
+  String $repomd_gpg_key_type = $certs::params::repomd_gpg_key_type,
+  String $repomd_gpg_key_length = $certs::params::repomd_gpg_key_length,
+  String $repomd_gpg_expire_date = $certs::params::repomd_gpg_expire_date,
+  Boolean $repomd_gpg_use_subkeys = $certs::params::repomd_gpg_use_subkeys,
+  Optional[Stdlib::Absolutepath] $repomd_gpg_sub = $certs::params::repomd_gpg_sub,
+  String $repomd_gpg_sub_key_type = $certs::params::repomd_gpg_sub_key_type,
+  String $repomd_gpg_sub_key_length = $certs::params::repomd_gpg_sub_key_length,
+  String $repomd_gpg_sub_expire_date = $certs::params::repomd_gpg_sub_expire_date,
+  Stdlib::Absolutepath $repomd_gpg_dir = $certs::params::repomd_gpg_dir,
+  String $repomd_gpg_user = $certs::params::repomd_gpg_user,
+  String $repomd_gpg_group = $certs::params::repomd_gpg_group,
+  String $repomd_gpg_pub_file = $certs::params::repomd_gpg_pub_file,
 ) inherits certs::params {
 
   if $server_cert {

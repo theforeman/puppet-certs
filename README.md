@@ -13,6 +13,10 @@
 This module is responsible for generating a CA and certificate used
 for communication between services inside the Katello deployment.
 
+It is also responsible for generating a GPG key used by Pulp for
+repository metadata signing and used by Yum for metadata signature
+verification.
+
 ### What certs affects
 
 * Installs and deploys a CA

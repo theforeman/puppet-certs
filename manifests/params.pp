@@ -37,6 +37,35 @@ class certs::params {
   $server_cert_req  = undef
   $server_ca_cert   = undef
 
+  $repomd_gpg                  = undef
+  $repomd_gpg_name             = 'Repository Metadata Signing Key'
+  $repomd_gpg_comment          = undef
+  $repomd_gpg_email            = undef
+  # primary key type is used as a gpg Key-Type batch parameter:
+  # https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html
+  $repomd_gpg_key_type         = 'RSA'
+  $repomd_gpg_key_length       = '4096'
+  $repomd_gpg_expire_date      = '0'
+  $repomd_gpg_use_subkeys      = false
+  $repomd_gpg_sub              = undef
+  # If more than one subkey is used (as is necessary for this use case), then
+  # gpg batch parameters cannot be used for subkeys, and the subkey type must be
+  # entered into the gpg interactive prompt:
+  #   Please select what kind of key you want:
+  #   (3) DSA (sign only)
+  #   (4) RSA (sign only)
+  #   (5) Elgamal (encrypt only)
+  #   (6) RSA (encrypt only)
+  # Unfortunately, this means that repomd_gpg_key_type and
+  # repomd_gpg_sub_key_type require different inputs to select the same type.
+  $repomd_gpg_sub_key_type     = '4'
+  $repomd_gpg_sub_key_length   = '4096'
+  $repomd_gpg_sub_expire_date  = '0'
+  $repomd_gpg_dir              = '/usr/share/httpd/.gnupg'
+  $repomd_gpg_user             = 'apache'
+  $repomd_gpg_group            = 'apache'
+  $repomd_gpg_pub_file         = 'repomd.gpg'
+
   $foreman_client_cert    = '/etc/foreman/client_cert.pem'
   $foreman_client_key     = '/etc/foreman/client_key.pem'
   # for verifying the foreman proxy https
