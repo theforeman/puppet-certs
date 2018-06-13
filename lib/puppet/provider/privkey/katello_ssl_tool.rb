@@ -14,7 +14,7 @@ Puppet::Type.type(:privkey).provide(:katello_ssl_tool, :parent => Puppet::Provid
                 '-passin', "file:#{resource[:password_file]}")
         File.read(tmp_file)
       ensure
-        File.delete(tmp_file) if File.exists?(tmp_file)
+        File.delete(tmp_file) if File.exist?(tmp_file)
       end
     else
       super

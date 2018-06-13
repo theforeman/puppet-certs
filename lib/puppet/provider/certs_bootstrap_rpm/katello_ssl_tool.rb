@@ -25,14 +25,14 @@ Puppet::Type.type(:certs_bootstrap_rpm).provide(:katello_ssl_tool) do
                             '--postun', postun_script_file,
                             *resource[:files])
       if (rpm = last_rpm) && resource[:alias]
-        File.delete(resource[:alias]) if File.exists?(resource[:alias])
+        File.delete(resource[:alias]) if File.exist?(resource[:alias])
         File.symlink(rpm, resource[:alias])
       end
       system('/sbin/restorecon ./*.rpm')
     end
   ensure
-    File.delete(post_script_file) if File.exists?(post_script_file)
-    File.delete(postun_script_file) if File.exists?(postun_script_file)
+    File.delete(post_script_file) if File.exist?(post_script_file)
+    File.delete(postun_script_file) if File.exist?(postun_script_file)
   end
 
   protected

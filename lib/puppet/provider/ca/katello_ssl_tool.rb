@@ -38,7 +38,7 @@ Puppet::Type.type(:ca).provide(:katello_ssl_tool, :parent => Puppet::Provider::K
   end
 
   def deploy!
-    if File.exists?(rpmfile)
+    if File.exist?(rpmfile)
       # the rpm is available locally on the file system
       rpm('-Uvh', '--force', rpmfile)
     else
