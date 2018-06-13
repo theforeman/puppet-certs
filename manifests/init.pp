@@ -1,7 +1,7 @@
 # == Class: certs
 #
 # Base for installing and configuring certs. It holds the basic configuration
-# aournd certificates generation and deployment. The per-subsystem configuratoin
+# around certificates generation and deployment. The per-subsystem configuration
 # of certificates should go into `subsystem_module/manifests/certs.pp`.
 #
 # === Parameters:
