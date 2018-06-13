@@ -1,4 +1,4 @@
-define certs::rhsm_reconfigure_script($ca_cert, $server_ca_cert) {
+define certs::rhsm_reconfigure_script($ca_cert, $server_ca_cert, $include_repomd_gpg, $repomd_pub_gpg) {
 
   concat { $title:
     owner => 'root',
@@ -48,10 +48,40 @@ define certs::rhsm_reconfigure_script($ca_cert, $server_ca_cert) {
     order   => '07',
   }
 
+  if $include_repomd_gpg {
+
+    concat::fragment { "${title}+repomd_gpg_data":
+      target  => $title,
+      content => "read -r -d '' REPOMD_GPG_DATA << EOM\n",
+      order   => '08',
+    }
+
+    concat::fragment { "${title}+repomd_gpg":
+      target => $title,
+      source => $repomd_pub_gpg,
+      order  => '09',
+    }
+
+    concat::fragment { "${title}+end_repomd_gpg":
+      target  => $title,
+      content => "EOM\n\n",
+      order   => '10',
+    }
+
+  } else {
+
+    concat::fragment { "${title}+repomd_gpg":
+      target  => $title,
+      content => "REPOMD_GPG_DATA=\n\n",
+      order   => '08',
+    }
+
+  }
+
   concat::fragment { "${title}+reconfigure":
     target  => $title,
     content => template('certs/rhsm-katello-reconfigure.erb'),
-    order   => '10',
+    order   => '50',
   }
 
 }

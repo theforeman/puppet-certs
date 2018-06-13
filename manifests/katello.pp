@@ -14,6 +14,8 @@ class certs::katello (
   $server_ca_name                    = $certs::server_ca_name,
   $ca_cert                           = $certs::ca_cert,
   $server_ca                         = $certs::server_ca,
+  $include_repomd_gpg                = false,
+  $repomd_pub_gpg                    = "${certs::repomd_gpg_dir}/${certs::repomd_gpg_pub_file}",
 ) inherits certs {
   $katello_rhsm_setup_script      = 'katello-rhsm-consumer'
   $katello_rhsm_setup_script_location = "/usr/bin/${katello_rhsm_setup_script}"
@@ -44,8 +46,10 @@ class certs::katello (
     require => File[$katello_server_ca_cert],
   } ~>
   certs::rhsm_reconfigure_script { "${katello_www_pub_dir}/${katello_rhsm_setup_script}":
-    ca_cert        => $ca_cert,
-    server_ca_cert => $katello_server_ca_cert,
+    ca_cert            => $ca_cert,
+    server_ca_cert     => $katello_server_ca_cert,
+    include_repomd_gpg => $include_repomd_gpg,
+    repomd_pub_gpg     => $repomd_pub_gpg,
   } ~>
   certs_bootstrap_rpm { $candlepin_consumer_name:
     dir              => $katello_www_pub_dir,
