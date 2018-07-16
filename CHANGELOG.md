@@ -1,4 +1,16 @@
-# Change Log
+# Changelog
+
+## [4.2.0](https://github.com/theforeman/puppet-certs/tree/4.2.0) (2018-07-16)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.1.0...4.2.0)
+
+**Implemented enhancements:**
+
+- Fixes [\#16911](https://projects.theforeman.org/issues/16911) - Make $server\_cert\_req optional [\#172](https://github.com/theforeman/puppet-certs/pull/172) ([ekohl](https://github.com/ekohl))
+
+**Fixed bugs:**
+
+- fixes [\#24210](https://projects.theforeman.org/issues/24210) - certs group must be overridable [\#204](https://github.com/theforeman/puppet-certs/pull/204) ([stbenjam](https://github.com/stbenjam))
 
 ## [4.1.0](https://github.com/theforeman/puppet-certs/tree/4.1.0) (2018-05-29)
 
@@ -24,7 +36,8 @@
 
 - Fix debian OS determination [\#193](https://github.com/theforeman/puppet-certs/pull/193) ([jturel](https://github.com/jturel))
 
-## [4.0.0](https://github.com/theforeman/puppet-certs/tree/4.0.0) (2018-01-25)
+## [4.0.0](https://github.com/theforeman/puppet-certs/tree/4.0.0) (2018-01-29)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/3.0.1...4.0.0)
 
 **Breaking changes:**
