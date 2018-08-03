@@ -13,10 +13,10 @@
 #
 class certs::foreman_proxy_content (
   String[1] $parent_fqdn = $::fqdn,
-  String $foreman_proxy_fqdn = $::certs::params::node_fqdn,
-  Array[String] $foreman_proxy_cname = $::certs::params::cname,
-  String[1] $certs_tar = $::certs::params::certs_tar,
-) inherits certs::params {
+  String $foreman_proxy_fqdn = $::fqdn,
+  Array[String] $foreman_proxy_cname = [],
+  String[1] $certs_tar = undef,
+) {
 
   if $foreman_proxy_fqdn == $::fqdn {
     fail('The hostname is the same as the provided hostname for the foreman-proxy')
