@@ -90,4 +90,5 @@ class certs::params {
 
   $qpidd_group = 'qpidd'
 
+  $tar_file = undef
 }

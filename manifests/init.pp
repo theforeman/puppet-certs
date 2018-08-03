@@ -24,6 +24,10 @@
 # $server_cert_req::      Path to the ssl certificate request for https
 #                         if not specified, the default CA will generate one
 #
+# $tar_file::             Use a tarball with certificates rather than generate
+#                         new ones. This can be used on another node which is
+#                         not the CA.
+#
 # === Advanced parameters:
 #
 # $log_dir::              Where the log files should go
@@ -93,6 +97,7 @@ class certs (
   String $group = $::certs::params::group,
   String $default_ca_name = $::certs::params::default_ca_name,
   String $server_ca_name = $::certs::params::server_ca_name,
+  Optional[Stdlib::Absolutepath] $tar_file = $::certs::params::tar_file,
 ) inherits certs::params {
 
   if $server_cert {
@@ -112,6 +117,12 @@ class certs (
 
   $katello_server_ca_cert = "${pki_dir}/certs/${server_ca_name}.crt"
   $katello_default_ca_cert = "${pki_dir}/certs/${default_ca_name}.crt"
+
+  if $tar_file {
+    certs::tar_extract { $tar_file:
+      before => Class['certs::install'],
+    }
+  }
 
   contain ::certs::install
   contain ::certs::config
