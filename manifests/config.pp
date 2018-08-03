@@ -4,6 +4,8 @@ class certs::config (
   $group   = $::certs::group,
 ) {
 
+  ensure_resource('group', $group, {'ensure' => 'present' })
+
   file { $pki_dir:
     ensure => directory,
     owner  => 'root',
