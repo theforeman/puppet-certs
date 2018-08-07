@@ -31,7 +31,7 @@ class certs::ssltools::nssdb (
     mode   => '0640',
   } ->
   exec { 'create-nss-db':
-    command => "certutil -N -d '${nss_db_dir}' -f '${nss_db_password_file}'",
+    command => "certutil -N -d '${nss_db_dir}' -f '${nss_db_password_file}' --empty-password",
     path    => '/usr/bin',
     umask   => '0027',
     group   => $group,
