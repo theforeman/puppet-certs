@@ -4,5 +4,3 @@ fixtures:
     extlib:            "https://github.com/puppet-community/puppet-extlib"
     trusted_ca:        "https://github.com/jlambert121/jlambert121-trusted_ca"
     concat:            "https://github.com/puppetlabs/puppetlabs-concat"
-  symlinks:
-    certs: "#{source_dir}"
