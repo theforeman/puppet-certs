@@ -21,9 +21,9 @@ class certs::foreman_proxy_content (
   notify {'DEPRECATION WARNING: certs::foreman_proxy_content has been deprecated, consider using certs::generate_archive with foreman_proxy => true':}
 
   class { 'certs::generate_archive':
-    server_fqdn   => $foreman_proxy_fqdn,
-    server_cname  => $foreman_proxy_cname,
-    certs_tar     => $certs_tar,
-    foreman_proxy => true,
+    hostname  => $foreman_proxy_fqdn,
+    cnames    => $foreman_proxy_cname,
+    certs_tar => $certs_tar,
+    role      => 'all-proxy',
   }
 }
