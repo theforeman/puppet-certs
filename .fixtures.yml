@@ -1,6 +1,6 @@
 fixtures:
   repositories:
-    stdlib:            "https://github.com/puppetlabs/puppetlabs-stdlib.git"
-    extlib:            "https://github.com/puppet-community/puppet-extlib"
-    trusted_ca:        "https://github.com/jlambert121/jlambert121-trusted_ca"
     concat:            "https://github.com/puppetlabs/puppetlabs-concat"
+    extlib:            "https://github.com/voxpupuli/puppet-extlib"
+    stdlib:            "https://github.com/puppetlabs/puppetlabs-stdlib"
+    trusted_ca:        "https://github.com/voxpupuli/puppet-trusted_ca"
