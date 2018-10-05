@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.3.0](https://github.com/theforeman/puppet-certs/tree/4.3.0) (2018-10-05)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.2.0...4.3.0)
+
+**Implemented enhancements:**
+
+- Switch to puppet-trusted\_ca & allow puppet-extlib 3.0 [\#217](https://github.com/theforeman/puppet-certs/pull/217) ([ekohl](https://github.com/ekohl))
+- set empty-password for nssdb as FIPS fails on password file [\#211](https://github.com/theforeman/puppet-certs/pull/211) ([amitkarsale](https://github.com/amitkarsale))
+
+**Merged pull requests:**
+
+- Allow stdlib & concat 5.x [\#216](https://github.com/theforeman/puppet-certs/pull/216) ([ekohl](https://github.com/ekohl))
+- Do not let foreman\_proxy\_content inherit from params [\#214](https://github.com/theforeman/puppet-certs/pull/214) ([ekohl](https://github.com/ekohl))
+
 ## [4.2.0](https://github.com/theforeman/puppet-certs/tree/4.2.0) (2018-07-16)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.1.0...4.2.0)
@@ -80,6 +94,7 @@
 - Fixes [\#20642](https://projects.theforeman.org/issues/20642) - don't set hostname-override when localhost [\#164](https://github.com/theforeman/puppet-certs/pull/164) ([iNecas](https://github.com/iNecas))
 
 ## [3.0.0](https://github.com/theforeman/puppet-certs/tree/3.0.0) (2017-08-30)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/2.0.1...3.0.0)
 
 **Merged pull requests:**
@@ -91,6 +106,7 @@
 - Refactor to Puppet 4 types [\#159](https://github.com/theforeman/puppet-certs/pull/159) ([sean797](https://github.com/sean797))
 
 ## [2.0.1](https://github.com/theforeman/puppet-certs/tree/2.0.1) (2017-06-01)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/2.0.0...2.0.1)
 
 **Merged pull requests:**
@@ -101,6 +117,7 @@
 - fixes [\#19259](https://projects.theforeman.org/issues/19259) - apache key should be mode 0440 [\#154](https://github.com/theforeman/puppet-certs/pull/154) ([stbenjam](https://github.com/stbenjam))
 
 ## [2.0.0](https://github.com/theforeman/puppet-certs/tree/2.0.0) (2017-04-07)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/1.0.1...2.0.0)
 
 **Closed issues:**
@@ -138,6 +155,7 @@
 - fixes [\#17714](https://projects.theforeman.org/issues/17714) - use pki dir for puppet client certs [\#117](https://github.com/theforeman/puppet-certs/pull/117) ([stbenjam](https://github.com/stbenjam))
 
 ## [1.0.1](https://github.com/theforeman/puppet-certs/tree/1.0.1) (2017-01-24)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/1.0.0...1.0.1)
 
 **Merged pull requests:**
@@ -149,6 +167,7 @@
 - Change existing Kafo type definitions to Puppet 4 types [\#114](https://github.com/theforeman/puppet-certs/pull/114) ([stbenjam](https://github.com/stbenjam))
 
 ## [1.0.0](https://github.com/theforeman/puppet-certs/tree/1.0.0) (2016-12-29)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/0.7.5...1.0.0)
 
 **Merged pull requests:**
@@ -158,9 +177,11 @@
 - fixes [\#17658](https://projects.theforeman.org/issues/17658) - support restarting goferd on OS's with systemd, too [\#115](https://github.com/theforeman/puppet-certs/pull/115) ([stbenjam](https://github.com/stbenjam))
 
 ## [0.7.5](https://github.com/theforeman/puppet-certs/tree/0.7.5) (2016-12-14)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/0.7.4...0.7.5)
 
 ## [0.7.4](https://github.com/theforeman/puppet-certs/tree/0.7.4) (2016-12-14)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/0.7.1...0.7.4)
 
 **Merged pull requests:**
@@ -178,6 +199,7 @@
 - refs [\#11737](https://projects.theforeman.org/issues/11737) - support cnames and add localhost cname to qpid certs [\#65](https://github.com/theforeman/puppet-certs/pull/65) ([stbenjam](https://github.com/stbenjam))
 
 ## [0.7.1](https://github.com/theforeman/puppet-certs/tree/0.7.1) (2016-09-14)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/0.7.0...0.7.1)
 
 **Merged pull requests:**
@@ -185,6 +207,7 @@
 - Bump foreman dependency [\#105](https://github.com/theforeman/puppet-certs/pull/105) ([beav](https://github.com/beav))
 
 ## [0.7.0](https://github.com/theforeman/puppet-certs/tree/0.7.0) (2016-09-12)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/0.6.0...0.7.0)
 
 **Merged pull requests:**
@@ -204,6 +227,7 @@
 - refs [\#15217](https://projects.theforeman.org/issues/15217) - puppet 4 support [\#89](https://github.com/theforeman/puppet-certs/pull/89) ([stbenjam](https://github.com/stbenjam))
 
 ## [0.6.0](https://github.com/theforeman/puppet-certs/tree/0.6.0) (2016-05-27)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/0.5.0...0.6.0)
 
 **Merged pull requests:**
@@ -217,6 +241,7 @@
 - Fixes [\#14223](https://projects.theforeman.org/issues/14223) - Handles atomic machine detection properly [\#81](https://github.com/theforeman/puppet-certs/pull/81) ([parthaa](https://github.com/parthaa))
 
 ## [0.5.0](https://github.com/theforeman/puppet-certs/tree/0.5.0) (2016-03-16)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/0.4.1...0.5.0)
 
 **Merged pull requests:**
@@ -225,6 +250,7 @@
 - Fixes [\#14188](https://projects.theforeman.org/issues/14188) - change pulp\_parent to qpid\_client class [\#78](https://github.com/theforeman/puppet-certs/pull/78) ([johnpmitsch](https://github.com/johnpmitsch))
 
 ## [0.4.1](https://github.com/theforeman/puppet-certs/tree/0.4.1) (2016-03-01)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/0.4.0...0.4.1)
 
 **Merged pull requests:**
@@ -233,6 +259,7 @@
 - fix bootstrap rpm in katello\_devel install [\#76](https://github.com/theforeman/puppet-certs/pull/76) ([jlsherrill](https://github.com/jlsherrill))
 
 ## [0.4.0](https://github.com/theforeman/puppet-certs/tree/0.4.0) (2016-02-24)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/0.2.0...0.4.0)
 
 **Merged pull requests:**
@@ -245,6 +272,7 @@
 - Fixes [\#10052](https://projects.theforeman.org/issues/10052) - Code to setup rhsm.conf for atomic hosts [\#67](https://github.com/theforeman/puppet-certs/pull/67) ([parthaa](https://github.com/parthaa))
 
 ## [0.2.0](https://github.com/theforeman/puppet-certs/tree/0.2.0) (2015-10-15)
+
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/0.1.0...0.2.0)
 
 **Merged pull requests:**
@@ -255,6 +283,9 @@
 - Fixes [\#11755](https://projects.theforeman.org/issues/11755): Validate absolute path for custom certificates [\#58](https://github.com/theforeman/puppet-certs/pull/58) ([ehelms](https://github.com/ehelms))
 
 ## [0.1.0](https://github.com/theforeman/puppet-certs/tree/0.1.0) (2015-07-20)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/7f082050ca4711b7f46fd053801c0a2475ceedf4...0.1.0)
+
 **Merged pull requests:**
 
 - Prepare puppet-certs for release [\#63](https://github.com/theforeman/puppet-certs/pull/63) ([stbenjam](https://github.com/stbenjam))
@@ -315,4 +346,4 @@
 
 
 
-\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
