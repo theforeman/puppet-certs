@@ -1,5 +1,5 @@
 [![Puppet Forge](https://img.shields.io/puppetforge/v/katello/certs.svg)](https://forge.puppetlabs.com/katello/certs)
-[![Build Status](https://travis.ci.org/theforeman/puppet-certs.svg?branch=master)](https://travis-ci.org/Katello/puppet-certs)
+[![Build Status](https://travis-ci.org/theforeman/puppet-certs.svg?branch=master)](https://travis-ci.org/theforeman/puppet-certs)
 #### Table of Contents
 
 1. [Overview](#overview)
