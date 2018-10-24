@@ -9,6 +9,23 @@ CFG=/etc/rhsm/rhsm.conf
 CFG_BACKUP=$CFG.kat-backup
 CA_TRUST_ANCHORS=/etc/pki/ca-trust/source/anchors
 
+is_debian()
+{
+  if [ -r "/etc/os-release" ]
+  then
+    ID="$(sed -n -e "s/^ID\s*=\s*\(.*\)/\1/p" /etc/os-release)"
+    ID_LIKE="$(sed -n -e "s/^ID_LIKE\s*=\s*\(.*\)/\1/p" /etc/os-release)"
+
+    if [ "$ID" = "debian" ] ||       # Debian
+       [ "$ID_LIKE" = "debian" ] ||  # e.g Ubuntu
+       [ "$ID_LIKE" = "ubuntu" ]     # e.g. Linux Mint
+    then
+      return 0
+    fi
+  fi
+  return 1
+}
+
 # exit on non-RHEL systems or when rhsm.conf is not found
 test -f $CFG || exit
 type -P subscription-manager >/dev/null || type -P subscription-manager-cli >/dev/null || exit
@@ -37,7 +54,7 @@ then
     --server.port="$PORT" \
     --rhsm.repo_ca_cert="%(ca_cert_dir)s$KATELLO_SERVER_CA_CERT" \
     --rhsm.baseurl="$BASEURL"
-elif [ -r "/etc/os-release" ] && [ "$(sed -n -e "s/^ID\s*=\s*\(.*\)/\1/p" /etc/os-release)" = "debian" ]
+elif is_debian
 then
   # Debian setup
   BASEURL=https://$KATELLO_SERVER/pulp/deb
