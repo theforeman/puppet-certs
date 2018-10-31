@@ -71,7 +71,7 @@ class certs::qpid (
       subscribe   => Pubkey[$client_cert],
     } ~>
     exec { 'generate-pfx-for-nss-db':
-      command     => "openssl pkcs12 -in ${client_cert} -inkey ${client_key} -export -out '${pfx_path}' -password 'file:${nss_db_password_file}'",
+      command     => "openssl pkcs12 -in ${client_cert} -inkey ${client_key} -export -out '${pfx_path}' -password 'file:${nss_db_password_file}' -name 'broker'",
       path        => '/usr/bin',
       refreshonly => true,
     } ~>

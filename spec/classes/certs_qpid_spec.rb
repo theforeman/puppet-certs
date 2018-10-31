@@ -42,7 +42,7 @@ describe 'certs::qpid' do
 
         it do
           is_expected.to contain_exec('generate-pfx-for-nss-db')
-            .with_command("openssl pkcs12 -in /etc/pki/katello/certs/foo.example.com-qpid-broker.crt -inkey /etc/pki/katello/private/foo.example.com-qpid-broker.key -export -out '/etc/pki/katello/foo.example.com-qpid-broker.pfx' -password 'file:/etc/pki/katello/nssdb/nss_db_password-file'")
+            .with_command("openssl pkcs12 -in /etc/pki/katello/certs/foo.example.com-qpid-broker.crt -inkey /etc/pki/katello/private/foo.example.com-qpid-broker.key -export -out '/etc/pki/katello/foo.example.com-qpid-broker.pfx' -password 'file:/etc/pki/katello/nssdb/nss_db_password-file' -name 'broker'")
         end
 
         it do
