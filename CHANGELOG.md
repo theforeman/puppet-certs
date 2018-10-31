@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.4.1](https://github.com/theforeman/puppet-certs/tree/4.4.1) (2018-10-31)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.4.0...4.4.1)
+
+**Fixed bugs:**
+
+- Fixes [\#25359](https://projects.theforeman.org/issues/25359) - Add name flag to openssl pkcs12 nsddb key/cert convert. [\#223](https://github.com/theforeman/puppet-certs/pull/223) ([chris1984](https://github.com/chris1984))
+
 ## [4.4.0](https://github.com/theforeman/puppet-certs/tree/4.4.0) (2018-10-31)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.3.0...4.4.0)
