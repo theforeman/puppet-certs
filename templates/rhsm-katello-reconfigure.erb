@@ -111,17 +111,17 @@ if [ -d $CA_TRUST_ANCHORS ]; then
   # reload docker if it is installed and running
   if [ -f /usr/lib/systemd/system/docker.service ]; then
     systemctl status docker >/dev/null && \
-    systemctl reload docker >/dev/null 2&>1
+    systemctl reload docker >/dev/null 2>&1
   elif [ -f /etc/init.d/docker ]; then
     service docker status >/dev/null && \
-    service docker reload >/dev/null 2&>1
+    service docker reload >/dev/null 2>&1
   fi
 fi
 
 # restart goferd if it is installed and running
 [ -f /etc/init.d/goferd ] && \
   service goferd status >/dev/null && \
-  service goferd restart >/dev/null 2&>1
+  service goferd restart >/dev/null 2>&1
 
 [ -f /usr/lib/systemd/system/goferd.service ] && \
 [ -f /bin/systemctl ] && \
