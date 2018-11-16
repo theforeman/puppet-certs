@@ -82,7 +82,7 @@ class certs::foreman_proxy (
   if $deploy {
 
     certs::keypair { 'foreman_proxy':
-      key_pair   => $proxy_cert_name,
+      key_pair   => Cert[$proxy_cert_name],
       key_file   => $proxy_key,
       manage_key => true,
       key_owner  => 'foreman-proxy',
@@ -95,7 +95,7 @@ class certs::foreman_proxy (
     }
 
     certs::keypair { 'foreman_proxy_client':
-      key_pair   => $foreman_proxy_client_cert_name,
+      key_pair   => Cert[$foreman_proxy_client_cert_name],
       key_file   => $foreman_ssl_key,
       manage_key => true,
       key_owner  => 'foreman-proxy',

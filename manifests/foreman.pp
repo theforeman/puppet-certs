@@ -39,7 +39,7 @@ class certs::foreman (
 
   if $deploy {
     certs::keypair { 'foreman':
-      key_pair   => $client_cert_name,
+      key_pair   => Cert[$client_cert_name],
       key_file   => $client_key,
       manage_key => true,
       key_owner  => 'foreman',
