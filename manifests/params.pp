@@ -58,8 +58,8 @@ class certs::params {
   # for verifying the foreman https
   $puppet_ssl_ca_cert = "${pki_dir}/puppet/puppet_client_ca.crt"
 
-  $candlepin_keystore               = '/etc/pki/katello/keystore'
   $candlepin_certs_dir              = '/etc/candlepin/certs'
+  $candlepin_keystore               = "${candlepin_certs_dir}/keystore"
   $candlepin_ca_cert                = "${candlepin_certs_dir}/candlepin-ca.crt"
   $candlepin_ca_key                 = "${candlepin_certs_dir}/candlepin-ca.key"
   $candlepin_amqp_store_dir         = "${candlepin_certs_dir}/amqp"
