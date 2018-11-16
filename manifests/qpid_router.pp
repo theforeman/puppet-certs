@@ -62,7 +62,7 @@ class certs::qpid_router (
 
   if $deploy {
     certs::keypair { 'qpid_router_server':
-      key_pair    => $server_keypair,
+      key_pair    => Cert[$server_keypair],
       key_file    => $server_key,
       manage_key  => true,
       key_owner   => $owner,
@@ -76,7 +76,7 @@ class certs::qpid_router (
     }
 
     certs::keypair { 'qpid_router_client':
-      key_pair    => $client_keypair,
+      key_pair    => Cert[$client_keypair],
       key_file    => $client_key,
       manage_key  => true,
       key_owner   => $owner,

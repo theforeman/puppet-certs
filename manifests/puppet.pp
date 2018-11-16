@@ -48,7 +48,7 @@ class certs::puppet (
       mode   => '0700',
     } ->
     certs::keypair { 'puppet':
-      key_pair    => $puppet_client_cert_name,
+      key_pair    => Cert[$puppet_client_cert_name],
       key_file    => $client_key,
       manage_key  => true,
       key_owner   => 'puppet',

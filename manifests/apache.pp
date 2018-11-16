@@ -57,7 +57,7 @@ class certs::apache (
 
   if $deploy {
     certs::keypair { 'apache':
-      key_pair   => $apache_cert_name,
+      key_pair   => Cert[$apache_cert_name],
       key_file   => $apache_key,
       manage_key => true,
       key_owner  => 'root',

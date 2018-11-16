@@ -5,8 +5,8 @@ class certs::candlepin (
   $generate               = $::certs::generate,
   $regenerate             = $::certs::regenerate,
   $deploy                 = $::certs::deploy,
-  $ca_cert                = $::certs::ca_cert_stripped,
-  $ca_key                 = $::certs::ca_key,
+  $ca_cert                = $::certs::candlepin_ca_cert,
+  $ca_key                 = $::certs::candlepin_ca_key,
   $pki_dir                = $::certs::pki_dir,
   $keystore               = $::certs::candlepin_keystore,
   $keystore_password_file = $::certs::keystore_password_file,
@@ -76,10 +76,24 @@ class certs::candlepin (
   $client_req = "${pki_dir}/java-client.req"
   $client_cert = "${pki_dir}/certs/${java_client_cert_name}.crt"
   $client_key = "${pki_dir}/private/${java_client_cert_name}.key"
+  $alias = 'candlepin-ca'
 
   if $deploy {
+    certs::keypair { 'candlepin-ca':
+      manage_cert   => true,
+      manage_key    => true,
+      key_pair      => $default_ca,
+      key_file      => $ca_key,
+      cert_file     => $ca_cert,
+      cert_owner    => $user,
+      cert_group    => $group,
+      key_mode      => '0440',
+      cert_mode     => '0640',
+      unprotect     => true,
+      password_file => $ca_key_password_file,
+    } ~>
     certs::keypair { 'tomcat':
-      key_pair  => $tomcat_cert_name,
+      key_pair  => Cert[$tomcat_cert_name],
       key_file  => $tomcat_key,
       cert_file => $tomcat_cert,
     } ~>
@@ -95,7 +109,7 @@ class certs::candlepin (
       creates => $keystore,
     } ~>
     certs::keypair { 'candlepin':
-      key_pair  => $java_client_cert_name,
+      key_pair  => Cert[$java_client_cert_name],
       key_file  => $client_key,
       cert_file => $client_cert,
     } ~>
@@ -106,7 +120,7 @@ class certs::candlepin (
       mode   => '0750',
     } ~>
     exec { 'import CA into Candlepin truststore':
-      command => "keytool -import -v -keystore ${amqp_truststore} -storepass ${keystore_password} -alias ${::certs::default_ca_name} -file ${ca_cert} -noprompt",
+      command => "keytool -import -v -keystore ${amqp_truststore} -storepass ${keystore_password} -alias ${alias} -file ${ca_cert} -noprompt",
       creates => $amqp_truststore,
     } ~>
     exec { 'import client certificate into Candlepin keystore':

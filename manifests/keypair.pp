@@ -10,13 +10,17 @@ define certs::keypair (
   $cert_owner  = undef,
   $cert_group  = undef,
   $cert_mode   = undef,
+  $unprotect   = false,
+  $password_file = undef,
 ) {
-  Cert[$key_pair] ~>
+  $key_pair ~>
   privkey { $key_file:
-    key_pair => Cert[$key_pair],
+    key_pair      => $key_pair,
+    unprotect     => $unprotect,
+    password_file => $password_file,
   } ~>
   pubkey { $cert_file:
-    key_pair => Cert[$key_pair],
+    key_pair => $key_pair,
   }
 
   if $manage_key {

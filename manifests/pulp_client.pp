@@ -42,7 +42,7 @@ class certs::pulp_client (
 
   if $deploy {
     certs::keypair { 'pulp_client':
-      key_pair   => $client_cert_name,
+      key_pair   => Cert[$client_cert_name],
       key_file   => $client_key,
       manage_key => true,
       key_group  => $group,

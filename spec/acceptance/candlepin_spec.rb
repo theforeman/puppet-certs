@@ -95,7 +95,7 @@ describe 'certs' do
       its(:exit_status) { should eq 0 }
       its(:stdout) { should match(/^Keystore type: JKS$/i) }
       its(:stdout) { should match(/^Your keystore contains 1 entry$/) }
-      its(:stdout) { should match(/^katello-default-ca, .+, trustedCertEntry, $/) }
+      its(:stdout) { should match(/^candlepin-ca, .+, trustedCertEntry, $/) }
     end
 
     describe command("keytool -list -keystore /etc/candlepin/certs/amqp/candlepin.jks -storepass $(cat #{keystore_password_file})") do

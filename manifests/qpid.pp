@@ -48,7 +48,7 @@ class certs::qpid (
     $pfx_path               = "${pki_dir}/${qpid_cert_name}.pfx"
 
     certs::keypair { 'qpid':
-      key_pair   => $qpid_cert_name,
+      key_pair   => Cert[$qpid_cert_name],
       key_file   => $client_key,
       manage_key => true,
       key_owner  => 'root',
