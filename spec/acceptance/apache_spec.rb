@@ -16,7 +16,7 @@ describe 'certs::apache' do
 
   context 'with default parameters' do
     let(:pp) do
-      'include ::certs::apache'
+      'include certs::apache'
     end
 
     it 'should force regeneration' do
