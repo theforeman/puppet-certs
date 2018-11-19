@@ -98,7 +98,7 @@ else
     sed -i "s/full_refresh_on_yum\s*=.*$/full_refresh_on_yum = 1/g" $CFG
   else
     full_refresh_config="#config for on-premise management\nfull_refresh_on_yum = 1"
-    sed -i "/baseurl/a\n$full_refresh_config" $CFG
+    sed -i "/baseurl/a\ $full_refresh_config" $CFG
   fi
 fi
 
