@@ -16,7 +16,7 @@ describe 'certs' do
 
   context 'with default params' do
     let(:pp) do
-      'include ::certs'
+      'include certs'
     end
 
     it_behaves_like 'a idempotent resource'

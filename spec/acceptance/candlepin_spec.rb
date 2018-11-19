@@ -32,7 +32,7 @@ describe 'certs' do
         ensure => installed,
       }
 
-      include ::certs::candlepin
+      include certs::candlepin
       EOS
     end
 
