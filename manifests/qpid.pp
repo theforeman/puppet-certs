@@ -1,20 +1,20 @@
 # Handles Qpid cert configuration
 class certs::qpid (
-  $hostname             = $::certs::node_fqdn,
-  $cname                = $::certs::cname,
-  $generate             = $::certs::generate,
-  $regenerate           = $::certs::regenerate,
-  $deploy               = $::certs::deploy,
-  $country              = $::certs::country,
-  $state                = $::certs::state,
-  $city                 = $::certs::city,
-  $org_unit             = $::certs::org_unit,
-  $expiration           = $::certs::expiration,
-  $default_ca           = $::certs::default_ca,
-  $ca_key_password_file = $::certs::ca_key_password_file,
-  $pki_dir              = $::certs::pki_dir,
-  $ca_cert              = $::certs::ca_cert,
-  $qpidd_group          = $::certs::qpidd_group,
+  $hostname             = $certs::node_fqdn,
+  $cname                = $certs::cname,
+  $generate             = $certs::generate,
+  $regenerate           = $certs::regenerate,
+  $deploy               = $certs::deploy,
+  $country              = $certs::country,
+  $state                = $certs::state,
+  $city                 = $certs::city,
+  $org_unit             = $certs::org_unit,
+  $expiration           = $certs::expiration,
+  $default_ca           = $certs::default_ca,
+  $ca_key_password_file = $certs::ca_key_password_file,
+  $pki_dir              = $certs::pki_dir,
+  $ca_cert              = $certs::ca_cert,
+  $qpidd_group          = $certs::qpidd_group,
 ) inherits certs {
 
   Exec { logoutput => 'on_failure' }
@@ -39,9 +39,9 @@ class certs::qpid (
   }
 
   if $deploy {
-    include ::certs::ssltools::nssdb
-    $nss_db_dir = $::certs::ssltools::nssdb::nss_db_dir
-    $nss_db_password_file = $::certs::ssltools::nssdb::nss_db_password_file
+    include certs::ssltools::nssdb
+    $nss_db_dir = $certs::ssltools::nssdb::nss_db_dir
+    $nss_db_password_file = $certs::ssltools::nssdb::nss_db_password_file
 
     $client_cert            = "${pki_dir}/certs/${qpid_cert_name}.crt"
     $client_key             = "${pki_dir}/private/${qpid_cert_name}.key"

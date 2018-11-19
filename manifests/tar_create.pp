@@ -10,7 +10,7 @@
 #
 define certs::tar_create(
   $path               = $title,
-  $foreman_proxy_fqdn = $::certs::foreman_proxy_content::foreman_proxy_fqdn,
+  $foreman_proxy_fqdn = $certs::foreman_proxy_content::foreman_proxy_fqdn,
 ) {
   exec { "generate ${path}":
     cwd     => '/root',

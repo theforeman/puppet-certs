@@ -4,16 +4,16 @@
 # This file is placed in $katello_www_pub_dir.
 #
 class certs::katello (
-  $hostname                          = $::certs::node_fqdn,
+  $hostname                          = $certs::node_fqdn,
   $deployment_url                    = undef,
   $rhsm_port                         = 443,
   $rhsm_ca_dir                       = '/etc/rhsm/ca',
   $candlepin_cert_rpm_alias_filename = 'katello-ca-consumer-latest.noarch.rpm',
   $katello_www_pub_dir               = '/var/www/html/pub',
-  $katello_server_ca_cert            = $::certs::katello_server_ca_cert,
-  $server_ca_name                    = $::certs::server_ca_name,
-  $ca_cert                           = $::certs::ca_cert,
-  $server_ca                         = $::certs::server_ca,
+  $katello_server_ca_cert            = $certs::katello_server_ca_cert,
+  $server_ca_name                    = $certs::server_ca_name,
+  $ca_cert                           = $certs::ca_cert,
+  $server_ca                         = $certs::server_ca,
 ) inherits certs {
   $katello_rhsm_setup_script      = 'katello-rhsm-consumer'
   $katello_rhsm_setup_script_location = "/usr/bin/${katello_rhsm_setup_script}"
@@ -22,7 +22,7 @@ class certs::katello (
   $candlepin_consumer_summary     = "Subscription-manager consumer certificate for Katello instance ${hostname}"
   $candlepin_consumer_description = 'Consumer certificate and post installation script that configures rhsm.'
 
-  include ::trusted_ca
+  include trusted_ca
   trusted_ca::ca { 'katello_server-host-cert':
     source  => $katello_server_ca_cert,
     require => File[$katello_server_ca_cert],
