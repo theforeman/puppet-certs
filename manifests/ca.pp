@@ -1,26 +1,26 @@
 # == Class: certs
 # Sets up the CA for Katello
 class certs::ca (
-  $default_ca_name         = $::certs::default_ca_name,
-  $server_ca_name          = $::certs::server_ca_name,
-  $ca_common_name          = $::certs::ca_common_name,
-  $country                 = $::certs::country,
-  $state                   = $::certs::state,
-  $city                    = $::certs::city,
-  $org                     = $::certs::org,
-  $org_unit                = $::certs::org_unit,
-  $ca_expiration           = $::certs::ca_expiration,
-  $generate                = $::certs::generate,
-  $deploy                  = $::certs::deploy,
-  $server_cert             = $::certs::server_cert,
-  $ssl_build_dir           = $::certs::ssl_build_dir,
-  $group                   = $::certs::group,
-  $katello_server_ca_cert  = $::certs::katello_server_ca_cert,
-  $ca_key                  = $::certs::ca_key,
-  $ca_cert                 = $::certs::ca_cert,
-  $ca_cert_stripped        = $::certs::ca_cert_stripped,
-  $ca_key_password         = $::certs::ca_key_password,
-  $ca_key_password_file    = $::certs::ca_key_password_file,
+  $default_ca_name         = $certs::default_ca_name,
+  $server_ca_name          = $certs::server_ca_name,
+  $ca_common_name          = $certs::ca_common_name,
+  $country                 = $certs::country,
+  $state                   = $certs::state,
+  $city                    = $certs::city,
+  $org                     = $certs::org,
+  $org_unit                = $certs::org_unit,
+  $ca_expiration           = $certs::ca_expiration,
+  $generate                = $certs::generate,
+  $deploy                  = $certs::deploy,
+  $server_cert             = $certs::server_cert,
+  $ssl_build_dir           = $certs::ssl_build_dir,
+  $group                   = $certs::group,
+  $katello_server_ca_cert  = $certs::katello_server_ca_cert,
+  $ca_key                  = $certs::ca_key,
+  $ca_cert                 = $certs::ca_cert,
+  $ca_cert_stripped        = $certs::ca_cert_stripped,
+  $ca_key_password         = $certs::ca_key_password,
+  $ca_key_password_file    = $certs::ca_key_password_file,
 ) {
 
   file { $ca_key_password_file:
@@ -50,7 +50,7 @@ class certs::ca (
       ensure        => present,
       generate      => $generate,
       deploy        => $deploy,
-      custom_pubkey => $::certs::server_ca_cert,
+      custom_pubkey => $certs::server_ca_cert,
     }
   } else {
     ca { $server_ca_name:

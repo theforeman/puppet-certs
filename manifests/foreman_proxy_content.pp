@@ -12,13 +12,13 @@
 # $certs_tar::                      Path to tar file with certs to generate
 #
 class certs::foreman_proxy_content (
-  String[1] $parent_fqdn = $::fqdn,
-  String $foreman_proxy_fqdn = $::fqdn,
+  String[1] $parent_fqdn = $facts['fqdn'],
+  String $foreman_proxy_fqdn = $facts['fqdn'],
   Array[String] $foreman_proxy_cname = [],
   String[1] $certs_tar = undef,
 ) {
 
-  if $foreman_proxy_fqdn == $::fqdn {
+  if $foreman_proxy_fqdn == $facts['fqdn'] {
     fail('The hostname is the same as the provided hostname for the foreman-proxy')
   }
 
