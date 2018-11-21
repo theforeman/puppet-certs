@@ -6,7 +6,8 @@ class certs::qpid_client (
   $regenerate            = $certs::regenerate,
   $deploy                = $certs::deploy,
 
-  $messaging_client_cert = $certs::messaging_client_cert,
+  $qpid_client_cert      = $certs::qpid_client_cert,
+  $qpid_client_ca_cert   = $certs::qpid_client_ca_cert,
 
   $country               = $certs::country,
   $state                 = $certs::state,
@@ -15,6 +16,8 @@ class certs::qpid_client (
   $expiration            = $certs::expiration,
   $default_ca            = $certs::default_ca,
   $ca_key_password_file  = $certs::ca_key_password_file,
+
+  $cert_group            = 'apache',
 ) inherits certs {
 
   $qpid_client_cert_name = "${hostname}-qpid-client-cert"
@@ -39,16 +42,31 @@ class certs::qpid_client (
 
   if $deploy {
 
-    Cert[$qpid_client_cert_name] ~>
-    key_bundle { $messaging_client_cert:
-      key_pair => Cert[$qpid_client_cert_name],
-    } ~>
-    file { $messaging_client_cert:
-      owner => 'apache',
-      group => 'apache',
-      mode  => '0640',
+    file { $certs::pulp_pki_dir:
+      ensure => directory,
+      owner  => 'root',
+      group  => $cert_group,
+      mode   => '0640',
     }
 
+    file { "${certs::pulp_pki_dir}/qpid":
+      ensure => directory,
+      owner  => 'root',
+      group  => $cert_group,
+      mode   => '0640',
+    } ~>
+    Cert[$qpid_client_cert_name] ~>
+    key_bundle { $qpid_client_cert:
+      key_pair => Cert[$qpid_client_cert_name],
+    } ~>
+    file { $qpid_client_cert:
+      owner => 'root',
+      group => $cert_group,
+      mode  => '0640',
+    } ~>
+    pubkey { $qpid_client_ca_cert:
+      key_pair => $default_ca,
+    }
   }
 
 }

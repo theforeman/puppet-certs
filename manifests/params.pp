@@ -73,7 +73,10 @@ class certs::params {
   $katello_product        = 'node-certs'
   $katello_activation_key = undef
 
-  $messaging_client_cert = "${pki_dir}/qpid_client_striped.crt"
+  $pulp_pki_dir = '/etc/pki/pulp'
+
+  $qpid_client_cert = "${pulp_pki_dir}/qpid/client.crt"
+  $qpid_client_ca_cert = "${pulp_pki_dir}/qpid/ca.crt"
 
   $qpid_router_server_cert = "${pki_dir}/qpid_router_server.crt"
   $qpid_router_client_cert = "${pki_dir}/qpid_router_client.crt"
