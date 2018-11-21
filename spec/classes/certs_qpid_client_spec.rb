@@ -15,11 +15,11 @@ describe 'certs::qpid_client' do
         end
 
         it do
-          is_expected.to contain_key_bundle('/etc/pki/katello/qpid_client_striped.crt')
+          is_expected.to contain_key_bundle('/etc/pki/pulp/qpid/client.crt')
             .with_key_pair('Cert[foo.example.com-qpid-client-cert]')
         end
 
-        it { is_expected.to contain_file('/etc/pki/katello/qpid_client_striped.crt') }
+        it { is_expected.to contain_file('/etc/pki/pulp/qpid/client.crt') }
       end
     end
   end
