@@ -8,10 +8,9 @@
 # Actions:
 # - Extracts a tarball
 #
-# Requires:
-# - The certs class
-#
 define certs::tar_extract($path = $title) {
+  validate_file_exists($path)
+
   exec { "extract ${path}":
     cwd     => '/root',
     path    => ['/usr/bin', '/bin'],
