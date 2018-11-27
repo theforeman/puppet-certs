@@ -7,21 +7,21 @@ class certs::config (
   file { $pki_dir:
     ensure => directory,
     owner  => 'root',
-    group  => $group,
+    group  => 'root',
     mode   => '0755',
   }
 
   file { "${pki_dir}/certs":
     ensure => directory,
     owner  => 'root',
-    group  => $group,
+    group  => 'root',
     mode   => '0755',
   }
 
   file { "${pki_dir}/private":
     ensure => directory,
     owner  => 'root',
-    group  => $group,
+    group  => 'root',
     mode   => '0750',
   }
 
