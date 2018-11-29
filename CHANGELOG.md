@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.4.2](https://github.com/theforeman/puppet-certs/tree/4.4.2) (2018-11-29)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.4.1...4.4.2)
+
+**Fixed bugs:**
+
+- Fixes [\#25512](https://projects.theforeman.org/issues/25512) fixes incorrect editing of rhsm.conf [\#227](https://github.com/theforeman/puppet-certs/pull/227) ([patilsuraj767](https://github.com/patilsuraj767))
+- Fix wrong redirect notation [\#224](https://github.com/theforeman/puppet-certs/pull/224) ([masatake](https://github.com/masatake))
+
 ## [4.4.1](https://github.com/theforeman/puppet-certs/tree/4.4.1) (2018-10-31)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.4.0...4.4.1)
