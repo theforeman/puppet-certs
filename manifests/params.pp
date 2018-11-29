@@ -28,7 +28,6 @@ class certs::params {
   $ca_expiration = '36500' # 100 years
 
   $keystore_password_file = 'keystore_password-file'
-  $nss_db_dir = "${pki_dir}/nssdb"
 
   $user = 'root'
   $group = 'root'

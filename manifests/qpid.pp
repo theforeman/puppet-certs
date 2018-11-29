@@ -13,7 +13,6 @@ class certs::qpid (
   $default_ca           = $::certs::default_ca,
   $ca_key_password_file = $::certs::ca_key_password_file,
   $pki_dir              = $::certs::pki_dir,
-  $nss_db_dir           = $::certs::nss_db_dir,
   $ca_cert              = $::certs::ca_cert,
   $qpidd_group          = $::certs::qpidd_group,
 ) inherits certs {
@@ -41,6 +40,7 @@ class certs::qpid (
 
   if $deploy {
     include ::certs::ssltools::nssdb
+    $nss_db_dir = $::certs::ssltools::nssdb::nss_db_dir
     $nss_db_password_file = $::certs::ssltools::nssdb::nss_db_password_file
 
     $client_cert            = "${pki_dir}/certs/${qpid_cert_name}.crt"
