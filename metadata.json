@@ -1,6 +1,6 @@
 {
   "name": "katello-certs",
-  "version": "4.4.2",
+  "version": "5.0.0",
   "author": "Katello",
   "summary": "Deploys CA and required certs for a Foreman and Katello installation.",
   "license": "GPL-3.0+",
