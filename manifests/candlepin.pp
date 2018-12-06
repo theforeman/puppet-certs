@@ -84,11 +84,14 @@ class certs::candlepin (
       key_pair      => $default_ca,
       key_file      => $ca_key,
       cert_file     => $ca_cert,
-      cert_owner    => $user,
-      cert_group    => $group,
+      cert_owner    => 'tomcat',
+      cert_group    => 'tomcat',
+      key_owner     => 'tomcat',
+      key_group     => 'tomcat',
       key_mode      => '0440',
       cert_mode     => '0640',
       unprotect     => true,
+      strip         => true,
       password_file => $ca_key_password_file,
     } ~>
     certs::keypair { 'tomcat':
