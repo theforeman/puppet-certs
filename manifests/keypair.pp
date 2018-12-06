@@ -11,6 +11,7 @@ define certs::keypair (
   $cert_group  = undef,
   $cert_mode   = undef,
   $unprotect   = false,
+  $strip       = false,
   $password_file = undef,
 ) {
   $key_pair ~>
@@ -21,6 +22,7 @@ define certs::keypair (
   } ~>
   pubkey { $cert_file:
     key_pair => $key_pair,
+    strip    => $strip,
   }
 
   if $manage_key {

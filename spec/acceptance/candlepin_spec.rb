@@ -84,6 +84,20 @@ describe 'certs' do
       it { should be_grouped_into 'root' }
     end
 
+    describe file('/etc/candlepin/certs/candlepin-ca.crt') do
+      it { should be_file }
+      it { should be_mode 640 }
+      it { should be_owned_by 'tomcat' }
+      it { should be_grouped_into 'tomcat' }
+    end
+
+    describe file('/etc/candlepin/certs/candlepin-ca.key') do
+      it { should be_file }
+      it { should be_mode 440 }
+      it { should be_owned_by 'tomcat' }
+      it { should be_grouped_into 'tomcat' }
+    end
+
     describe command("keytool -list -keystore /etc/candlepin/certs/keystore -storepass $(cat #{keystore_password_file})") do
       its(:exit_status) { should eq 0 }
       its(:stdout) { should match(/^Keystore type: JKS$/i) }
