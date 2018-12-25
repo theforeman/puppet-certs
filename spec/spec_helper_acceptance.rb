@@ -1,3 +1,10 @@
+ENV['PUPPET_INSTALL_TYPE'] ||= 'agent'
+ENV['BEAKER_IS_PE'] ||= 'no'
+ENV['BEAKER_PUPPET_COLLECTION'] ||= 'puppet6'
+ENV['BEAKER_debug'] ||= 'true'
+ENV['BEAKER_setfile'] ||= 'centos7-64{hostname=centos7-64.example.com}'
+ENV['BEAKER_HYPERVISOR'] ||= 'docker'
+
 require 'beaker-puppet'
 require 'beaker-rspec'
 require 'beaker/puppet_install_helper'
@@ -47,16 +54,4 @@ shared_examples 'the example' do |name|
   include_examples 'a idempotent resource'
 end
 
-def normalize_openssl_subject(subject)
-  return subject unless subject.start_with?('/')
-  # openssl < 1.1
-  subject[1..-1].split('/').join(', ').gsub('=', ' = ')
-end
-
-shared_examples 'certificate issuer' do |expected|
-  it { expect(normalize_openssl_subject(subject.issuer)).to eq(expected) }
-end
-
-shared_examples 'certificate subject' do |expected|
-  it { expect(normalize_openssl_subject(subject.subject)).to eq(expected) }
-end
+Dir["./spec/support/acceptance/**/*.rb"].sort.each { |f| require f }
