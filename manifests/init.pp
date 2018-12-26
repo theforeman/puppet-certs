@@ -73,8 +73,8 @@
 #
 class certs (
   Stdlib::Absolutepath $log_dir = $certs::params::log_dir,
-  String $node_fqdn = $certs::params::node_fqdn,
-  Array[String] $cname = $certs::params::cname,
+  Stdlib::Fqdn $node_fqdn = $certs::params::node_fqdn,
+  Array[Stdlib::Fqdn] $cname = $certs::params::cname,
   Boolean $generate = $certs::params::generate,
   Boolean $regenerate = $certs::params::regenerate,
   Boolean $regenerate_ca = $certs::params::regenerate_ca,
