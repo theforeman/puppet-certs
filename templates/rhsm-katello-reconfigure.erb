@@ -70,10 +70,7 @@ else
   BASEURL=https://$KATELLO_SERVER/pulp/repos
 
   # Get version of RHSM
-  RHSM_V="`rpm -q --queryformat='%{VERSION}' subscription-manager 2> /dev/null | tr . ' '`"
-  if test $? != 0 ; then
-    RHSM_V="0 0 0"
-  fi
+  RHSM_V="$((rpm -q --queryformat='%{VERSION}' subscription-manager 2> /dev/null || echo 0.0.0) | tail -n1 | tr . ' ')"
   declare -a RHSM_VERSION=($RHSM_V)
 
   # configure rhsm
@@ -132,8 +129,8 @@ fi
 if (test -f /etc/redhat-release && grep -q -i "Red Hat Enterprise Linux Server release 5" /etc/redhat-release) || \
    (test -f /etc/centos-release && grep -q -i "CentOS Linux release 5" /etc/centos-release) || \
    test ${RHSM_VERSION[0]:-0} -lt 1 -o ${RHSM_VERSION[1]:-0} -lt 18 -o \( ${RHSM_VERSION[1]:-0} -eq 18 -a ${RHSM_VERSION[2]:-0} -lt 2 \); then
-  FQDN=`hostname -f`
-  if [ $? == "0" ] && [ "$FQDN" != "localhost" ] && [ -d /etc/rhsm/facts/ ]; then
+  FQDN="$(hostname -f 2>/dev/null || echo localhost)"
+  if [ "$FQDN" != "localhost" ] && [ -d /etc/rhsm/facts/ ]; then
     echo "{\"network.hostname-override\":\"$FQDN\"}" > /etc/rhsm/facts/katello.facts
   fi
 fi
