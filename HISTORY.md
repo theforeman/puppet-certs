@@ -1,3 +1,29 @@
+## [4.4.2](https://github.com/theforeman/puppet-certs/tree/4.4.2) (2018-11-29)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.4.1...4.4.2)
+
+**Fixed bugs:**
+
+- Fixes [\#25512](https://projects.theforeman.org/issues/25512) fixes incorrect editing of rhsm.conf [\#227](https://github.com/theforeman/puppet-certs/pull/227) ([patilsuraj767](https://github.com/patilsuraj767))
+- Fix wrong redirect notation [\#224](https://github.com/theforeman/puppet-certs/pull/224) ([masatake](https://github.com/masatake))
+
+## [4.4.1](https://github.com/theforeman/puppet-certs/tree/4.4.1) (2018-10-31)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.4.0...4.4.1)
+
+**Fixed bugs:**
+
+- Fixes [\#25359](https://projects.theforeman.org/issues/25359) - Add name flag to openssl pkcs12 nsddb key/cert convert. [\#223](https://github.com/theforeman/puppet-certs/pull/223) ([chris1984](https://github.com/chris1984))
+
+## [4.4.0](https://github.com/theforeman/puppet-certs/tree/4.4.0) (2018-10-31)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.3.0...4.4.0)
+
+**Implemented enhancements:**
+
+- Rewrite validate\_file\_exists to a modern Ruby function [\#222](https://github.com/theforeman/puppet-certs/pull/222) ([ekohl](https://github.com/ekohl))
+- Add support for debian derivatives [\#220](https://github.com/theforeman/puppet-certs/pull/220) ([m-bucher](https://github.com/m-bucher))
+
 ## [4.3.0](https://github.com/theforeman/puppet-certs/tree/4.3.0) (2018-10-05)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.2.0...4.3.0)

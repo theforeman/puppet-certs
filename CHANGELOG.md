@@ -1,5 +1,32 @@
 # Changelog
 
+## [5.0.0](https://github.com/theforeman/puppet-certs/tree/5.0.0) (2019-01-11)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.4.2...5.0.0)
+
+**Breaking changes:**
+
+- Clean up $nss\_db\_dir handling [\#201](https://github.com/theforeman/puppet-certs/pull/201) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Use FQDNs data types where appropriate [\#236](https://github.com/theforeman/puppet-certs/pull/236) ([ekohl](https://github.com/ekohl))
+- Check the file is present in tar\_extract [\#230](https://github.com/theforeman/puppet-certs/pull/230) ([ekohl](https://github.com/ekohl))
+- Add Puppet 6 support [\#226](https://github.com/theforeman/puppet-certs/pull/226) ([ekohl](https://github.com/ekohl))
+- Move keystore to Candlepin default location [\#225](https://github.com/theforeman/puppet-certs/pull/225) ([ehelms](https://github.com/ehelms))
+- Refs [\#24947](https://projects.theforeman.org/issues/24947) - Allow extract tar files at the top level [\#215](https://github.com/theforeman/puppet-certs/pull/215) ([ekohl](https://github.com/ekohl))
+
+**Fixed bugs:**
+
+- Fixes [\#25739](https://projects.theforeman.org/issues/25739) - don't allow statements to fail in an set -e script [\#234](https://github.com/theforeman/puppet-certs/pull/234) ([evgeni](https://github.com/evgeni))
+- Fixes [\#25512](https://projects.theforeman.org/issues/25512) fixes incorrect editing of rhsm.conf [\#227](https://github.com/theforeman/puppet-certs/pull/227) ([patilsuraj767](https://github.com/patilsuraj767))
+
+**Merged pull requests:**
+
+- Use extlib namespaced functions [\#239](https://github.com/theforeman/puppet-certs/pull/239) ([ekohl](https://github.com/ekohl))
+- Candlepin CA should be owned by tomcat user [\#232](https://github.com/theforeman/puppet-certs/pull/232) ([jturel](https://github.com/jturel))
+- Deploy CA cert and key to Candlepin default locations [\#228](https://github.com/theforeman/puppet-certs/pull/228) ([ehelms](https://github.com/ehelms))
+
 ## [4.4.2](https://github.com/theforeman/puppet-certs/tree/4.4.2) (2018-11-29)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.4.1...4.4.2)
