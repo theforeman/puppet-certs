@@ -83,6 +83,13 @@ else
       --server.port="$PORT" \
       --rhsm.repo_ca_cert="%(ca_cert_dir)s$KATELLO_SERVER_CA_CERT" \
       --rhsm.baseurl="$BASEURL"
+
+    # Older version of subscription manager may not recognize
+    # report_package_profile and package_profile_on_trans options.
+    # So set them separately and redirect out & error to /dev/null
+    # to fail silently.
+    subscription-manager config --rhsm.package_profile_on_trans=1 > /dev/null 2>&1 || true
+    subscription-manager config --rhsm.report_package_profile=1 > /dev/null 2>&1 || true
   else
     sed -i "s/^hostname\s*=.*/hostname = $KATELLO_SERVER/g" $CFG
     sed -i "s/^port\s*=.*/port = $PORT/g" $CFG
