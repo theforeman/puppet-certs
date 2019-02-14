@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.1.0](https://github.com/theforeman/puppet-certs/tree/5.1.0) (2019-02-14)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/5.0.0...5.1.0)
+
+**Implemented enhancements:**
+
+- Fixes [\#25873](https://projects.theforeman.org/issues/25873) - Set rhsm package upload options [\#240](https://github.com/theforeman/puppet-certs/pull/240) ([parthaa](https://github.com/parthaa))
+
 ## [5.0.0](https://github.com/theforeman/puppet-certs/tree/5.0.0) (2019-01-11)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.4.2...5.0.0)
