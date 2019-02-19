@@ -27,7 +27,6 @@ class certs::foreman_proxy (
 
   $proxy_cert_name = "${hostname}-foreman-proxy"
   $foreman_proxy_client_cert_name = "${hostname}-foreman-proxy-client"
-  $foreman_proxy_ssl_client_bundle = "${pki_dir}/private/${foreman_proxy_client_cert_name}-bundle.pem"
 
   if $server_cert {
     cert { $proxy_cert_name:
@@ -104,14 +103,6 @@ class certs::foreman_proxy (
     } ->
     pubkey { $foreman_ssl_ca_cert:
       key_pair => $server_ca,
-    } ~>
-    key_bundle { $foreman_proxy_ssl_client_bundle:
-      key_pair => Cert[$foreman_proxy_client_cert_name],
-    } ~>
-    file { $foreman_proxy_ssl_client_bundle:
-      ensure => file,
-      mode   => '0644',
     }
-
   }
 }
