@@ -110,6 +110,12 @@ class certs::candlepin (
       command => "openssl pkcs12 -export -in ${tomcat_cert} -inkey ${tomcat_key} -out ${keystore} -name tomcat -CAfile ${ca_cert} -caname root -password \"file:${password_file}\" -passin \"file:${ca_key_password_file}\" ",
       creates => $keystore,
     } ~>
+    file { $keystore:
+      ensure => file,
+      owner  => 'tomcat',
+      group  => $group,
+      mode   => '0640',
+    } ~>
     certs::keypair { 'candlepin':
       key_pair  => Cert[$java_client_cert_name],
       key_file  => $client_key,
@@ -122,8 +128,12 @@ class certs::candlepin (
       mode   => '0750',
     } ~>
     exec { 'import CA into Candlepin truststore':
-      command => "keytool -import -v -keystore ${amqp_truststore} -storepass ${keystore_password} -alias ${alias} -file ${ca_cert} -noprompt",
-      creates => $amqp_truststore,
+      command => "keytool -import -trustcacerts -v -keystore ${keystore} -storepass ${keystore_password} -alias ${alias} -file ${ca_cert} -noprompt",
+      unless  => "keytool -list -keystore ${keystore} -storepass ${keystore_password} -alias ${alias}",
+    } ~>
+    exec { 'import CA into Candlepin AMQP truststore':
+      command => "keytool -import -v -keystore ${amqp_truststore} -storepass ${keystore_password} -alias ${alias} -file ${ca_cert} -trustcacerts -noprompt",
+      unless  => "keytool -list -keystore ${amqp_truststore} -storepass ${keystore_password} -alias ${alias}",
     } ~>
     exec { 'import client certificate into Candlepin keystore':
       # Stupid keytool doesn't allow you to import a keypair.  You can only import a cert.  Hence, we have to
