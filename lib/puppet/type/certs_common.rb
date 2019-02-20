@@ -63,6 +63,9 @@ module Certs
 
     newparam(:password_file)
 
+    # ensure RSA string is present in -----(BEGIN/END) (RSA )?PRIVATE KEY-----
+    newparam(:force_rsa)
+
     # make ensure present default
     define_method(:managed?) { true }
 

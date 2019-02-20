@@ -106,7 +106,8 @@ class certs::foreman_proxy (
       key_pair => $server_ca,
     } ~>
     key_bundle { $foreman_proxy_ssl_client_bundle:
-      key_pair => Cert[$foreman_proxy_client_cert_name],
+      key_pair  => Cert[$foreman_proxy_client_cert_name],
+      force_rsa => true,
     } ~>
     file { $foreman_proxy_ssl_client_bundle:
       ensure => file,
