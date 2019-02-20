@@ -6,7 +6,11 @@ class certs::ssltools::nssdb (
   Exec { logoutput => 'on_failure' }
 
   $nss_db_password_file   = "${nss_db_dir}/nss_db_password-file"
-  $nssdb_files            = ["${nss_db_dir}/cert8.db", "${nss_db_dir}/key3.db", "${nss_db_dir}/secmod.db"]
+
+  $nssdb_files = $facts['operatingsystemmajrelease'] ? {
+    '7' => ["${nss_db_dir}/cert8.db", "${nss_db_dir}/key3.db", "${nss_db_dir}/secmod.db"],
+    default => ["${nss_db_dir}/cert9.db", "${nss_db_dir}/key4.db", "${nss_db_dir}/pkcs11.txt"]
+  }
 
   ensure_packages(['openssl', 'nss-tools'])
 
