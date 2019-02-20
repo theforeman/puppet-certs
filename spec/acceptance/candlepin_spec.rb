@@ -79,8 +79,8 @@ describe 'certs' do
 
     describe file('/etc/candlepin/certs/keystore') do
       it { should be_file }
-      it { should be_mode 644 }
-      it { should be_owned_by 'root' }
+      it { should be_mode 640 }
+      it { should be_owned_by 'tomcat' }
       it { should be_grouped_into 'root' }
     end
 
@@ -101,8 +101,9 @@ describe 'certs' do
     describe command("keytool -list -keystore /etc/candlepin/certs/keystore -storepass $(cat #{keystore_password_file})") do
       its(:exit_status) { should eq 0 }
       its(:stdout) { should match(/^Keystore type: JKS$/i) }
-      its(:stdout) { should match(/^Your keystore contains 1 entry$/) }
+      its(:stdout) { should match(/^Your keystore contains 2 entries$/) }
       its(:stdout) { should match(/^tomcat, .+, PrivateKeyEntry, $/) }
+      its(:stdout) { should match(/^candlepin-ca, .+, trustedCertEntry, $/) }
     end
 
     describe command("keytool -list -keystore /etc/candlepin/certs/amqp/candlepin.truststore -storepass $(cat #{keystore_password_file})") do
