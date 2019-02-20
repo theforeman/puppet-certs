@@ -175,14 +175,22 @@ module Puppet::Provider::KatelloSslTool
 
     def exists?
       return false unless File.exists?(resource[:path])
-      checksum(expected_content) == checksum(current_content)
+      checksum(expected_content_processed) == checksum(current_content)
     end
 
     def create
-      File.open(resource[:path], "w", mode) { |f| f << expected_content }
+      File.open(resource[:path], "w", mode) { |f| f << expected_content_processed }
     end
 
     protected
+
+    def expected_content_processed
+      content = expected_content
+      if resource[:force_rsa]
+        content.gsub!(/(BEGIN|END) (PRIVATE KEY)/, '\1 RSA \2')
+      end
+      content
+    end
 
     def expected_content
       File.read(source_path)
