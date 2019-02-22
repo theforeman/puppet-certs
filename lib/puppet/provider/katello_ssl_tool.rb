@@ -167,15 +167,13 @@ module Puppet::Provider::KatelloSslTool
 
   class CertFile < Puppet::Provider
 
-    include Puppet::Util::Checksums
-
     initvars
 
     commands :openssl => 'openssl'
 
     def exists?
       return false unless File.exists?(resource[:path])
-      checksum(expected_content_processed) == checksum(current_content)
+      expected_content_processed == current_content
     end
 
     def create
@@ -198,10 +196,6 @@ module Puppet::Provider::KatelloSslTool
 
     def current_content
       File.read(resource[:path])
-    end
-
-    def checksum(content)
-      md5(content)
     end
 
     # what path to copy from
