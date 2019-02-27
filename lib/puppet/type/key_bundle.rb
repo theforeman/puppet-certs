@@ -1,9 +1,9 @@
-require File.expand_path('../certs_common', __FILE__)
+require_relative '../../puppet_x/certs/common'
 
 Puppet::Type.newtype(:key_bundle) do
   desc 'Stores the public and private key in one file file on a location'
 
-  instance_eval(&Certs::FILE_COMMON_PARAMS)
+  instance_eval(&PuppetX::Certs::Common::FILE_COMMON_PARAMS)
 
   newparam(:pubkey)
 
