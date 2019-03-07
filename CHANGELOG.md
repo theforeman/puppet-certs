@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.4.3](https://github.com/theforeman/puppet-certs/tree/4.4.3) (2019-03-07)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/5.1.0...4.4.3)
+
+**Implemented enhancements:**
+
+- Fixes [\#26119](https://projects.theforeman.org/issues/26119) - don't use md5 for digesting [\#246](https://github.com/theforeman/puppet-certs/pull/246) ([iNecas](https://github.com/iNecas))
+- Fixes [\#25873](https://projects.theforeman.org/issues/25873) - Set rhsm package upload options [\#240](https://github.com/theforeman/puppet-certs/pull/240) ([parthaa](https://github.com/parthaa))
+
+**Fixed bugs:**
+
+- Fixes [\#26180](https://projects.theforeman.org/issues/26180) Move type common module to PuppetX namespace so doesn't break 'puppet generate types' [\#249](https://github.com/theforeman/puppet-certs/pull/249) ([treydock](https://github.com/treydock))
+- Fixes [\#26088](https://projects.theforeman.org/issues/26088) - ensure RSA word for SSLProxyMachineCertificateFile [\#243](https://github.com/theforeman/puppet-certs/pull/243) ([iNecas](https://github.com/iNecas))
+
 ## [4.4.2](https://github.com/theforeman/puppet-certs/tree/4.4.2) (2018-11-29)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/4.4.1...4.4.2)
