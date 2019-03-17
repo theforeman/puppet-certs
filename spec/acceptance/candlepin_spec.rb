@@ -100,7 +100,7 @@ describe 'certs' do
 
     describe command("keytool -list -keystore /etc/candlepin/certs/keystore -storepass $(cat #{keystore_password_file})") do
       its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/^Keystore type: JKS$/i) }
+      its(:stdout) { should match(/^Keystore type: PKCS12$/i) }
       its(:stdout) { should match(/^Your keystore contains 1 entry$/) }
       its(:stdout) { should match(/^tomcat, .+, PrivateKeyEntry, $/) }
     end
