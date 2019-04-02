@@ -1,5 +1,14 @@
 # Changelog
 
+## [5.1.1](https://github.com/theforeman/puppet-certs/tree/5.1.1) (2019-04-02)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/5.1.0...5.1.1)
+
+**Fixed bugs:**
+
+- Fixes [\#26180](https://projects.theforeman.org/issues/26180) Move type common module to PuppetX namespace so doesn't break 'puppet generate types' [\#249](https://github.com/theforeman/puppet-certs/pull/249) ([treydock](https://github.com/treydock))
+- Fixes [\#26088](https://projects.theforeman.org/issues/26088) - ensure RSA word for SSLProxyMachineCertificateFile [\#243](https://github.com/theforeman/puppet-certs/pull/243) ([iNecas](https://github.com/iNecas))
+
 ## [5.1.0](https://github.com/theforeman/puppet-certs/tree/5.1.0) (2019-02-14)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/5.0.0...5.1.0)
