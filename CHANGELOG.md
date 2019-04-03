@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.1.2](https://github.com/theforeman/puppet-certs/tree/5.1.2) (2019-04-03)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/5.1.1...5.1.2)
+
+**Fixed bugs:**
+
+- Fixes [\#26119](https://projects.theforeman.org/issues/26119) - don't use md5 for digesting [\#246](https://github.com/theforeman/puppet-certs/pull/246) ([iNecas](https://github.com/iNecas))
+
 ## [5.1.1](https://github.com/theforeman/puppet-certs/tree/5.1.1) (2019-04-02)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/5.1.0...5.1.1)
