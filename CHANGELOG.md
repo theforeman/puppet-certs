@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.0.1](https://github.com/theforeman/puppet-certs/tree/6.0.1) (2019-06-13)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/6.0.0...6.0.1)
+
+**Merged pull requests:**
+
+- allow newer versions of dependencies [\#253](https://github.com/theforeman/puppet-certs/pull/253) ([mmoll](https://github.com/mmoll))
+
 ## [6.0.0](https://github.com/theforeman/puppet-certs/tree/6.0.0) (2019-04-16)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/5.1.2...6.0.0)
