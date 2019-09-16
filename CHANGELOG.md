@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.0.2](https://github.com/theforeman/puppet-certs/tree/6.0.2) (2019-09-16)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/6.0.1...6.0.2)
+
+**Fixed bugs:**
+
+- Fixes [\#27857](https://projects.theforeman.org/issues/27857) - autorequire parent paths in types [\#257](https://github.com/theforeman/puppet-certs/pull/257) ([ekohl](https://github.com/ekohl))
+
 ## [6.0.1](https://github.com/theforeman/puppet-certs/tree/6.0.1) (2019-06-13)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/6.0.0...6.0.1)
