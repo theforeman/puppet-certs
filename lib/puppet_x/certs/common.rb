@@ -95,10 +95,21 @@ module PuppetX
           autorequire_cert('Ca')
         end
 
+        # Autorequire the nearest ancestor directory found in the catalog.
+        # Copied from Puppet's lib/puppet/type/file.rb
         autorequire(:file) do
-          @parameters[:path]
+          req = []
+          path = Pathname.new(self[:path])
+          if !path.root?
+            # Start at our parent, to avoid autorequiring ourself
+            parents = path.parent.enum_for(:ascend)
+            found = parents.find { |p| catalog.resource(:file, p.to_s) }
+            if found
+              req << found.to_s
+            end
+          end
+          req
         end
-
       end
     end
   end
