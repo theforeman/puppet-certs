@@ -6,6 +6,6 @@
 # even though it's the current recommended default. By adding indirection to a
 # class we can work around this.
 class certs::foreman_proxy_content::params {
-  $parent_fqdn = $facts['networking']['fqdn']
+  $parent_fqdn = $facts['fqdn']
   $foreman_proxy_cname = []
 }
