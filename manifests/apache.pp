@@ -23,6 +23,7 @@ class certs::apache (
   $apache_cert_name = "${hostname}-apache"
   $apache_cert = "${pki_dir}/certs/katello-apache.crt"
   $apache_key  = "${pki_dir}/private/katello-apache.key"
+  $apache_ca_cert = $certs::katello_server_ca_cert
 
   if $server_cert {
     cert { $apache_cert_name:
