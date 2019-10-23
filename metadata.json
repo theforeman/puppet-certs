@@ -1,7 +1,7 @@
 {
   "name": "katello-certs",
   "version": "6.1.0",
-  "author": "Katello",
+  "author": "katello",
   "summary": "Deploys CA and required certs for a Foreman and Katello installation.",
   "license": "GPL-3.0+",
   "source": "https://github.com/theforeman/puppet-certs.git",
