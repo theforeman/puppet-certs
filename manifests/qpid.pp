@@ -15,6 +15,7 @@ class certs::qpid (
   $pki_dir              = $certs::pki_dir,
   $ca_cert              = $certs::ca_cert,
   $qpidd_group          = $certs::qpidd_group,
+  $nss_cert_name        = 'broker',
 ) inherits certs {
 
   Exec { logoutput => 'on_failure' }
@@ -64,14 +65,14 @@ class certs::qpid (
       refreshonly => true,
       subscribe   => Pubkey[$ca_cert],
     } ~>
-    certs::ssltools::certutil { 'broker':
+    certs::ssltools::certutil { $nss_cert_name:
       nss_db_dir  => $nss_db_dir,
       client_cert => $client_cert,
       refreshonly => true,
       subscribe   => Pubkey[$client_cert],
     } ~>
     exec { 'generate-pfx-for-nss-db':
-      command     => "openssl pkcs12 -in ${client_cert} -inkey ${client_key} -export -out '${pfx_path}' -password 'file:${nss_db_password_file}' -name 'broker'",
+      command     => "openssl pkcs12 -in ${client_cert} -inkey ${client_key} -export -out '${pfx_path}' -password 'file:${nss_db_password_file}' -name '${nss_cert_name}'",
       path        => '/usr/bin',
       refreshonly => true,
     } ~>
