@@ -17,7 +17,7 @@ class certs::qpid_client (
   $default_ca            = $certs::default_ca,
   $ca_key_password_file  = $certs::ca_key_password_file,
 
-  $cert_group            = 'apache',
+  $cert_group            = 'pulp',
 ) inherits certs {
 
   $qpid_client_cert_name = "${hostname}-qpid-client-cert"
@@ -46,7 +46,7 @@ class certs::qpid_client (
       ensure => directory,
       owner  => 'root',
       group  => $cert_group,
-      mode   => '0640',
+      mode   => '0755',
     }
 
     file { "${certs::pulp_pki_dir}/qpid":
