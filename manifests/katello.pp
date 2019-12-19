@@ -55,7 +55,7 @@ class certs::katello (
     # (especially in the custom certs scenario)
     files            => ["${katello_rhsm_setup_script_location}:755=${katello_www_pub_dir}/${katello_rhsm_setup_script}"],
     bootstrap_script => "/bin/bash ${katello_rhsm_setup_script_location}",
-    postun_script    => 'test -f /etc/rhsm/rhsm.conf.kat-backup && command cp /etc/rhsm/rhsm.conf.kat-backup /etc/rhsm/rhsm.conf',
+    postun_script    => file('certs/postun.sh'),
     alias            => $candlepin_cert_rpm_alias_filename,
     subscribe        => $server_ca,
   }

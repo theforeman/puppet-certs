@@ -19,7 +19,7 @@ describe 'certs::katello' do
         .with_description('Consumer certificate and post installation script that configures rhsm.')
         .with_files(['/usr/bin/katello-rhsm-consumer:755=/var/www/html/pub/katello-rhsm-consumer'])
         .with_bootstrap_script('/bin/bash /usr/bin/katello-rhsm-consumer')
-        .with_postun_script('test -f /etc/rhsm/rhsm.conf.kat-backup && command cp /etc/rhsm/rhsm.conf.kat-backup /etc/rhsm/rhsm.conf')
+        .with_postun_script("if [ $1 -eq 0 ]; then\ntest -f /etc/rhsm/rhsm.conf.kat-backup && command cp /etc/rhsm/rhsm.conf.kat-backup /etc/rhsm/rhsm.conf\nfi\n")
         .with_alias('katello-ca-consumer-latest.noarch.rpm')
         .that_subscribes_to(['Ca[server_ca]', 'Certs::Rhsm_reconfigure_script[/var/www/html/pub/katello-rhsm-consumer]'])
     end
