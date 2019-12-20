@@ -38,8 +38,6 @@
 # $regenerate::           Force regeneration of the certificates (excluding
 #                         CA certificates)
 #
-# $regenerate_ca::        Force regeneration of the CA certificate
-#
 # $deploy::               Deploy the certs on the configured system. False means
 #                         we want to apply it to a different system
 #
@@ -77,7 +75,6 @@ class certs (
   Array[Stdlib::Fqdn] $cname = $certs::params::cname,
   Boolean $generate = $certs::params::generate,
   Boolean $regenerate = $certs::params::regenerate,
-  Boolean $regenerate_ca = $certs::params::regenerate_ca,
   Boolean $deploy = $certs::params::deploy,
   String $ca_common_name = $certs::params::ca_common_name,
   String[2,2] $country = $certs::params::country,
