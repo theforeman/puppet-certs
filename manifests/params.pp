@@ -13,7 +13,6 @@ class certs::params {
   $ca_common_name = $facts['fqdn']  # we need fqdn as CA common name as candlepin uses it as a ssl cert
   $generate      = true
   $regenerate    = false
-  $regenerate_ca = false
   $deploy        = true
 
   $default_ca_name = 'katello-default-ca'
