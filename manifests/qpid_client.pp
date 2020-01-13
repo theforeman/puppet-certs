@@ -42,27 +42,29 @@ class certs::qpid_client (
 
   if $deploy {
 
+    Package <| name == 'pulp-server' |> -> Class['qpid_client']
+
     file { $certs::pulp_pki_dir:
-      ensure => directory,
-      owner  => 'root',
-      group  => $cert_group,
-      mode   => '0755',
+      ensure  => directory,
+      owner   => 'root',
+      group   => $cert_group,
+      mode    => '0755',
     }
 
     file { "${certs::pulp_pki_dir}/qpid":
-      ensure => directory,
-      owner  => 'root',
-      group  => $cert_group,
-      mode   => '0640',
+      ensure  => directory,
+      owner   => 'root',
+      group   => $cert_group,
+      mode    => '0640',
     } ~>
     Cert[$qpid_client_cert_name] ~>
     key_bundle { $qpid_client_cert:
       key_pair => Cert[$qpid_client_cert_name],
     } ~>
     file { $qpid_client_cert:
-      owner => 'root',
-      group => $cert_group,
-      mode  => '0640',
+      owner   => 'root',
+      group   => $cert_group,
+      mode    => '0640',
     } ~>
     pubkey { $qpid_client_ca_cert:
       key_pair => $default_ca,
