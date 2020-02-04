@@ -1,6 +1,6 @@
 # Constains certs specific configurations for candlepin
 class certs::candlepin (
-  $hostname               = $certs::node_fqdn,
+  $hostname               = 'localhost',
   $cname                  = $certs::cname,
   $generate               = $certs::generate,
   $regenerate             = $certs::regenerate,
