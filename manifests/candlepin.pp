@@ -10,9 +10,6 @@ class certs::candlepin (
   $pki_dir                = $certs::pki_dir,
   $keystore               = $certs::candlepin_keystore,
   $keystore_password_file = $certs::keystore_password_file,
-  $amqp_truststore        = $certs::candlepin_amqp_truststore,
-  $amqp_keystore          = $certs::candlepin_amqp_keystore,
-  $amqp_store_dir         = $certs::candlepin_amqp_store_dir,
   $country                = $certs::country,
   $state                  = $certs::state,
   $city                   = $certs::city,
@@ -31,6 +28,8 @@ class certs::candlepin (
   }
 
   $java_client_cert_name = 'java-client'
+  $artemis_alias = 'artemis-client'
+  $artemis_client_dn = "CN=${hostname}, OU=${org_unit}, O=candlepin, ST=${state}, C=${country}"
 
   cert { $java_client_cert_name:
     ensure        => present,
@@ -117,35 +116,27 @@ class certs::candlepin (
       mode   => '0640',
     } ~>
     certs::keypair { 'candlepin':
-      key_pair  => Cert[$java_client_cert_name],
-      key_file  => $client_key,
-      cert_file => $client_cert,
-    } ~>
-    file { $amqp_store_dir:
-      ensure => directory,
-      owner  => 'tomcat',
-      group  => $group,
-      mode   => '0750',
+      key_pair    => Cert[$java_client_cert_name],
+      key_file    => $client_key,
+      cert_file   => $client_cert,
+      manage_cert => true,
+      cert_owner  => $user,
+      cert_group  => $group,
+      cert_mode   => '0440',
+      manage_key  => true,
+      key_owner   => $user,
+      key_group   => $group,
+      key_mode    => '0440',
     } ~>
     exec { 'import CA into Candlepin truststore':
       command => "keytool -import -trustcacerts -v -keystore ${keystore} -storepass ${keystore_password} -alias ${alias} -file ${ca_cert} -noprompt",
       unless  => "keytool -list -keystore ${keystore} -storepass ${keystore_password} -alias ${alias}",
     } ~>
-    exec { 'import CA into Candlepin AMQP truststore':
-      command => "keytool -import -v -keystore ${amqp_truststore} -storepass ${keystore_password} -alias ${alias} -file ${ca_cert} -trustcacerts -noprompt",
-      unless  => "keytool -list -keystore ${amqp_truststore} -storepass ${keystore_password} -alias ${alias}",
-    } ~>
     exec { 'import client certificate into Candlepin keystore':
       # Stupid keytool doesn't allow you to import a keypair.  You can only import a cert.  Hence, we have to
       # create the store as an PKCS12 and convert to JKS.  See http://stackoverflow.com/a/8224863
-      command => "openssl pkcs12 -export -name amqp-client -in ${client_cert} -inkey ${client_key} -out /tmp/keystore.p12 -passout file:${password_file} && keytool -importkeystore -destkeystore ${amqp_keystore} -srckeystore /tmp/keystore.p12 -srcstoretype pkcs12 -alias amqp-client -storepass ${keystore_password} -srcstorepass ${keystore_password} -noprompt && rm /tmp/keystore.p12",
-      unless  => "keytool -list -keystore ${amqp_keystore} -storepass ${keystore_password} -alias amqp-client",
-    } ~>
-    file { $amqp_keystore:
-      ensure => file,
-      owner  => 'tomcat',
-      group  => $group,
-      mode   => '0640',
+      command => "openssl pkcs12 -export -name ${artemis_alias} -in ${client_cert} -inkey ${client_key} -out /tmp/keystore.p12 -passout file:${password_file} && keytool -importkeystore -destkeystore ${keystore} -srckeystore /tmp/keystore.p12 -srcstoretype pkcs12 -alias ${artemis_alias} -storepass ${keystore_password} -srcstorepass ${keystore_password} -noprompt && rm /tmp/keystore.p12",
+      unless  => "keytool -list -keystore ${keystore} -storepass ${keystore_password} -alias ${artemis_alias} | grep $(openssl x509 -noout -fingerprint -in ${client_cert} | cut -d '=' -f 2)",
     }
   }
 }
