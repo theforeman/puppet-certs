@@ -60,9 +60,6 @@ class certs::params {
   $candlepin_keystore               = "${candlepin_certs_dir}/keystore"
   $candlepin_ca_cert                = "${candlepin_certs_dir}/candlepin-ca.crt"
   $candlepin_ca_key                 = "${candlepin_certs_dir}/candlepin-ca.key"
-  $candlepin_amqp_store_dir         = "${candlepin_certs_dir}/amqp"
-  $candlepin_amqp_truststore        = "${candlepin_amqp_store_dir}/candlepin.truststore"
-  $candlepin_amqp_keystore          = "${candlepin_amqp_store_dir}/candlepin.jks"
 
   # Settings for uploading packages to Katello
   $katello_user           = undef
