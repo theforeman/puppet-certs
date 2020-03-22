@@ -10,5 +10,3 @@ Rakefile:
   param_docs_pattern:
     - manifests/foreman_proxy_content.pp
     - manifests/init.pp
-spec/spec_helper_acceptance.rb:
-  install_epel: true
