@@ -28,6 +28,8 @@ RSpec.configure do |c|
         on host, 'sed -i "s/keepcache=.*/keepcache=1/" /etc/yum.conf'
         # refresh check if cache needs refresh on next yum command
         on host, 'yum clean expire-cache'
+        # foreman nightly provides katello-cert-tools
+        host.install_package('https://yum.theforeman.org/releases/nightly/el7/x86_64/foreman-release.rpm')
       end
     end
   end
