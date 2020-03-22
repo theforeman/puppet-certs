@@ -1,19 +1,6 @@
 require 'spec_helper_acceptance'
 
 describe 'certs' do
-  before(:all) do
-    install_repo = <<-EOS
-      yumrepo { 'katello':
-        descr    => 'Katello latest',
-        baseurl  => 'https://fedorapeople.org/groups/katello/releases/yum/latest/katello/el7/$basearch/',
-        gpgcheck => false,
-        enabled  => true,
-      }
-    EOS
-
-    apply_manifest(install_repo)
-  end
-
   keystore_password_file = '/etc/pki/katello/keystore_password-file'
 
   context 'with default params' do

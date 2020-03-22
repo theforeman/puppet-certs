@@ -1,19 +1,6 @@
 require 'spec_helper_acceptance'
 
 describe 'certs' do
-  before(:all) do
-    install_repo = <<-EOS
-      yumrepo { 'katello':
-        descr    => 'Katello latest',
-        baseurl  => 'https://fedorapeople.org/groups/katello/releases/yum/latest/katello/el7/$basearch/',
-        gpgcheck => false,
-        enabled  => true,
-      }
-    EOS
-
-    apply_manifest(install_repo)
-  end
-
   context 'with default params' do
     let(:pp) do
       'include certs'
