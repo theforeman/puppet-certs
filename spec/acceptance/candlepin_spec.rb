@@ -14,6 +14,8 @@ describe 'certs' do
     apply_manifest(install_repo)
   end
 
+  keystore_password_file = '/etc/pki/katello/keystore_password-file'
+
   context 'with default params' do
     let(:pp) do
       <<-EOS
@@ -36,16 +38,14 @@ describe 'certs' do
       EOS
     end
 
-    keystore_password_file = '/etc/pki/katello/keystore_password-file'
-
     it_behaves_like 'a idempotent resource'
 
     describe x509_certificate('/etc/pki/katello/certs/katello-tomcat.crt') do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
-      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}"
+      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
+      include_examples 'certificate subject', "C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
       its(:keylength) { should be >= 2048 }
     end
 
@@ -59,8 +59,8 @@ describe 'certs' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
-      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, O = candlepin, OU = SomeOrgUnit, CN = #{fact('fqdn')}"
+      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
+      include_examples 'certificate subject', "C = US, ST = North Carolina, O = candlepin, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
       its(:keylength) { should be >= 2048 }
     end
 
@@ -106,6 +106,12 @@ describe 'certs' do
       its(:stdout) { should match(/^candlepin-ca, .+, trustedCertEntry, $/) }
     end
 
+    describe command("keytool -list -v -keystore /etc/candlepin/certs/keystore -alias tomcat -storepass $(cat #{keystore_password_file})") do
+      its(:exit_status) { should eq 0 }
+      its(:stdout) { should match(/^Owner: CN=#{host_inventory['fqdn']}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
+      its(:stdout) { should match(/^Issuer: CN=#{host_inventory['fqdn']}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
+    end
+
     describe command("keytool -list -keystore /etc/candlepin/certs/amqp/candlepin.truststore -storepass $(cat #{keystore_password_file})") do
       its(:exit_status) { should eq 0 }
       its(:stdout) { should match(/^Keystore type: JKS$/i) }
@@ -119,5 +125,41 @@ describe 'certs' do
       its(:stdout) { should match(/^Your keystore contains 1 entry$/) }
       its(:stdout) { should match(/^amqp-client, .+, PrivateKeyEntry, $/) }
     end
+  end
+
+  describe 'with localhost' do
+    let(:pp) do
+      <<-PUPPET
+      class { 'certs::candlepin':
+        hostname => 'localhost',
+      }
+      PUPPET
+    end
+
+    it_behaves_like 'a idempotent resource'
+  end
+
+  describe x509_certificate('/etc/pki/katello/certs/katello-tomcat.crt') do
+    it { should be_certificate }
+    it { should be_valid }
+    it { should have_purpose 'server' }
+    include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
+    include_examples 'certificate subject', 'C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = localhost'
+    its(:keylength) { should be >= 2048 }
+  end
+
+  describe x509_certificate('/etc/pki/katello/certs/java-client.crt') do
+    it { should be_certificate }
+    it { should be_valid }
+    it { should have_purpose 'server' }
+    include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
+    include_examples 'certificate subject', 'C = US, ST = North Carolina, O = candlepin, OU = SomeOrgUnit, CN = localhost'
+    its(:keylength) { should be >= 2048 }
+  end
+
+  describe command("keytool -list -v -keystore /etc/candlepin/certs/keystore -alias tomcat -storepass $(cat #{keystore_password_file})") do
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/^Owner: CN=localhost, OU=SomeOrgUnit, O=Katello, ST=North Carolina, C=US$/) }
+    its(:stdout) { should match(/^Issuer: CN=#{host_inventory['fqdn']}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
   end
 end
