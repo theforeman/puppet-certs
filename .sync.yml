@@ -5,6 +5,7 @@
 .travis.yml:
   beaker_sets:
   - centos7-64
+  - centos8-64
   test_all_rvms: false
 Rakefile:
   param_docs_pattern:

@@ -22,14 +22,26 @@ RSpec.configure do |c|
   c.before :suite do
     # Install module and dependencies
     hosts.each do |host|
-      if fact_on(host, 'osfamily') == 'RedHat'
+      if fact_on(host, 'os.family') == 'RedHat'
         # don't delete downloaded rpm for use with BEAKER_provision=no +
         # BEAKER_destroy=no
         on host, 'sed -i "s/keepcache=.*/keepcache=1/" /etc/yum.conf'
         # refresh check if cache needs refresh on next yum command
         on host, 'yum clean expire-cache'
+
+        major = fact_on(host, 'os.release.major')
+
+        if major == '8'
+          on host, puppet('resource', 'package', 'glibc-langpack-en', 'ensure=installed')
+        end
         # foreman nightly provides katello-cert-tools
-        host.install_package('https://yum.theforeman.org/releases/nightly/el7/x86_64/foreman-release.rpm')
+        baseurl = if ENV['FOREMAN_REPO_RELEASE']
+                    "https://yum.theforeman.org/releases/nightly/el#{major}/x86_64/"
+                  else
+                    "http://koji.katello.org/releases/yum/foreman-nightly/RHEL/#{major}/x86_64/"
+                  end
+
+        on host, puppet_resource('yumrepo', 'foreman', "baseurl=#{baseurl}", 'gpgcheck=0')
       end
     end
   end
