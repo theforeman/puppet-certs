@@ -2,3 +2,4 @@
 --no-140chars-check
 --no-class_inherits_from_params_class-check
 --no-arrow_on_right_operand_line-check
+--no-parameter_documentation-check
