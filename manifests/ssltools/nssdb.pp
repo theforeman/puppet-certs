@@ -7,7 +7,7 @@ class certs::ssltools::nssdb (
 
   $nss_db_password_file   = "${nss_db_dir}/nss_db_password-file"
 
-  $nssdb_files = $facts['operatingsystemmajrelease'] ? {
+  $nssdb_files = $facts['os']['release']['major'] ? {
     '7' => ["${nss_db_dir}/cert8.db", "${nss_db_dir}/key3.db", "${nss_db_dir}/secmod.db"],
     default => ["${nss_db_dir}/cert9.db", "${nss_db_dir}/key4.db", "${nss_db_dir}/pkcs11.txt"]
   }

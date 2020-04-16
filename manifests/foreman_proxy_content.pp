@@ -20,17 +20,17 @@ class certs::foreman_proxy_content (
   Array[Stdlib::Fqdn] $foreman_proxy_cname = $certs::foreman_proxy_content::params::foreman_proxy_cname,
 ) inherits certs::foreman_proxy_content::params {
 
-  if $foreman_proxy_fqdn == $facts['fqdn'] {
+  if $foreman_proxy_fqdn == $facts['networking']['fqdn'] {
     fail('The hostname is the same as the provided hostname for the foreman-proxy')
   }
 
-  class { '::certs::puppet':        hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { '::certs::foreman':       hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { '::certs::foreman_proxy': hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { '::certs::apache':        hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { '::certs::qpid':          hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { '::certs::qpid_router':   hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { '::certs::qpid_client':   hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::puppet':        hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::foreman':       hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::foreman_proxy': hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::apache':        hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::qpid':          hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::qpid_router':   hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::qpid_client':   hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
 
   certs::tar_create { $certs_tar:
     subscribe => Class['certs::puppet', 'certs::foreman', 'certs::foreman_proxy', 'certs::qpid', 'certs::qpid_router', 'certs::apache', 'certs::qpid_client'],
