@@ -5,12 +5,12 @@ class certs::params {
   $pki_dir = '/etc/pki/katello'
   $ssl_build_dir = '/root/ssl-build'
 
-  $node_fqdn = $facts['fqdn']
+  $node_fqdn = $facts['networking']['fqdn']
   $cname = []
 
   $custom_repo = false
 
-  $ca_common_name = $facts['fqdn']  # we need fqdn as CA common name as candlepin uses it as a ssl cert
+  $ca_common_name = $facts['networking']['fqdn']  # we need fqdn as CA common name as candlepin uses it as a ssl cert
   $generate      = true
   $regenerate    = false
   $deploy        = true
