@@ -33,17 +33,24 @@ describe 'certs::apache' do
   end
 
   context 'with server cert' do
+    before(:context) do
+      ['crt', 'key'].each do |ext|
+        source_path = "fixtures/example.partial.solutions.#{ext}"
+        dest_path = "/server.#{ext}"
+        scp_to(hosts, source_path, dest_path)
+      end
+
+      # Force regen
+      on hosts, "if [ -e /root/ssl-build/#{fact('fqdn')} ] ; then touch /root/ssl-build/#{fact('fqdn')}/#{fact('fqdn')}-apache.update ; fi"
+    end
+
     let(:pp) do
       <<-EOS
       class { '::certs::apache':
-        server_cert => '/etc/puppetlabs/code/modules/certs/fixtures/example.partial.solutions.crt',
-        server_key  => '/etc/puppetlabs/code/modules/certs/fixtures/example.partial.solutions.key',
+        server_cert => '/server.crt',
+        server_key  => '/server.key',
       }
       EOS
-    end
-
-    it 'should force regeneration' do
-      on hosts, "if [ -e /root/ssl-build/#{fact('fqdn')} ] ; then touch /root/ssl-build/#{fact('fqdn')}/#{fact('fqdn')}-apache.update ; fi"
     end
 
     it_behaves_like 'a idempotent resource'
