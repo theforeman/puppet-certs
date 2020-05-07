@@ -8,3 +8,17 @@ yumrepo { 'foreman':
   baseurl  => $baseurl,
   gpgcheck => 0,
 }
+
+user { 'mongodb':
+  ensure => present
+}
+
+group { 'pulp':
+  ensure => present
+}
+
+file { '/etc/pulp':
+  ensure => directory,
+  owner  => 'root',
+  mode   => '0770',
+}
