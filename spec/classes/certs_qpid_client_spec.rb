@@ -1,9 +1,11 @@
 require 'spec_helper'
 
 describe 'certs::qpid_client' do
-  on_supported_os.each do |os, facts|
-    context "on #{os}" do
-      let :facts do facts end
+  on_supported_os.each do |os, os_facts|
+    context "on #{os}", if: os_facts[:operatingsystemmajrelease] == '7' do
+      let :facts do
+        os_facts
+      end
 
       describe "with default parameters" do
         it { is_expected.to compile.with_all_deps }
