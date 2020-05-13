@@ -1,3 +1,58 @@
+## [7.0.0](https://github.com/theforeman/puppet-certs/tree/7.0.0) (2020-02-11)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/6.1.1...7.0.0)
+
+**Breaking changes:**
+
+- Remove unused $regenerate\_ca parameter [\#268](https://github.com/theforeman/puppet-certs/pull/268) ([ekohl](https://github.com/ekohl))
+- /etc/pki/pulp perms and group owner [\#266](https://github.com/theforeman/puppet-certs/pull/266) ([wbclark](https://github.com/wbclark))
+
+## [6.1.1](https://github.com/theforeman/puppet-certs/tree/6.1.1) (2020-01-17)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/6.1.0...6.1.1)
+
+**Implemented enhancements:**
+
+- Expose the qpid nss cert name as a variable [\#265](https://github.com/theforeman/puppet-certs/pull/265) ([ekohl](https://github.com/ekohl))
+
+**Fixed bugs:**
+
+- Fixes [\#25683](https://projects.theforeman.org/issues/25683) - Do not run postun script if upgrading [\#267](https://github.com/theforeman/puppet-certs/pull/267) ([jlsherrill](https://github.com/jlsherrill))
+
+**Merged pull requests:**
+
+- Correct author case to name in metadata [\#263](https://github.com/theforeman/puppet-certs/pull/263) ([ekohl](https://github.com/ekohl))
+
+## [6.1.0](https://github.com/theforeman/puppet-certs/tree/6.1.0) (2019-10-23)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/6.0.2...6.1.0)
+
+**Implemented enhancements:**
+
+- Set a variable that defines the Apache CA [\#261](https://github.com/theforeman/puppet-certs/pull/261) ([ekohl](https://github.com/ekohl))
+- Fixes [\#27847](https://projects.theforeman.org/issues/27847) - Refactor foreman\_proxy\_content class [\#256](https://github.com/theforeman/puppet-certs/pull/256) ([ekohl](https://github.com/ekohl))
+
+**Fixed bugs:**
+
+- Refs [\#27847](https://projects.theforeman.org/issues/27847) - Use legacy facts [\#260](https://github.com/theforeman/puppet-certs/pull/260) ([ekohl](https://github.com/ekohl))
+- Refs [\#27847](https://projects.theforeman.org/issues/27847) - Load CNAME default from params [\#259](https://github.com/theforeman/puppet-certs/pull/259) ([ekohl](https://github.com/ekohl))
+
+## [6.0.2](https://github.com/theforeman/puppet-certs/tree/6.0.2) (2019-09-16)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/6.0.1...6.0.2)
+
+**Fixed bugs:**
+
+- Fixes [\#27857](https://projects.theforeman.org/issues/27857) - autorequire parent paths in types [\#257](https://github.com/theforeman/puppet-certs/pull/257) ([ekohl](https://github.com/ekohl))
+
+## [6.0.1](https://github.com/theforeman/puppet-certs/tree/6.0.1) (2019-06-13)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/6.0.0...6.0.1)
+
+**Merged pull requests:**
+
+- allow newer versions of dependencies [\#253](https://github.com/theforeman/puppet-certs/pull/253) ([mmoll](https://github.com/mmoll))
+
 ## [6.0.0](https://github.com/theforeman/puppet-certs/tree/6.0.0) (2019-04-16)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/5.1.2...6.0.0)
