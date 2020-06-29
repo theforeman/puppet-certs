@@ -21,6 +21,7 @@ class certs::mongodb_client (
   $mongodb_client_cert_name = 'mongodb-client-certificate'
   $mongodb_client_cert = "${pki_dir}/${mongodb_client_cert_name}.crt"
   $mongodb_client_key  = "${pki_dir}/${mongodb_client_cert_name}.key"
+  $mongodb_client_bundle = "${pki_dir}/${mongodb_client_cert_name}-bundle.crt"
   $mongodb_client_ca_cert = $certs::katello_server_ca_cert
 
   cert { $mongodb_client_cert_name:
@@ -60,6 +61,18 @@ class certs::mongodb_client (
       cert_group  => $group,
       cert_mode   => '0440',
       cert_file   => $mongodb_client_cert,
+    }
+
+    key_bundle { $mongodb_client_bundle:
+      key_pair  => Cert[$mongodb_client_cert_name],
+      force_rsa => true,
+      require   => Cert[$mongodb_client_cert_name],
+    } ~>
+    file { $mongodb_client_bundle:
+      ensure => file,
+      mode   => '0440',
+      owner  => 'root',
+      group  => $group,
     }
   }
 }
