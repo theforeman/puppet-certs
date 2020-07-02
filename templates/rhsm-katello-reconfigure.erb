@@ -40,21 +40,7 @@ chmod 644 $KATELLO_CERT_DIR/$KATELLO_SERVER_CA_CERT
 echo "$KATELLO_DEFAULT_CA_DATA" > $KATELLO_CERT_DIR/$KATELLO_DEFAULT_CA_CERT
 chmod 644 $KATELLO_CERT_DIR/$KATELLO_DEFAULT_CA_CERT
 
-# if atomic or debian machine handle it the special way, else handle the regular rhel way
-if [ -n "${IS_ATOMIC+1}" ] || [ -e "/run/ostree-booted" ]
-then
-  # atomic setup
-  BASEURL=https://$KATELLO_SERVER/pulp/ostree/web/
-
-  # configure rhsm
-  # the config command was introduced in rhsm 0.96.6
-  subscription-manager config \
-    --server.hostname="$KATELLO_SERVER" \
-    --server.prefix="$PREFIX" \
-    --server.port="$PORT" \
-    --rhsm.repo_ca_cert="%(ca_cert_dir)s$KATELLO_SERVER_CA_CERT" \
-    --rhsm.baseurl="$BASEURL"
-elif is_debian
+if is_debian
 then
   # Debian setup
   BASEURL=https://$KATELLO_SERVER/pulp/deb
@@ -111,25 +97,7 @@ if [ -d $CA_TRUST_ANCHORS ]; then
   update-ca-trust enable
   cp $KATELLO_CERT_DIR/$KATELLO_SERVER_CA_CERT $CA_TRUST_ANCHORS
   update-ca-trust
-
-  # reload docker if it is installed and running
-  if [ -f /usr/lib/systemd/system/docker.service ]; then
-    systemctl status docker >/dev/null && \
-    systemctl reload docker >/dev/null 2>&1
-  elif [ -f /etc/init.d/docker ]; then
-    service docker status >/dev/null && \
-    service docker reload >/dev/null 2>&1
-  fi
 fi
-
-# restart goferd if it is installed and running
-[ -f /etc/init.d/goferd ] && \
-  service goferd status >/dev/null && \
-  service goferd restart >/dev/null 2>&1
-
-[ -f /usr/lib/systemd/system/goferd.service ] && \
-[ -f /bin/systemctl ] && \
-  systemctl try-restart goferd >/dev/null 2>&1
 
 # EL5 systems and subscription-manager versions before 1.18.1-1 don't have the network.fqdn fact.
 # For these cases, we have to update the "hostname-override" fact
