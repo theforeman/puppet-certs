@@ -2,6 +2,7 @@ require 'spec_helper_acceptance'
 
 describe 'certs' do
   keystore_password_file = '/etc/pki/katello/keystore_password-file'
+  truststore_password_file = '/etc/pki/katello/truststore_password-file'
 
   context 'with default params' do
     let(:pp) do
@@ -61,14 +62,28 @@ describe 'certs' do
       it { should be_file }
       it { should be_mode 440 }
       it { should be_owned_by 'root' }
-      it { should be_grouped_into 'root' }
+      it { should be_grouped_into 'tomcat' }
+    end
+
+    describe file(truststore_password_file) do
+      it { should be_file }
+      it { should be_mode 440 }
+      it { should be_owned_by 'root' }
+      it { should be_grouped_into 'tomcat' }
     end
 
     describe file('/etc/candlepin/certs/keystore') do
       it { should be_file }
       it { should be_mode 640 }
-      it { should be_owned_by 'tomcat' }
-      it { should be_grouped_into 'root' }
+      it { should be_owned_by 'root' }
+      it { should be_grouped_into 'tomcat' }
+    end
+
+    describe file('/etc/candlepin/certs/truststore') do
+      it { should be_file }
+      it { should be_mode 640 }
+      it { should be_owned_by 'root' }
+      it { should be_grouped_into 'tomcat' }
     end
 
     describe file('/etc/candlepin/certs/candlepin-ca.crt') do
@@ -88,12 +103,25 @@ describe 'certs' do
     describe command("keytool -list -keystore /etc/candlepin/certs/keystore -storepass $(cat #{keystore_password_file})") do
       its(:exit_status) { should eq 0 }
       its(:stdout) { should match(/^Keystore type: PKCS12$/i) }
-      its(:stdout) { should match(/^Your keystore contains 3 entries$/) }
+      its(:stdout) { should match(/^Your keystore contains 1 entry$/) }
       its(:stdout) { should match(/^tomcat, .+, PrivateKeyEntry, $/) }
-      its(:stdout) { should match(/^candlepin-ca, .+, trustedCertEntry, $/) }
     end
 
     describe command("keytool -list -v -keystore /etc/candlepin/certs/keystore -alias tomcat -storepass $(cat #{keystore_password_file})") do
+      its(:exit_status) { should eq 0 }
+      its(:stdout) { should match(/^Owner: CN=#{host_inventory['fqdn']}, OU=SomeOrgUnit, O=Katello, ST=North Carolina, C=US$/) }
+      its(:stdout) { should match(/^Issuer: CN=#{host_inventory['fqdn']}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
+    end
+
+    describe command("keytool -list -keystore /etc/candlepin/certs/truststore -storepass $(cat #{truststore_password_file})") do
+      its(:exit_status) { should eq 0 }
+      its(:stdout) { should match(/^Keystore type: PKCS12$/i) }
+      its(:stdout) { should match(/^Your keystore contains 2 entries$/) }
+      its(:stdout) { should match(/^candlepin-ca, .+, trustedCertEntry, $/) }
+      its(:stdout) { should match(/^artemis-client, .+, trustedCertEntry, $/) }
+    end
+
+    describe command("keytool -list -v -keystore /etc/candlepin/certs/truststore -alias candlepin-ca -storepass $(cat #{truststore_password_file})") do
       its(:exit_status) { should eq 0 }
       its(:stdout) { should match(/^Owner: CN=#{host_inventory['fqdn']}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
       its(:stdout) { should match(/^Issuer: CN=#{host_inventory['fqdn']}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }

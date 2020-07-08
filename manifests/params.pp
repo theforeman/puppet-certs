@@ -27,6 +27,7 @@ class certs::params {
   $ca_expiration = '36500' # 100 years
 
   $keystore_password_file = 'keystore_password-file'
+  $truststore_password_file = 'truststore_password-file'
 
   $user = 'root'
   $group = 'root'
@@ -58,6 +59,7 @@ class certs::params {
 
   $candlepin_certs_dir              = '/etc/candlepin/certs'
   $candlepin_keystore               = "${candlepin_certs_dir}/keystore"
+  $candlepin_truststore             = "${candlepin_certs_dir}/truststore"
   $candlepin_ca_cert                = "${candlepin_certs_dir}/candlepin-ca.crt"
   $candlepin_ca_key                 = "${candlepin_certs_dir}/candlepin-ca.key"
 

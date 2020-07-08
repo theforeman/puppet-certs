@@ -1,25 +1,27 @@
 # Constains certs specific configurations for candlepin
 class certs::candlepin (
-  $hostname               = $certs::node_fqdn,
-  $cname                  = $certs::cname,
-  $generate               = $certs::generate,
-  $regenerate             = $certs::regenerate,
-  $deploy                 = $certs::deploy,
-  $ca_cert                = $certs::candlepin_ca_cert,
-  $ca_key                 = $certs::candlepin_ca_key,
-  $pki_dir                = $certs::pki_dir,
-  $keystore               = $certs::candlepin_keystore,
-  $keystore_password_file = $certs::keystore_password_file,
-  $country                = $certs::country,
-  $state                  = $certs::state,
-  $city                   = $certs::city,
-  $org                    = $certs::org,
-  $org_unit               = $certs::org_unit,
-  $expiration             = $certs::expiration,
-  $default_ca             = $certs::default_ca,
-  $ca_key_password_file   = $certs::ca_key_password_file,
-  $user                   = $certs::user,
-  $group                  = $certs::group,
+  $hostname                 = $certs::node_fqdn,
+  $cname                    = $certs::cname,
+  $generate                 = $certs::generate,
+  $regenerate               = $certs::regenerate,
+  $deploy                   = $certs::deploy,
+  $ca_cert                  = $certs::candlepin_ca_cert,
+  $ca_key                   = $certs::candlepin_ca_key,
+  $pki_dir                  = $certs::pki_dir,
+  $keystore                 = $certs::candlepin_keystore,
+  $keystore_password_file   = $certs::keystore_password_file,
+  $truststore               = $certs::candlepin_truststore,
+  $truststore_password_file = $certs::truststore_password_file,
+  $country                  = $certs::country,
+  $state                    = $certs::state,
+  $city                     = $certs::city,
+  $org                      = $certs::org,
+  $org_unit                 = $certs::org_unit,
+  $expiration               = $certs::expiration,
+  $default_ca               = $certs::default_ca,
+  $ca_key_password_file     = $certs::ca_key_password_file,
+  $user                     = $certs::user,
+  $group                    = 'tomcat',
 ) inherits certs {
 
   Exec {
@@ -70,7 +72,9 @@ class certs::candlepin (
   }
 
   $keystore_password = extlib::cache_data('foreman_cache_data', $keystore_password_file, extlib::random_password(32))
-  $password_file = "${pki_dir}/keystore_password-file"
+  $truststore_password = extlib::cache_data('foreman_cache_data', $truststore_password_file, extlib::random_password(32))
+  $keystore_password_path = "${pki_dir}/keystore_password-file"
+  $truststore_password_path = "${pki_dir}/truststore_password-file"
   $client_req = "${pki_dir}/java-client.req"
   $client_cert = "${pki_dir}/certs/${java_client_cert_name}.crt"
   $client_key = "${pki_dir}/private/${java_client_cert_name}.key"
@@ -98,20 +102,20 @@ class certs::candlepin (
       key_file  => $tomcat_key,
       cert_file => $tomcat_cert,
     } ~>
-    file { $password_file:
+    file { $keystore_password_path:
       ensure  => file,
       content => $keystore_password,
-      owner   => $user,
+      owner   => 'root',
       group   => $group,
       mode    => '0440',
     } ~>
     exec { 'candlepin-generate-ssl-keystore':
-      command => "openssl pkcs12 -export -in ${tomcat_cert} -inkey ${tomcat_key} -out ${keystore} -name tomcat -CAfile ${ca_cert} -caname root -password \"file:${password_file}\" -passin \"file:${ca_key_password_file}\" ",
-      unless  => "keytool -list -keystore ${keystore} -storepass ${keystore_password} -alias tomcat | grep $(openssl x509 -noout -fingerprint -in ${tomcat_cert} | cut -d '=' -f 2)",
+      command => "openssl pkcs12 -export -in ${tomcat_cert} -inkey ${tomcat_key} -out ${keystore} -name tomcat -CAfile ${ca_cert} -caname root -password \"file:${keystore_password_path}\"",
+      unless  => "keytool -list -keystore ${keystore} -storepass:file ${keystore_password_path} -alias tomcat | grep $(openssl x509 -noout -fingerprint -in ${tomcat_cert} | cut -d '=' -f 2)",
     } ~>
     file { $keystore:
       ensure => file,
-      owner  => 'tomcat',
+      owner  => 'root',
       group  => $group,
       mode   => '0640',
     } ~>
@@ -128,15 +132,26 @@ class certs::candlepin (
       key_group   => $group,
       key_mode    => '0440',
     } ~>
-    exec { 'import CA into Candlepin truststore':
-      command => "keytool -import -trustcacerts -v -keystore ${keystore} -storepass ${keystore_password} -alias ${alias} -file ${ca_cert} -noprompt",
-      unless  => "keytool -list -keystore ${keystore} -storepass ${keystore_password} -alias ${alias}",
+    file { $truststore_password_path:
+      ensure  => file,
+      content => $truststore_password,
+      owner   => 'root',
+      group   => $group,
+      mode    => '0440',
     } ~>
-    exec { 'import client certificate into Candlepin keystore':
-      # Stupid keytool doesn't allow you to import a keypair.  You can only import a cert.  Hence, we have to
-      # create the store as an PKCS12 and convert to JKS.  See http://stackoverflow.com/a/8224863
-      command => "openssl pkcs12 -export -name ${artemis_alias} -in ${client_cert} -inkey ${client_key} -out /tmp/keystore.p12 -passout file:${password_file} && keytool -importkeystore -destkeystore ${keystore} -srckeystore /tmp/keystore.p12 -srcstoretype pkcs12 -alias ${artemis_alias} -storepass ${keystore_password} -srcstorepass ${keystore_password} -noprompt && rm /tmp/keystore.p12",
-      unless  => "keytool -list -keystore ${keystore} -storepass ${keystore_password} -alias ${artemis_alias} | grep $(openssl x509 -noout -fingerprint -in ${client_cert} | cut -d '=' -f 2)",
+    exec { 'Create Candlepin truststore with CA':
+      command => "keytool -import -v -keystore ${truststore} -alias ${alias} -file ${ca_cert} -noprompt -storetype pkcs12 -storepass:file ${truststore_password_path}",
+      unless  => "keytool -list -keystore ${truststore} -alias ${alias} -storepass:file ${truststore_password_path}",
+    } ~>
+    file { $truststore:
+      ensure => file,
+      owner  => 'root',
+      group  => $group,
+      mode   => '0640',
+    } ~>
+    exec { 'import client certificate into Candlepin truststore':
+      command => "keytool -import -v -keystore ${truststore} -alias ${artemis_alias} -file ${client_cert} -noprompt -storepass:file ${truststore_password_path}",
+      unless  => "keytool -list -keystore ${truststore} -alias ${artemis_alias} -storepass:file ${truststore_password_path}",
     }
   }
 }
