@@ -60,44 +60,32 @@ describe 'certs' do
 
     describe file(keystore_password_file) do
       it { should be_file }
-      it { should be_mode 440 }
+      it { should be_mode 400 }
       it { should be_owned_by 'root' }
-      it { should be_grouped_into 'tomcat' }
+      it { should be_grouped_into 'root' }
     end
 
     describe file(truststore_password_file) do
       it { should be_file }
-      it { should be_mode 440 }
+      it { should be_mode 400 }
       it { should be_owned_by 'root' }
-      it { should be_grouped_into 'tomcat' }
+      it { should be_grouped_into 'root' }
     end
 
     describe file('/etc/candlepin/certs/keystore') do
       it { should be_file }
-      it { should be_mode 640 }
-      it { should be_owned_by 'root' }
-      it { should be_grouped_into 'tomcat' }
     end
 
     describe file('/etc/candlepin/certs/truststore') do
       it { should be_file }
-      it { should be_mode 640 }
-      it { should be_owned_by 'root' }
-      it { should be_grouped_into 'tomcat' }
     end
 
     describe file('/etc/candlepin/certs/candlepin-ca.crt') do
       it { should be_file }
-      it { should be_mode 640 }
-      it { should be_owned_by 'tomcat' }
-      it { should be_grouped_into 'tomcat' }
     end
 
     describe file('/etc/candlepin/certs/candlepin-ca.key') do
       it { should be_file }
-      it { should be_mode 440 }
-      it { should be_owned_by 'tomcat' }
-      it { should be_grouped_into 'tomcat' }
     end
 
     describe command("keytool -list -keystore /etc/candlepin/certs/keystore -storepass $(cat #{keystore_password_file})") do
