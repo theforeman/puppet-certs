@@ -22,6 +22,7 @@ class certs::candlepin (
   $ca_key_password_file     = $certs::ca_key_password_file,
   $user                     = $certs::user,
   $group                    = 'tomcat',
+  $client_keypair_group     = 'tomcat',
 ) inherits certs {
 
   Exec {
@@ -125,11 +126,11 @@ class certs::candlepin (
       cert_file   => $client_cert,
       manage_cert => true,
       cert_owner  => $user,
-      cert_group  => $group,
+      cert_group  => $client_keypair_group,
       cert_mode   => '0440',
       manage_key  => true,
       key_owner   => $user,
-      key_group   => $group,
+      key_group   => $client_keypair_group,
       key_mode    => '0440',
     } ~>
     file { $truststore_password_path:
