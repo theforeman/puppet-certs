@@ -1,3 +1,23 @@
+## [8.0.0](https://github.com/theforeman/puppet-certs/tree/8.0.0) (2020-05-14)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/7.0.0...8.0.0)
+
+**Breaking changes:**
+
+- Use modern facts [\#286](https://github.com/theforeman/puppet-certs/issues/286)
+- Remove unused defines [\#280](https://github.com/theforeman/puppet-certs/pull/280) ([ekohl](https://github.com/ekohl))
+- Refs [\#28924](https://projects.theforeman.org/issues/28924): Drop amqp key and truststore + generate Artemis client certs [\#275](https://github.com/theforeman/puppet-certs/pull/275) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- Refs [\#29215](https://projects.theforeman.org/issues/29215): Add RHEL 8 to metadata and run tests on all OSes [\#284](https://github.com/theforeman/puppet-certs/pull/284) ([ehelms](https://github.com/ehelms))
+- Allow extlib 5.x [\#279](https://github.com/theforeman/puppet-certs/pull/279) ([mmoll](https://github.com/mmoll))
+- Fixes [\#29195](https://projects.theforeman.org/issues/29195) - puppet-certs should run on el8 [\#278](https://github.com/theforeman/puppet-certs/pull/278) ([wbclark](https://github.com/wbclark))
+
+**Fixed bugs:**
+
+- Refs [\#28922](https://projects.theforeman.org/issues/28922): Replace keystore certificate if it changes [\#276](https://github.com/theforeman/puppet-certs/pull/276) ([ehelms](https://github.com/ehelms))
+
 ## [7.0.0](https://github.com/theforeman/puppet-certs/tree/7.0.0) (2020-02-11)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/6.1.1...7.0.0)

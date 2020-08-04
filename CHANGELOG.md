@@ -1,6 +1,22 @@
 # Changelog
 
-## [8.0.0](https://github.com/theforeman/puppet-certs/tree/8.0.0) (2020-05-13)
+## [9.0.0](https://github.com/theforeman/puppet-certs/tree/9.0.0) (2020-08-05)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/8.0.0...9.0.0)
+
+**Breaking changes:**
+
+- Refs [\#30346](https://projects.theforeman.org/issues/30346): Generate a separate truststore for Candlepin [\#291](https://github.com/theforeman/puppet-certs/pull/291) ([ehelms](https://github.com/ehelms))
+- Refs [\#30316](https://projects.theforeman.org/issues/30316): Drop bootstrap RPM code [\#290](https://github.com/theforeman/puppet-certs/pull/290) ([ehelms](https://github.com/ehelms))
+- Fixes [\#30312](https://projects.theforeman.org/issues/30312): Drop docker, atomic and goferd support from consumer RPM [\#289](https://github.com/theforeman/puppet-certs/pull/289) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- Refs [\#30346](https://projects.theforeman.org/issues/30346) - allow override of candlepin client keypair group [\#295](https://github.com/theforeman/puppet-certs/pull/295) ([jturel](https://github.com/jturel))
+- Refs [\#29715](https://projects.theforeman.org/issues/29715) - Create mongodb client certificate bundle [\#288](https://github.com/theforeman/puppet-certs/pull/288) ([ehelms](https://github.com/ehelms))
+- Refs [\#29715](https://projects.theforeman.org/issues/29715): Add mongodb server and client certs [\#285](https://github.com/theforeman/puppet-certs/pull/285) ([ehelms](https://github.com/ehelms))
+
+## [8.0.0](https://github.com/theforeman/puppet-certs/tree/8.0.0) (2020-05-14)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/7.0.0...8.0.0)
 
