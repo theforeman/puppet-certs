@@ -63,14 +63,6 @@ class certs::params {
   $candlepin_ca_cert                = "${candlepin_certs_dir}/candlepin-ca.crt"
   $candlepin_ca_key                 = "${candlepin_certs_dir}/candlepin-ca.key"
 
-  # Settings for uploading packages to Katello
-  $katello_user           = undef
-  $katello_password       = undef
-  $katello_org            = 'Katello Infrastructure'
-  $katello_repo_provider  = 'node-installer'
-  $katello_product        = 'node-certs'
-  $katello_activation_key = undef
-
   $pulp_pki_dir = '/etc/pki/pulp'
 
   $qpid_client_cert = "${pulp_pki_dir}/qpid/client.crt"
