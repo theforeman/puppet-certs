@@ -1,4 +1,10 @@
 # Handles Foreman Proxy cert configuration
+#
+# @param $private_key_mode
+#   The mode used on private key files (which are owned by root:$group).
+#
+# @param $public_key_mode
+#   The mode used on public key files (which are owned by root:$group).
 class certs::foreman_proxy (
   $hostname             = $certs::node_fqdn,
   $cname                = $certs::cname,
@@ -22,7 +28,9 @@ class certs::foreman_proxy (
   $expiration           = $certs::expiration,
   $default_ca           = $certs::default_ca,
   $ca_key_password_file = $certs::ca_key_password_file,
-  $group                = $certs::group,
+  $group                = 'foreman-proxy',
+  Stdlib::Filemode $private_key_mode = '0440',
+  Stdlib::Filemode $public_key_mode = '0444',
 ) inherits certs {
 
   $proxy_cert_name = "${hostname}-foreman-proxy"
@@ -82,25 +90,34 @@ class certs::foreman_proxy (
   if $deploy {
 
     certs::keypair { 'foreman_proxy':
-      key_pair   => Cert[$proxy_cert_name],
-      key_file   => $proxy_key,
-      manage_key => true,
-      key_owner  => 'foreman-proxy',
-      key_mode   => '0400',
-      key_group  => $group,
-      cert_file  => $proxy_cert,
+      key_pair    => Cert[$proxy_cert_name],
+      key_file    => $proxy_key,
+      manage_key  => true,
+      key_owner   => 'root',
+      key_mode    => $private_key_mode,
+      key_group   => $group,
+      cert_file   => $proxy_cert,
+      manage_cert => true,
+      cert_owner  => 'root',
+      cert_group  => $group,
+      cert_mode   => $public_key_mode,
     } ->
     pubkey { $proxy_ca_cert:
       key_pair => $default_ca,
     }
 
     certs::keypair { 'foreman_proxy_client':
-      key_pair   => Cert[$foreman_proxy_client_cert_name],
-      key_file   => $foreman_ssl_key,
-      manage_key => true,
-      key_owner  => 'foreman-proxy',
-      key_mode   => '0400',
-      cert_file  => $foreman_ssl_cert,
+      key_pair    => Cert[$foreman_proxy_client_cert_name],
+      key_file    => $foreman_ssl_key,
+      manage_key  => true,
+      key_owner   => 'root',
+      key_group   => $group,
+      key_mode    => $private_key_mode,
+      cert_file   => $foreman_ssl_cert,
+      manage_cert => true,
+      cert_owner  => 'root',
+      cert_group  => $group,
+      cert_mode   => $public_key_mode,
     } ->
     pubkey { $foreman_ssl_ca_cert:
       key_pair => $server_ca,
@@ -111,7 +128,9 @@ class certs::foreman_proxy (
     } ~>
     file { $foreman_proxy_ssl_client_bundle:
       ensure => file,
-      mode   => '0644',
+      owner  => 'root',
+      group  => $group,
+      mode   => $public_key_mode,
     }
 
   }
