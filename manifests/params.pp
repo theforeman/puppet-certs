@@ -73,10 +73,6 @@ class certs::params {
   $qpid_router_owner       = 'qdrouterd'
   $qpid_router_group       = 'root'
 
-  # Pulp expects the node certificate to be located on this very location
-  $nodes_cert_dir        = '/etc/pki/pulp/nodes'
-  $nodes_cert_name       = 'node.crt'
-
   $qpidd_group = 'qpidd'
 
   $tar_file = undef
