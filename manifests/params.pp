@@ -8,8 +8,6 @@ class certs::params {
   $node_fqdn = $facts['networking']['fqdn']
   $cname = []
 
-  $custom_repo = false
-
   $ca_common_name = $facts['networking']['fqdn']  # we need fqdn as CA common name as candlepin uses it as a ssl cert
   $generate      = true
   $regenerate    = false
