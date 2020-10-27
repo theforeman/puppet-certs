@@ -1,5 +1,18 @@
 # Changelog
 
+## [10.0.0](https://github.com/theforeman/puppet-certs/tree/10.0.0) (2020-10-29)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/9.0.0...10.0.0)
+
+**Breaking changes:**
+
+- Remove unused variables in params.pp [\#301](https://github.com/theforeman/puppet-certs/pull/301) ([ekohl](https://github.com/ekohl))
+- Refs [\#30316](https://projects.theforeman.org/issues/30316): Cleanup bootstrap RPM generation code [\#294](https://github.com/theforeman/puppet-certs/pull/294) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- Change foreman-proxy file ownership to 440 [\#300](https://github.com/theforeman/puppet-certs/pull/300) ([ekohl](https://github.com/ekohl))
+
 ## [9.0.0](https://github.com/theforeman/puppet-certs/tree/9.0.0) (2020-08-05)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/8.0.0...9.0.0)
