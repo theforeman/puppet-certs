@@ -57,7 +57,9 @@ class certs::qpid (
       key_mode   => '0440',
       cert_file  => $client_cert,
     } ~>
+    # lint:ignore:relative_classname_reference
     Class['::certs::ssltools::nssdb'] ~>
+    # lint:endignore
     certs::ssltools::certutil { 'ca':
       nss_db_dir  => $nss_db_dir,
       client_cert => $ca_cert,
