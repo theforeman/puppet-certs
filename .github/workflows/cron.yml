@@ -80,12 +80,14 @@ jobs:
       fail-fast: false
       matrix:
         setfile:
-          - centos7-64{hostname=centos7-64.example.com}
-          - centos8-64{hostname=centos8-64.example.com}
+          - value: centos7-64{hostname=centos7-64.example.com}
+            name: centos7
+          - value: centos8-64{hostname=centos8-64.example.com}
+            name: centos8
         puppet:
           - "6"
           - "5"
-    name: Puppet ${{ matrix.puppet }} - ${{ matrix.setfile }}
+    name: Puppet ${{ matrix.puppet }} - ${{ matrix.setfile.name }}
     steps:
       - name: Enable IPv6 on docker
         run: |
@@ -112,4 +114,4 @@ jobs:
         run: bundle exec rake beaker
         env:
           BEAKER_PUPPET_COLLECTION: puppet${{ matrix.puppet }}
-          BEAKER_setfile: ${{ matrix.setfile }}
+          BEAKER_setfile: ${{ matrix.setfile.value }}
