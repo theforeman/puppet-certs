@@ -30,8 +30,6 @@
 #
 # === Advanced parameters:
 #
-# $log_dir::              Where the log files should go
-#
 # $generate::             Should the generation of the certs be part of the
 #                         configuration
 #
@@ -70,7 +68,6 @@
 # $server_ca_name::       The name of the server CA (used for https)
 #
 class certs (
-  Stdlib::Absolutepath $log_dir = $certs::params::log_dir,
   Stdlib::Fqdn $node_fqdn = $certs::params::node_fqdn,
   Array[Stdlib::Fqdn] $cname = $certs::params::cname,
   Boolean $generate = $certs::params::generate,
