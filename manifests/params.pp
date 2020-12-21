@@ -6,9 +6,6 @@ class certs::params {
 
   $ca_common_name = $facts['networking']['fqdn']  # we need fqdn as CA common name as candlepin uses it as a ssl cert
 
-  $keystore_password_file = 'keystore_password-file'
-  $truststore_password_file = 'truststore_password-file'
-
   $puppet_client_cert = "${pki_dir}/puppet/puppet_client.crt"
   $puppet_client_key  = "${pki_dir}/puppet/puppet_client.key"
   # for verifying the foreman https
