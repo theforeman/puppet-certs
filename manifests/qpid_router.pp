@@ -9,8 +9,8 @@ class certs::qpid_router (
   $client_cert            = $certs::qpid_router_client_cert,
   $server_key             = $certs::qpid_router_server_key,
   $client_key             = $certs::qpid_router_client_key,
-  $owner                  = $certs::qpid_router_owner,
-  $group                  = $certs::qpid_router_group,
+  $owner                  = 'qdrouterd',
+  $group                  = 'root',
 
   $country               = $certs::country,
   $state                 = $certs::state,
