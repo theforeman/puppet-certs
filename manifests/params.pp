@@ -1,7 +1,6 @@
 # Certs Parameters
 class certs::params {
 
-  $log_dir = '/var/log/certs'
   $pki_dir = '/etc/pki/katello'
   $ssl_build_dir = '/root/ssl-build'
 
