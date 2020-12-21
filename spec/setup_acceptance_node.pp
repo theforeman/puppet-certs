@@ -9,10 +9,6 @@ yumrepo { 'foreman':
   gpgcheck => 0,
 }
 
-user { 'mongodb':
-  ensure => present
-}
-
 group { 'pulp':
   ensure => present
 }
