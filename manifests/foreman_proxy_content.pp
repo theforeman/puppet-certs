@@ -17,7 +17,7 @@ class certs::foreman_proxy_content (
   Stdlib::Fqdn $foreman_proxy_fqdn,
   Stdlib::Absolutepath $certs_tar,
   Stdlib::Fqdn $parent_fqdn = $certs::foreman_proxy_content::params::parent_fqdn,
-  Array[Stdlib::Fqdn] $foreman_proxy_cname = $certs::foreman_proxy_content::params::foreman_proxy_cname,
+  Array[Stdlib::Fqdn] $foreman_proxy_cname = [],
 ) inherits certs::foreman_proxy_content::params {
 
   if $foreman_proxy_fqdn == $facts['networking']['fqdn'] {
