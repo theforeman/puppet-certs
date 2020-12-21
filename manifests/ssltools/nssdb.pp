@@ -1,7 +1,7 @@
 # Sets up nssdb
 class certs::ssltools::nssdb (
   $nss_db_dir = $certs::nss_db_dir,
-  $group = $certs::qpidd_group,
+  $group = 'qpidd',
 )  {
   Exec { logoutput => 'on_failure' }
 
