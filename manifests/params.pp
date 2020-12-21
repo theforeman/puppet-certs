@@ -2,37 +2,12 @@
 class certs::params {
 
   $pki_dir = '/etc/pki/katello'
-  $ssl_build_dir = '/root/ssl-build'
-
   $node_fqdn = $facts['networking']['fqdn']
-  $cname = []
 
   $ca_common_name = $facts['networking']['fqdn']  # we need fqdn as CA common name as candlepin uses it as a ssl cert
-  $generate      = true
-  $regenerate    = false
-  $deploy        = true
-
-  $default_ca_name = 'katello-default-ca'
-  $server_ca_name  = 'katello-server-ca'
-
-  $country       = 'US'
-  $state         = 'North Carolina'
-  $city          = 'Raleigh'
-  $org           = 'Katello'
-  $org_unit      = 'SomeOrgUnit'
-  $expiration    = '7300' # 20 years
-  $ca_expiration = '36500' # 100 years
 
   $keystore_password_file = 'keystore_password-file'
   $truststore_password_file = 'truststore_password-file'
-
-  $user = 'root'
-  $group = 'root'
-
-  $server_cert      = undef
-  $server_key       = undef
-  $server_cert_req  = undef
-  $server_ca_cert   = undef
 
   $foreman_client_cert    = '/etc/foreman/client_cert.pem'
   $foreman_client_key     = '/etc/foreman/client_key.pem'
@@ -73,6 +48,4 @@ class certs::params {
   $qpid_router_group       = 'root'
 
   $qpidd_group = 'qpidd'
-
-  $tar_file = undef
 }
