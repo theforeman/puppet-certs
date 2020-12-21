@@ -9,11 +9,6 @@ class certs::params {
   $keystore_password_file = 'keystore_password-file'
   $truststore_password_file = 'truststore_password-file'
 
-  $foreman_client_cert    = '/etc/foreman/client_cert.pem'
-  $foreman_client_key     = '/etc/foreman/client_key.pem'
-  # for verifying the foreman proxy https
-  $foreman_ssl_ca_cert    = '/etc/foreman/proxy_ca.pem'
-
   $foreman_proxy_cert    = '/etc/foreman-proxy/ssl_cert.pem'
   $foreman_proxy_key     = '/etc/foreman-proxy/ssl_key.pem'
   # for verifying the foreman client certs at the proxy side
