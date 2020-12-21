@@ -14,7 +14,7 @@ class certs::qpid (
   $ca_key_password_file = $certs::ca_key_password_file,
   $pki_dir              = $certs::pki_dir,
   $ca_cert              = $certs::ca_cert,
-  $qpidd_group          = $certs::qpidd_group,
+  $qpidd_group          = 'qpidd',
   $nss_cert_name        = 'broker',
 ) inherits certs {
 
