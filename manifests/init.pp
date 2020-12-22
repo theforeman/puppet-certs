@@ -69,7 +69,7 @@
 #
 class certs (
   Stdlib::Fqdn $node_fqdn = $certs::params::node_fqdn,
-  Array[Stdlib::Fqdn] $cname = [],
+  Array[Stdlib::Fqdn] $cname = $certs::params::cname,
   Boolean $generate = true,
   Boolean $regenerate = false,
   Boolean $deploy = true,
