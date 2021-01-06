@@ -163,4 +163,40 @@ describe 'certs' do
     its(:stdout) { should match(/^Owner: CN=localhost, OU=SomeOrgUnit, O=Katello, ST=North Carolina, C=US$/) }
     its(:stdout) { should match(/^Issuer: CN=#{host_inventory['fqdn']}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
   end
+
+  context 'updates java-client certificate in truststore if it changes' do
+    let(:pp) do
+      <<-EOS
+      user { 'tomcat':
+        ensure => present,
+      }
+
+      ['/usr/share/tomcat/conf', '/etc/candlepin/certs'].each |$dir| {
+        exec { "mkdir -p ${dir}":
+          creates => $dir,
+          path    => ['/bin', '/usr/bin'],
+        }
+      }
+
+      package { 'java-1.8.0-openjdk-headless':
+        ensure => installed,
+      }
+
+      include certs::candlepin
+      EOS
+    end
+
+    before(:all) do
+      on default, 'rm -rf /root/ssl-build/localhost'
+    end
+
+    it_behaves_like 'a idempotent resource'
+
+    it "checks that the fingerprint matches" do
+      fingerprint_output = on default, 'openssl x509 -noout -fingerprint -in /etc/pki/katello/certs/java-client.crt'
+      fingerprint = fingerprint_output.output.split('=').last
+      truststore_output = on default, "keytool -list -keystore /etc/candlepin/certs/truststore -storepass $(cat #{truststore_password_file})"
+      expect(truststore_output.output).to include(fingerprint)
+    end
+  end
 end
