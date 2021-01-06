@@ -140,19 +140,23 @@ class certs::candlepin (
       group   => $group,
       mode    => '0440',
     } ~>
-    exec { 'Create Candlepin truststore with CA':
-      command => "keytool -import -v -keystore ${truststore} -alias ${alias} -file ${ca_cert} -noprompt -storetype pkcs12 -storepass:file ${truststore_password_path}",
-      unless  => "keytool -list -keystore ${truststore} -alias ${alias} -storepass:file ${truststore_password_path}",
+    truststore_certificate { $alias:
+      ensure        => present,
+      truststore    => $truststore,
+      password_file => $truststore_password_path,
+      certificate   => $ca_cert,
+    } ~>
+    truststore_certificate { $artemis_alias:
+      ensure        => present,
+      truststore    => $truststore,
+      password_file => $truststore_password_path,
+      certificate   => $client_cert,
     } ~>
     file { $truststore:
       ensure => file,
       owner  => 'root',
       group  => $group,
       mode   => '0640',
-    } ~>
-    exec { 'import client certificate into Candlepin truststore':
-      command => "keytool -import -v -keystore ${truststore} -alias ${artemis_alias} -file ${client_cert} -noprompt -storepass:file ${truststore_password_path}",
-      unless  => "keytool -list -keystore ${truststore} -alias ${artemis_alias} -storepass:file ${truststore_password_path}",
     }
   }
 }
