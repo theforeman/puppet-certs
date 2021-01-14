@@ -34,8 +34,31 @@ describe 'certs::candlepin' do
 
         it { is_expected.to contain_file('/etc/candlepin/certs/truststore') }
         it { is_expected.to contain_file('/etc/pki/katello/truststore_password-file') }
-        it { is_expected.to contain_exec('Create Candlepin truststore with CA').that_notifies('File[/etc/candlepin/certs/truststore]') }
-        it { is_expected.to contain_exec('import client certificate into Candlepin truststore').that_subscribes_to('File[/etc/candlepin/certs/truststore]') }
+        it do
+          is_expected.to contain_truststore_certificate('/etc/candlepin/certs/truststore:candlepin-ca')
+            .with_alias('candlepin-ca')
+            .with_certificate('/etc/candlepin/certs/candlepin-ca.crt')
+            .that_requires('File[/etc/candlepin/certs/candlepin-ca.crt]')
+            .with_truststore('/etc/candlepin/certs/truststore')
+            .with_password_file('/etc/pki/katello/truststore_password-file')
+            .that_requires('File[/etc/pki/katello/truststore_password-file]')
+            # TODO: rspec-puppet doesn't support autonotify
+            # https://github.com/rodjek/rspec-puppet/pull/819
+            #.that_notifies('File[/etc/candlepin/certs/truststore]')
+        end
+
+        it do
+          is_expected.to contain_truststore_certificate('/etc/candlepin/certs/truststore:artemis-client')
+            .with_alias('artemis-client')
+            .with_certificate('/etc/pki/katello/certs/java-client.crt')
+            .that_requires('File[/etc/pki/katello/certs/java-client.crt]')
+            .with_truststore('/etc/candlepin/certs/truststore')
+            .with_password_file('/etc/pki/katello/truststore_password-file')
+            .that_requires('File[/etc/pki/katello/truststore_password-file]')
+            # TODO: rspec-puppet doesn't support autonotify
+            # https://github.com/rodjek/rspec-puppet/pull/819
+            #.that_notifies('File[/etc/candlepin/certs/truststore]')
+        end
       end
     end
   end
