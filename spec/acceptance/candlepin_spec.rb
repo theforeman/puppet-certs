@@ -163,4 +163,47 @@ describe 'certs' do
     its(:stdout) { should match(/^Owner: CN=localhost, OU=SomeOrgUnit, O=Katello, ST=North Carolina, C=US$/) }
     its(:stdout) { should match(/^Issuer: CN=#{host_inventory['fqdn']}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
   end
+
+  context 'updates java-client certificate in truststore if it changes' do
+    let(:pp) do
+      <<-EOS
+      user { 'tomcat':
+        ensure => present,
+      }
+
+      ['/usr/share/tomcat/conf', '/etc/candlepin/certs'].each |$dir| {
+        exec { "mkdir -p ${dir}":
+          creates => $dir,
+          path    => ['/bin', '/usr/bin'],
+        }
+      }
+
+      package { 'java-1.8.0-openjdk-headless':
+        ensure => installed,
+      }
+
+      include certs::candlepin
+      EOS
+    end
+
+    it "checks that the fingerprint matches" do
+      apply_manifest(pp, catch_failures: true)
+
+      initial_fingerprint_output = on default, 'openssl x509 -noout -fingerprint -in /etc/pki/katello/certs/java-client.crt'
+      initial_fingerprint = initial_fingerprint_output.output.strip.split('=').last
+      initial_truststore_output = on default, "keytool -list -keystore /etc/candlepin/certs/truststore -storepass $(cat #{truststore_password_file})"
+      expect(initial_truststore_output.output.strip).to include(initial_fingerprint)
+
+      on default, "rm -rf /root/ssl-build/#{host_inventory['fqdn']}"
+      apply_manifest(pp, catch_failures: true)
+
+      fingerprint_output = on default, 'openssl x509 -noout -fingerprint -in /etc/pki/katello/certs/java-client.crt'
+      fingerprint = fingerprint_output.output.strip.split('=').last
+      truststore_output = on default, "keytool -list -keystore /etc/candlepin/certs/truststore -storepass $(cat #{truststore_password_file})"
+
+      expect(truststore_output.output.strip).to include(fingerprint)
+      expect(fingerprint).not_to equal(initial_fingerprint)
+      expect(truststore_output.output.strip).not_to include(initial_fingerprint)
+    end
+  end
 end
