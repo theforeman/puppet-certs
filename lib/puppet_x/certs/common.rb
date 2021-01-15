@@ -86,8 +86,15 @@ module PuppetX
         newparam(:key_pair) do
           validate do |value|
             param_resource = resource.catalog.resource(value.to_s)
-            if param_resource && !['Puppet::Type::Ca', 'Puppet::Type::Cert'].include?(param_resource.class.to_s)
-              raise ArgumentError, "Expected Ca or Cert resource, got #{param_resource.class} #{param_resource.inspect}"
+
+            if param_resource.is_a?(Puppet::Resource)
+              param_resource_type = param_resource.resource_type
+            else
+              param_resource_type = param_resource.to_resource.resource_type
+            end
+
+            if param_resource && !['Puppet::Type::Ca', 'Puppet::Type::Cert'].include?(param_resource_type.to_s)
+              raise ArgumentError, "Expected Ca or Cert resource, got #{param_resource} #{param_resource.inspect}"
             end
           end
         end
