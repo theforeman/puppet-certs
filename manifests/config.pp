@@ -1,4 +1,5 @@
-# Certs Configuration
+# @summary Basic directory structure
+# @api private
 class certs::config (
   Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
   String $group = $certs::group,

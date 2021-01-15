@@ -1,5 +1,5 @@
-# == Class: certs
-# Sets up the CA for Katello
+# @summary set up the CA for Katello
+# @api private
 class certs::ca (
   String $default_ca_name = $certs::default_ca_name,
   String $server_ca_name = $certs::server_ca_name,
