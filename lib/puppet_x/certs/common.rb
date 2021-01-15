@@ -55,6 +55,8 @@ module PuppetX
         end
 
         newparam(:ca) do
+          isrequired
+
           validate do |value|
             ca_resource = resource.catalog.resource(value.to_s)
             if ca_resource && ca_resource.class.to_s != 'Puppet::Type::Ca'
@@ -68,12 +70,18 @@ module PuppetX
             catalog.resource(@parameters[:ca].value.to_s).to_hash[:name]
           end
         end
+
+        autorequire(:file) do
+          [self[:password_file]].compact
+        end
       end
 
       FILE_COMMON_PARAMS = Proc.new do
         ensurable
 
-        newparam(:path, :namevar => true)
+        newparam(:path, :namevar => true) do
+          isrequired
+        end
 
         newparam(:password_file)
 
@@ -84,6 +92,8 @@ module PuppetX
         define_method(:managed?) { true }
 
         newparam(:key_pair) do
+          isrequired
+
           validate do |value|
             param_resource = resource.catalog.resource(value.to_s)
 
@@ -120,6 +130,7 @@ module PuppetX
         # Copied from Puppet's lib/puppet/type/file.rb
         autorequire(:file) do
           req = []
+          req << self[:password_file] if self[:password_file]
           path = Pathname.new(self[:path])
           if !path.root?
             # Start at our parent, to avoid autorequiring ourself
