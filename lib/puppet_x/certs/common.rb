@@ -64,9 +64,7 @@ module PuppetX
         end
 
         autorequire(:ca) do
-          if @parameters.has_key?(:ca)
-            catalog.resource(@parameters[:ca].value.to_s).to_hash[:name]
-          end
+          [self[:ca]&.title].compact
         end
 
         autorequire(:file) do
@@ -107,19 +105,16 @@ module PuppetX
           end
         end
 
-        define_method(:autorequire_cert) do |type|
-          if @parameters.has_key?(:key_pair)
-            key_pair = catalog.resource(@parameters[:key_pair].value.to_s)
-            key_pair.to_hash[:name] if key_pair && key_pair.type == type
-          end
-        end
-
         autorequire(:cert) do
-          autorequire_cert('Cert')
+          req = []
+          req << self[:key_pair].title if self[:key_pair].type == 'Cert'
+          req
         end
 
         autorequire(:ca) do
-          autorequire_cert('Ca')
+          req = []
+          req << self[:key_pair].title if self[:key_pair].type == 'Ca'
+          req
         end
 
         # Autorequire the nearest ancestor directory found in the catalog.

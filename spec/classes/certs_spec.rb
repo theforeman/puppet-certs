@@ -40,18 +40,27 @@ describe 'certs' do
             .that_requires('File[/etc/pki/katello/private/katello-default-ca.pwd]')
         end
 
-        it { is_expected.to contain_privkey('/etc/pki/katello/private/katello-default-ca.key').that_requires('Ca[katello-default-ca]') }
         it do
-          is_expected.to contain_file('/etc/pki/katello/private/katello-default-ca.key')
-            .that_subscribes_to(['Ca[katello-default-ca]', 'Privkey[/etc/pki/katello/private/katello-default-ca.key]'])
+          is_expected.to contain_privkey('/etc/pki/katello/private/katello-default-ca.key')
+            .that_requires(['Ca[katello-default-ca]', 'File[/etc/pki/katello/private/katello-default-ca.pwd]'])
         end
 
-        it { is_expected.to contain_pubkey('/etc/pki/katello/certs/katello-default-ca-stripped.crt').that_subscribes_to('Ca[katello-default-ca]') }
+        it do
+          is_expected.to contain_file('/etc/pki/katello/private/katello-default-ca.key')
+            .that_requires('Ca[katello-default-ca]')
+            .that_subscribes_to('Privkey[/etc/pki/katello/private/katello-default-ca.key]')
+        end
+
+        it do
+          is_expected.to contain_pubkey('/etc/pki/katello/certs/katello-default-ca-stripped.crt')
+            .that_requires('Ca[katello-default-ca]')
+        end
 
         it { is_expected.to contain_pubkey('/etc/pki/katello/certs/katello-default-ca.crt').that_subscribes_to('Ca[katello-default-ca]') }
         it do
           is_expected.to contain_file('/etc/pki/katello/certs/katello-default-ca.crt')
-            .that_subscribes_to(['Ca[katello-default-ca]', 'Pubkey[/etc/pki/katello/certs/katello-default-ca.crt]'])
+            .that_requires('Ca[katello-default-ca]')
+            .that_subscribes_to('Pubkey[/etc/pki/katello/certs/katello-default-ca.crt]')
         end
 
         it do
