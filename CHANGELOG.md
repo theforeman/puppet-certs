@@ -1,5 +1,19 @@
 # Changelog
 
+## [10.1.0](https://github.com/theforeman/puppet-certs/tree/10.1.0) (2021-01-28)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/10.0.0...10.1.0)
+
+**Implemented enhancements:**
+
+- Convert parameters to static defaults [\#308](https://github.com/theforeman/puppet-certs/pull/308) ([ehelms](https://github.com/ehelms))
+
+**Merged pull requests:**
+
+- Revert "Convert foreman\_proxy\_content.pp parameters to static defaults" [\#310](https://github.com/theforeman/puppet-certs/pull/310) ([ekohl](https://github.com/ekohl))
+- Move cname default back to params.pp due to Kafo improperly handling validation [\#309](https://github.com/theforeman/puppet-certs/pull/309) ([ehelms](https://github.com/ehelms))
+- Removed unused rhsm\_reconfigure\_script [\#306](https://github.com/theforeman/puppet-certs/pull/306) ([ehelms](https://github.com/ehelms))
+
 ## [10.0.0](https://github.com/theforeman/puppet-certs/tree/10.0.0) (2020-10-29)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/9.0.0...10.0.0)
