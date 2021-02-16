@@ -24,15 +24,16 @@ class certs::foreman_proxy_content (
     fail('The hostname is the same as the provided hostname for the foreman-proxy')
   }
 
-  class { 'certs::puppet':        hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { 'certs::foreman':       hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { 'certs::foreman_proxy': hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { 'certs::apache':        hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { 'certs::qpid':          hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { 'certs::qpid_router':   hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { 'certs::qpid_client':   hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::puppet':              hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::foreman':             hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::foreman_proxy':       hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::apache':              hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::qpid':                hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::qpid_router::server': hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::qpid_router::client': hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
+  class { 'certs::qpid_client':         hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
 
   certs::tar_create { $certs_tar:
-    subscribe => Class['certs::puppet', 'certs::foreman', 'certs::foreman_proxy', 'certs::qpid', 'certs::qpid_router', 'certs::apache', 'certs::qpid_client'],
+    subscribe => Class['certs::puppet', 'certs::foreman', 'certs::foreman_proxy', 'certs::qpid', 'certs::qpid_router::server', 'certs::qpid_router::client', 'certs::apache', 'certs::qpid_client'],
   }
 }
