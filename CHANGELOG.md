@@ -1,5 +1,14 @@
 # Changelog
 
+## [11.0.0](https://github.com/theforeman/puppet-certs/tree/11.0.0) (2021-02-19)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/10.1.0...11.0.0)
+
+**Breaking changes:**
+
+- Refs [\#31878](https://projects.theforeman.org/issues/31878) - Split qpid router server and client certificates [\#316](https://github.com/theforeman/puppet-certs/pull/316) ([ehelms](https://github.com/ehelms))
+- Drop creation of mongodb certificates [\#307](https://github.com/theforeman/puppet-certs/pull/307) ([ehelms](https://github.com/ehelms))
+
 ## [10.1.0](https://github.com/theforeman/puppet-certs/tree/10.1.0) (2021-01-28)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/10.0.0...10.1.0)
