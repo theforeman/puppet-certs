@@ -18,8 +18,6 @@ class certs::qpid (
   $nss_cert_name        = 'broker',
 ) inherits certs {
 
-  Exec { logoutput => 'on_failure' }
-
   $qpid_cert_name = "${hostname}-qpid-broker"
 
   cert { $qpid_cert_name:
@@ -77,11 +75,13 @@ class certs::qpid (
       command     => "openssl pkcs12 -in ${client_cert} -inkey ${client_key} -export -out '${pfx_path}' -password 'file:${nss_db_password_file}' -name '${nss_cert_name}'",
       path        => '/usr/bin',
       refreshonly => true,
+      logoutput   => 'on_failure',
     } ~>
     exec { 'add-private-key-to-nss-db':
       command     => "pk12util -i '${pfx_path}' -d '${nss_db_dir}' -w '${nss_db_password_file}' -k '${nss_db_password_file}'",
       path        => '/usr/bin',
       refreshonly => true,
+      logoutput   => 'on_failure',
     }
   }
 }
