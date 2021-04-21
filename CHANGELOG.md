@@ -1,5 +1,22 @@
 # Changelog
 
+## [12.0.0](https://github.com/theforeman/puppet-certs/tree/12.0.0) (2021-04-27)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/11.0.0...12.0.0)
+
+**Breaking changes:**
+
+- Remove qpid\_client class and avoid resource defaults in qpid class [\#315](https://github.com/theforeman/puppet-certs/pull/315) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- Refs [\#31574](https://projects.theforeman.org/issues/31574): Compare SHA256 fingerprints when checking truststore [\#323](https://github.com/theforeman/puppet-certs/pull/323) ([ehelms](https://github.com/ehelms))
+- Support Puppet 7 [\#319](https://github.com/theforeman/puppet-certs/pull/319) ([ekohl](https://github.com/ekohl))
+
+**Fixed bugs:**
+
+- Fixes [\#31574](https://projects.theforeman.org/issues/31574): Ensure truststore certificates get updated when they change [\#320](https://github.com/theforeman/puppet-certs/pull/320) ([ehelms](https://github.com/ehelms))
+
 ## [11.0.0](https://github.com/theforeman/puppet-certs/tree/11.0.0) (2021-02-19)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/10.1.0...11.0.0)
