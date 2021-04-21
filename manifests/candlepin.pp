@@ -22,29 +22,10 @@ class certs::candlepin (
   $ca_key_password_file     = $certs::ca_key_password_file,
   $user                     = $certs::user,
   $group                    = 'tomcat',
-  $client_keypair_group     = 'tomcat',
+  $client_cert              = undef,
 ) inherits certs {
-  $java_client_cert_name = 'java-client'
+
   $artemis_alias = 'artemis-client'
-  $artemis_client_dn = "CN=${hostname}, OU=${org_unit}, O=candlepin, ST=${state}, C=${country}"
-
-  cert { $java_client_cert_name:
-    ensure        => present,
-    hostname      => $hostname,
-    cname         => $cname,
-    country       => $country,
-    state         => $state,
-    city          => $city,
-    org           => 'candlepin',
-    org_unit      => $org_unit,
-    expiration    => $expiration,
-    ca            => $default_ca,
-    generate      => $generate,
-    regenerate    => $regenerate,
-    deploy        => $deploy,
-    password_file => $ca_key_password_file,
-  }
-
   $tomcat_cert_name = "${hostname}-tomcat"
   $tomcat_cert = "${pki_dir}/certs/katello-tomcat.crt"
   $tomcat_key  = "${pki_dir}/private/katello-tomcat.key"
@@ -70,9 +51,6 @@ class certs::candlepin (
   $truststore_password = extlib::cache_data('foreman_cache_data', $truststore_password_file, extlib::random_password(32))
   $keystore_password_path = "${pki_dir}/keystore_password-file"
   $truststore_password_path = "${pki_dir}/truststore_password-file"
-  $client_req = "${pki_dir}/java-client.req"
-  $client_cert = "${pki_dir}/certs/${java_client_cert_name}.crt"
-  $client_key = "${pki_dir}/private/${java_client_cert_name}.key"
   $alias = 'candlepin-ca'
 
   if $deploy {
@@ -115,19 +93,6 @@ class certs::candlepin (
       owner  => 'root',
       group  => $group,
       mode   => '0640',
-    } ~>
-    certs::keypair { 'candlepin':
-      key_pair    => Cert[$java_client_cert_name],
-      key_file    => $client_key,
-      cert_file   => $client_cert,
-      manage_cert => true,
-      cert_owner  => $user,
-      cert_group  => $client_keypair_group,
-      cert_mode   => '0440',
-      manage_key  => true,
-      key_owner   => $user,
-      key_group   => $client_keypair_group,
-      key_mode    => '0440',
     }
 
     file { $truststore_password_path:
