@@ -106,7 +106,7 @@ class certs::candlepin (
     } ~>
     exec { 'candlepin-generate-ssl-keystore':
       command   => "openssl pkcs12 -export -in ${tomcat_cert} -inkey ${tomcat_key} -out ${keystore} -name tomcat -CAfile ${ca_cert} -caname root -password \"file:${keystore_password_path}\"",
-      unless    => "keytool -list -keystore ${keystore} -storepass:file ${keystore_password_path} -alias tomcat | grep $(openssl x509 -noout -fingerprint -in ${tomcat_cert} | cut -d '=' -f 2)",
+      unless    => "keytool -list -keystore ${keystore} -storepass:file ${keystore_password_path} -alias tomcat | grep $(openssl x509 -noout -fingerprint -sha256 -in ${tomcat_cert} | cut -d '=' -f 2)",
       logoutput => 'on_failure',
       path      => ['/bin/', '/usr/bin'],
     } ~>
