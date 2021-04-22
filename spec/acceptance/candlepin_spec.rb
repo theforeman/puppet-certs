@@ -189,7 +189,7 @@ describe 'certs' do
     it "checks that the fingerprint matches" do
       apply_manifest(pp, catch_failures: true)
 
-      initial_fingerprint_output = on default, 'openssl x509 -noout -fingerprint -in /etc/pki/katello/certs/java-client.crt'
+      initial_fingerprint_output = on default, 'openssl x509 -noout -fingerprint -sha256 -in /etc/pki/katello/certs/java-client.crt'
       initial_fingerprint = initial_fingerprint_output.output.strip.split('=').last
       initial_truststore_output = on default, "keytool -list -keystore /etc/candlepin/certs/truststore -storepass $(cat #{truststore_password_file})"
       expect(initial_truststore_output.output.strip).to include(initial_fingerprint)
@@ -197,7 +197,7 @@ describe 'certs' do
       on default, "rm -rf /root/ssl-build/#{host_inventory['fqdn']}"
       apply_manifest(pp, catch_failures: true)
 
-      fingerprint_output = on default, 'openssl x509 -noout -fingerprint -in /etc/pki/katello/certs/java-client.crt'
+      fingerprint_output = on default, 'openssl x509 -noout -fingerprint -sha256 -in /etc/pki/katello/certs/java-client.crt'
       fingerprint = fingerprint_output.output.strip.split('=').last
       truststore_output = on default, "keytool -list -keystore /etc/candlepin/certs/truststore -storepass $(cat #{truststore_password_file})"
 

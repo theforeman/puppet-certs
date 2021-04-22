@@ -26,7 +26,7 @@ Puppet::Type.type(:truststore_certificate).provide(:keytool) do
   def fingerprint(file)
     return unless File.exist?(file)
 
-    openssl('x509', '-noout', '-fingerprint', '-in', file).strip.split('=')[1]
+    openssl('x509', '-sha256', '-noout', '-fingerprint', '-in', file).strip.split('=')[1]
   end
 
   def file_readable?(file)
@@ -85,6 +85,6 @@ Puppet::Type.type(:truststore_certificate).provide(:keytool) do
 
   def truststore_fingerprint
     # TODO: include fingerprint type in the output?
-    truststore_content&.scan(/^Certificate fingerprint \(SHA1\): (.+)$/)&.first&.first
+    truststore_content&.scan(/^Certificate fingerprint \(SHA-256\): (.+)$/)&.first&.first
   end
 end
