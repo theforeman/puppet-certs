@@ -27,27 +27,20 @@ describe 'certs::qpid' do
         end
 
         it do
-          is_expected.to contain_certs__ssltools__certutil('ca')
-            .with_nss_db_dir('/etc/pki/katello/nssdb')
-            .with_client_cert('/etc/pki/katello/certs/katello-default-ca.crt')
-            .that_subscribes_to('Pubkey[/etc/pki/katello/certs/katello-default-ca.crt]')
+          is_expected.to contain_nssdb_certificate('/etc/pki/katello/nssdb:ca')
+            .with_ensure('present')
+            .with_certificate('/etc/pki/katello/certs/katello-default-ca.crt')
+            .with_trustargs('TCu,Cu,Tuw')
+            .with_password_file('/etc/pki/katello/nssdb/nss_db_password-file')
         end
 
         it do
-          is_expected.to contain_certs__ssltools__certutil('broker')
-            .with_nss_db_dir('/etc/pki/katello/nssdb')
-            .with_client_cert('/etc/pki/katello/certs/foo.example.com-qpid-broker.crt')
-            .that_subscribes_to('Pubkey[/etc/pki/katello/certs/foo.example.com-qpid-broker.crt]')
-        end
-
-        it do
-          is_expected.to contain_exec('generate-pfx-for-nss-db')
-            .with_command("openssl pkcs12 -in /etc/pki/katello/certs/foo.example.com-qpid-broker.crt -inkey /etc/pki/katello/private/foo.example.com-qpid-broker.key -export -out '/etc/pki/katello/foo.example.com-qpid-broker.pfx' -password 'file:/etc/pki/katello/nssdb/nss_db_password-file' -name 'broker'")
-        end
-
-        it do
-          is_expected.to contain_exec('add-private-key-to-nss-db')
-            .with_command("pk12util -i '/etc/pki/katello/foo.example.com-qpid-broker.pfx' -d '/etc/pki/katello/nssdb' -w '/etc/pki/katello/nssdb/nss_db_password-file' -k '/etc/pki/katello/nssdb/nss_db_password-file'")
+          is_expected.to contain_nssdb_certificate('/etc/pki/katello/nssdb:broker')
+            .with_ensure('present')
+            .with_certificate('/etc/pki/katello/certs/foo.example.com-qpid-broker.crt')
+            .with_private_key('/etc/pki/katello/private/foo.example.com-qpid-broker.key')
+            .with_trustargs(',,')
+            .with_password_file('/etc/pki/katello/nssdb/nss_db_password-file')
         end
       end
     end

@@ -54,34 +54,21 @@ class certs::qpid (
       key_group  => $qpidd_group,
       key_mode   => '0440',
       cert_file  => $client_cert,
-    } ~>
-    # lint:ignore:relative_classname_reference
-    Class['::certs::ssltools::nssdb'] ~>
-    # lint:endignore
-    certs::ssltools::certutil { 'ca':
-      nss_db_dir  => $nss_db_dir,
-      client_cert => $ca_cert,
-      trustargs   => 'TCu,Cu,Tuw',
-      refreshonly => true,
-      subscribe   => Pubkey[$ca_cert],
-    } ~>
-    certs::ssltools::certutil { $nss_cert_name:
-      nss_db_dir  => $nss_db_dir,
-      client_cert => $client_cert,
-      refreshonly => true,
-      subscribe   => Pubkey[$client_cert],
-    } ~>
-    exec { 'generate-pfx-for-nss-db':
-      command     => "openssl pkcs12 -in ${client_cert} -inkey ${client_key} -export -out '${pfx_path}' -password 'file:${nss_db_password_file}' -name '${nss_cert_name}'",
-      path        => '/usr/bin',
-      refreshonly => true,
-      logoutput   => 'on_failure',
-    } ~>
-    exec { 'add-private-key-to-nss-db':
-      command     => "pk12util -i '${pfx_path}' -d '${nss_db_dir}' -w '${nss_db_password_file}' -k '${nss_db_password_file}'",
-      path        => '/usr/bin',
-      refreshonly => true,
-      logoutput   => 'on_failure',
+    }
+
+    nssdb_certificate { "${nss_db_dir}:ca":
+      ensure        => present,
+      certificate   => $ca_cert,
+      trustargs     => 'TCu,Cu,Tuw',
+      password_file => $nss_db_password_file,
+    }
+
+    nssdb_certificate { "${nss_db_dir}:${nss_cert_name}":
+      ensure        => present,
+      certificate   => $client_cert,
+      private_key   => $client_key,
+      trustargs     => ',,',
+      password_file => $nss_db_password_file,
     }
   }
 }

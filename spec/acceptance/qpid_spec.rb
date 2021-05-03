@@ -63,6 +63,11 @@ describe 'certs' do
       its(:stdout) { should match(/\s*Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=pulp,ST=North Ca\n\s*rolina,C=US"/) }
       its(:stdout) { should match(/\s*Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh\n\s*,ST=North Carolina,C=US"/) }
     end
+
+    describe command("certutil -K -d #{nssdb_dir} -f #{nssdb_password_file} -n broker") do
+      its(:exit_status) { should eq 0 }
+      its(:stdout) { should match(/rsa/) }
+    end
   end
 
   context 'updates certificate in nssdb if it changes' do
