@@ -1,5 +1,13 @@
 # Changelog
 
+## [12.1.0](https://github.com/theforeman/puppet-certs/tree/12.1.0) (2021-05-04)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/12.0.0...12.1.0)
+
+**Implemented enhancements:**
+
+- Allow Puppet 7 compatible versions of mods [\#325](https://github.com/theforeman/puppet-certs/pull/325) ([ekohl](https://github.com/ekohl))
+
 ## [12.0.0](https://github.com/theforeman/puppet-certs/tree/12.0.0) (2021-04-27)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/11.0.0...12.0.0)
