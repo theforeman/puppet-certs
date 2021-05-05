@@ -91,31 +91,16 @@ class certs::candlepin (
       unprotect     => true,
       strip         => true,
       password_file => $ca_key_password_file,
-    } ~>
+    }
+
     certs::keypair { 'tomcat':
-      key_pair  => Cert[$tomcat_cert_name],
-      key_file  => $tomcat_key,
-      cert_file => $tomcat_cert,
-    } ~>
-    file { $keystore_password_path:
-      ensure  => file,
-      content => $keystore_password,
-      owner   => 'root',
-      group   => $group,
-      mode    => '0440',
-    } ~>
-    exec { 'candlepin-generate-ssl-keystore':
-      command   => "openssl pkcs12 -export -in ${tomcat_cert} -inkey ${tomcat_key} -out ${keystore} -name tomcat -CAfile ${ca_cert} -caname root -password \"file:${keystore_password_path}\"",
-      unless    => "keytool -list -keystore ${keystore} -storepass:file ${keystore_password_path} -alias tomcat | grep $(openssl x509 -noout -fingerprint -sha256 -in ${tomcat_cert} | cut -d '=' -f 2)",
-      logoutput => 'on_failure',
-      path      => ['/bin/', '/usr/bin'],
-    } ~>
-    file { $keystore:
-      ensure => file,
-      owner  => 'root',
-      group  => $group,
-      mode   => '0640',
-    } ~>
+      key_pair    => Cert[$tomcat_cert_name],
+      key_file    => $tomcat_key,
+      cert_file   => $tomcat_cert,
+      manage_cert => true,
+      manage_key  => true,
+    }
+
     certs::keypair { 'candlepin':
       key_pair    => Cert[$java_client_cert_name],
       key_file    => $client_key,
@@ -128,6 +113,29 @@ class certs::candlepin (
       key_owner   => $user,
       key_group   => $client_keypair_group,
       key_mode    => '0440',
+    }
+
+    file { $keystore_password_path:
+      ensure  => file,
+      content => $keystore_password,
+      owner   => 'root',
+      group   => $group,
+      mode    => '0440',
+    }
+
+    keystore { "${keystore}:tomcat":
+      ensure        => 'present',
+      certificate   => $tomcat_cert,
+      private_key   => $tomcat_key,
+      ca_file       => $ca_cert,
+      password_file => $keystore_password_path,
+    }
+
+    file { $keystore:
+      ensure => file,
+      owner  => 'root',
+      group  => $group,
+      mode   => '0640',
     }
 
     file { $truststore_password_path:
