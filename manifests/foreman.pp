@@ -42,8 +42,9 @@ class certs::foreman (
       key_pair   => Cert[$client_cert_name],
       key_file   => $client_key,
       manage_key => true,
-      key_owner  => 'foreman',
-      key_mode   => '0400',
+      key_owner  => 'root',
+      key_group  => 'foreman',
+      key_mode   => '0440',
       cert_file  => $client_cert,
     } ->
     pubkey { $ssl_ca_cert:
