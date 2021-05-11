@@ -1,5 +1,6 @@
 # Pulp Client Certs
 class certs::pulp_client (
+  Enum['present', 'absent'] $ensure = 'present',
   $hostname    = $certs::node_fqdn,
   $cname       = $certs::cname,
   $generate    = $certs::generate,
@@ -23,6 +24,7 @@ class certs::pulp_client (
   $ssl_ca_cert      = $ca_cert
 
   cert { $client_cert_name:
+    ensure        => $ensure,
     hostname      => $hostname,
     cname         => $cname,
     common_name   => $common_name,
@@ -42,6 +44,7 @@ class certs::pulp_client (
 
   if $deploy {
     certs::keypair { 'pulp_client':
+      ensure     => $ensure,
       key_pair   => Cert[$client_cert_name],
       key_file   => $client_key,
       manage_key => true,
