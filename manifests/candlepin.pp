@@ -26,7 +26,6 @@ class certs::candlepin (
 ) inherits certs {
   $java_client_cert_name = 'java-client'
   $artemis_alias = 'artemis-client'
-  $artemis_client_dn = "CN=${hostname}, OU=${org_unit}, O=candlepin, ST=${state}, C=${country}"
 
   cert { $java_client_cert_name:
     ensure        => present,
@@ -76,6 +75,7 @@ class certs::candlepin (
   $client_cert = "${pki_dir}/certs/${java_client_cert_name}.crt"
   $client_key = "${pki_dir}/private/${java_client_cert_name}.key"
   $alias = 'candlepin-ca'
+  $artemis_client_dn = Deferred('certs::certificate_subject', [$client_cert])
 
   if $deploy {
     certs::keypair { 'candlepin-ca':
