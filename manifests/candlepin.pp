@@ -110,12 +110,7 @@ class certs::candlepin (
       unless    => "keytool -list -keystore ${keystore} -storepass:file ${keystore_password_path} -alias tomcat | grep $(openssl x509 -noout -fingerprint -sha256 -in ${tomcat_cert} | cut -d '=' -f 2)",
       logoutput => 'on_failure',
       path      => ['/bin/', '/usr/bin'],
-    } ~>
-    file { $keystore:
-      ensure => file,
-      owner  => 'root',
-      group  => $group,
-      mode   => '0640',
+      require   => Keystore[$keystore],
     } ~>
     certs::keypair { 'candlepin':
       key_pair    => Cert[$java_client_cert_name],
@@ -129,6 +124,14 @@ class certs::candlepin (
       key_owner   => $user,
       key_group   => $client_keypair_group,
       key_mode    => '0440',
+    }
+
+    keystore { $keystore:
+      ensure        => present,
+      password_file => $keystore_password_path,
+      owner         => 'root',
+      group         => $group,
+      mode          => '0640',
     }
 
     file { $truststore_password_path:
