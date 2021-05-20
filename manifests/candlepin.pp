@@ -143,6 +143,14 @@ class certs::candlepin (
       show_diff => false,
     }
 
+    truststore { $truststore:
+      ensure        => present,
+      password_file => $truststore_password_path,
+      owner         => 'root',
+      group         => $group,
+      mode          => '0640',
+    }
+
     truststore_certificate { "${truststore}:${alias}":
       ensure        => present,
       password_file => $truststore_password_path,
@@ -153,13 +161,6 @@ class certs::candlepin (
       ensure        => present,
       password_file => $truststore_password_path,
       certificate   => $client_cert,
-    }
-
-    file { $truststore:
-      ensure => file,
-      owner  => 'root',
-      group  => $group,
-      mode   => '0640',
     }
   }
 }
