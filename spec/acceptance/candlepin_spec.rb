@@ -182,7 +182,7 @@ describe 'certs' do
         }
       }
 
-      package { 'java-1.8.0-openjdk-headless':
+      package { 'java-11-openjdk-headless':
         ensure => installed,
       }
 
@@ -208,6 +208,46 @@ describe 'certs' do
       expect(truststore_output.output.strip).to include(fingerprint)
       expect(fingerprint).not_to equal(initial_fingerprint)
       expect(truststore_output.output.strip).not_to include(initial_fingerprint)
+    end
+  end
+
+  context 'updates keystore if the certificate changes' do
+    let(:pp) do
+      <<-EOS
+      user { 'tomcat':
+        ensure => present,
+      }
+      ['/usr/share/tomcat/conf', '/etc/candlepin/certs'].each |$dir| {
+        exec { "mkdir -p ${dir}":
+          creates => $dir,
+          path    => ['/bin', '/usr/bin'],
+        }
+      }
+      package { 'java-11-openjdk-headless':
+        ensure => installed,
+      }
+      include certs::candlepin
+      EOS
+    end
+
+    it "checks that the fingerprint matches" do
+      apply_manifest(pp, catch_failures: true)
+
+      initial_fingerprint_output = on default, 'openssl x509 -noout -fingerprint -sha256 -in /etc/pki/katello/certs/katello-tomcat.crt'
+      initial_fingerprint = initial_fingerprint_output.output.strip.split('=').last
+      initial_keystore_output = on default, "keytool -list -keystore /etc/candlepin/certs/keystore -storepass $(cat #{keystore_password_file})"
+      expect(initial_keystore_output.output.strip).to include(initial_fingerprint)
+
+      on default, "rm -rf /root/ssl-build/#{host_inventory['fqdn']}"
+      apply_manifest(pp, catch_failures: true)
+
+      fingerprint_output = on default, 'openssl x509 -noout -fingerprint -sha256 -in /etc/pki/katello/certs/katello-tomcat.crt'
+      fingerprint = fingerprint_output.output.strip.split('=').last
+      keystore_output = on default, "keytool -list -keystore /etc/candlepin/certs/keystore -storepass $(cat #{keystore_password_file})"
+
+      expect(keystore_output.output.strip).to include(fingerprint)
+      expect(fingerprint).not_to equal(initial_fingerprint)
+      expect(keystore_output.output.strip).not_to include(initial_fingerprint)
     end
   end
 end

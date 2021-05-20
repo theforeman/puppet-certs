@@ -70,8 +70,8 @@ class certs::candlepin (
 
   $keystore_password = extlib::cache_data('foreman_cache_data', $keystore_password_file, extlib::random_password(32))
   $truststore_password = extlib::cache_data('foreman_cache_data', $truststore_password_file, extlib::random_password(32))
-  $keystore_password_path = "${pki_dir}/keystore_password-file"
-  $truststore_password_path = "${pki_dir}/truststore_password-file"
+  $keystore_password_path = "${pki_dir}/${keystore_password_file}"
+  $truststore_password_path = "${pki_dir}/${truststore_password_file}"
   $client_req = "${pki_dir}/java-client.req"
   $client_cert = "${pki_dir}/certs/${java_client_cert_name}.crt"
   $client_key = "${pki_dir}/private/${java_client_cert_name}.key"
@@ -93,12 +93,36 @@ class certs::candlepin (
       unprotect     => true,
       strip         => true,
       password_file => $ca_key_password_file,
-    } ~>
+    }
+
     certs::keypair { 'tomcat':
-      key_pair  => Cert[$tomcat_cert_name],
-      key_file  => $tomcat_key,
-      cert_file => $tomcat_cert,
-    } ~>
+      key_pair    => Cert[$tomcat_cert_name],
+      key_file    => $tomcat_key,
+      manage_key  => true,
+      key_owner   => 'root',
+      key_group   => $client_keypair_group,
+      key_mode    => '0440',
+      cert_file   => $tomcat_cert,
+      manage_cert => true,
+      cert_owner  => 'root',
+      cert_group  => $client_keypair_group,
+      cert_mode   => '0440',
+    }
+
+    certs::keypair { 'candlepin':
+      key_pair    => Cert[$java_client_cert_name],
+      key_file    => $client_key,
+      cert_file   => $client_cert,
+      manage_cert => true,
+      cert_owner  => 'root',
+      cert_group  => $client_keypair_group,
+      cert_mode   => '0440',
+      manage_key  => true,
+      key_owner   => 'root',
+      key_group   => $client_keypair_group,
+      key_mode    => '0440',
+    }
+
     file { $keystore_password_path:
       ensure    => file,
       content   => $keystore_password,
@@ -106,26 +130,6 @@ class certs::candlepin (
       group     => $group,
       mode      => '0440',
       show_diff => false,
-    } ~>
-    exec { 'candlepin-generate-ssl-keystore':
-      command   => "openssl pkcs12 -export -in ${tomcat_cert} -inkey ${tomcat_key} -out ${keystore} -name tomcat -CAfile ${ca_cert} -caname root -password \"file:${keystore_password_path}\"",
-      unless    => "keytool -list -keystore ${keystore} -storepass:file ${keystore_password_path} -alias tomcat | grep $(openssl x509 -noout -fingerprint -sha256 -in ${tomcat_cert} | cut -d '=' -f 2)",
-      logoutput => 'on_failure',
-      path      => ['/bin/', '/usr/bin'],
-      require   => Keystore[$keystore],
-    } ~>
-    certs::keypair { 'candlepin':
-      key_pair    => Cert[$java_client_cert_name],
-      key_file    => $client_key,
-      cert_file   => $client_cert,
-      manage_cert => true,
-      cert_owner  => $user,
-      cert_group  => $client_keypair_group,
-      cert_mode   => '0440',
-      manage_key  => true,
-      key_owner   => $user,
-      key_group   => $client_keypair_group,
-      key_mode    => '0440',
     }
 
     keystore { $keystore:
@@ -134,6 +138,14 @@ class certs::candlepin (
       owner         => 'root',
       group         => $group,
       mode          => '0640',
+    }
+
+    keystore_certificate { "${keystore}:tomcat":
+      ensure        => present,
+      password_file => $keystore_password_path,
+      certificate   => $tomcat_cert,
+      private_key   => $tomcat_key,
+      ca            => $ca_cert,
     }
 
     file { $truststore_password_path:
