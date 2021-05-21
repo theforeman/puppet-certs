@@ -5,17 +5,17 @@ describe 'certs' do
   nssdb_password_file = "#{nssdb_dir}/nss_db_password-file"
 
   context 'with default params' do
-    let(:pp) do
-      <<-EOS
-      user { 'qpidd':
-        ensure => present,
-      }
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+        user { 'qpidd':
+          ensure => present,
+        }
 
-      include certs::qpid
-      EOS
+        include certs::qpid
+        PUPPET
+      end
     end
-
-    it_behaves_like 'a idempotent resource'
 
     describe x509_certificate("/etc/pki/katello/certs/#{host_inventory['fqdn']}-qpid-broker.crt") do
       it { should be_certificate }
@@ -72,13 +72,13 @@ describe 'certs' do
 
   context 'updates certificate in nssdb if it changes' do
     let(:pp) do
-      <<-EOS
+      <<-PUPPET
       user { 'qpidd':
         ensure => present,
       }
 
       include certs::qpid
-      EOS
+      PUPPET
     end
 
     it "checks that the fingerprint matches" do

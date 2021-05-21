@@ -2,15 +2,14 @@ require 'spec_helper_acceptance'
 
 describe 'certs::apache' do
   context 'with default parameters' do
-    let(:pp) do
-      'include certs::apache'
-    end
 
     it 'should force regeneration' do
       on hosts, "if [ -e /root/ssl-build/#{fact('fqdn')} ] ; then touch /root/ssl-build/#{fact('fqdn')}/#{fact('fqdn')}-apache.update ; fi"
     end
 
-    it_behaves_like 'a idempotent resource'
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) { 'include certs::apache' }
+    end
 
     describe x509_certificate('/etc/pki/katello/certs/katello-apache.crt') do
       it { should be_certificate }
@@ -44,16 +43,16 @@ describe 'certs::apache' do
       on hosts, "if [ -e /root/ssl-build/#{fact('fqdn')} ] ; then touch /root/ssl-build/#{fact('fqdn')}/#{fact('fqdn')}-apache.update ; fi"
     end
 
-    let(:pp) do
-      <<-EOS
-      class { '::certs::apache':
-        server_cert => '/server.crt',
-        server_key  => '/server.key',
-      }
-      EOS
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+        class { '::certs::apache':
+          server_cert => '/server.crt',
+          server_key  => '/server.key',
+        }
+        PUPPET
+      end
     end
-
-    it_behaves_like 'a idempotent resource'
 
     describe x509_certificate('/etc/pki/katello/certs/katello-apache.crt') do
       it { should be_certificate }

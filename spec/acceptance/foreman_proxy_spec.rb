@@ -18,11 +18,9 @@ describe 'certs::foreman_proxy' do
   end
 
   context 'with default parameters' do
-    let(:pp) do
-      'include certs::foreman_proxy'
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) { 'include certs::foreman_proxy' }
     end
-
-    it_behaves_like 'a idempotent resource'
 
     describe x509_certificate('/etc/foreman-proxy/ssl_cert.pem') do
       it { should be_certificate }
