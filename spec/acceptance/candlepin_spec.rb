@@ -5,28 +5,28 @@ describe 'certs' do
   truststore_password_file = '/etc/pki/katello/truststore_password-file'
 
   context 'with default params' do
-    let(:pp) do
-      <<-EOS
-      user { 'tomcat':
-        ensure => present,
-      }
-
-      ['/usr/share/tomcat/conf', '/etc/candlepin/certs'].each |$dir| {
-        exec { "mkdir -p ${dir}":
-          creates => $dir,
-          path    => ['/bin', '/usr/bin'],
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+        user { 'tomcat':
+          ensure => present,
         }
-      }
 
-      package { 'java-1.8.0-openjdk-headless':
-        ensure => installed,
-      }
+        ['/usr/share/tomcat/conf', '/etc/candlepin/certs'].each |$dir| {
+          exec { "mkdir -p ${dir}":
+            creates => $dir,
+            path    => ['/bin', '/usr/bin'],
+          }
+        }
 
-      include certs::candlepin
-      EOS
+        package { 'java-1.8.0-openjdk-headless':
+          ensure => installed,
+        }
+
+        include certs::candlepin
+        PUPPET
+      end
     end
-
-    it_behaves_like 'a idempotent resource'
 
     describe x509_certificate('/etc/pki/katello/certs/katello-tomcat.crt') do
       it { should be_certificate }
@@ -129,15 +129,15 @@ describe 'certs' do
   end
 
   describe 'with localhost' do
-    let(:pp) do
-      <<-PUPPET
-      class { 'certs::candlepin':
-        hostname => 'localhost',
-      }
-      PUPPET
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+        class { 'certs::candlepin':
+          hostname => 'localhost',
+        }
+        PUPPET
+      end
     end
-
-    it_behaves_like 'a idempotent resource'
   end
 
   describe x509_certificate('/etc/pki/katello/certs/katello-tomcat.crt') do
@@ -166,7 +166,7 @@ describe 'certs' do
 
   context 'updates java-client certificate in truststore if it changes' do
     let(:pp) do
-      <<-EOS
+      <<-PUPPET
       user { 'tomcat':
         ensure => present,
       }
@@ -183,7 +183,7 @@ describe 'certs' do
       }
 
       include certs::candlepin
-      EOS
+      PUPPET
     end
 
     it "checks that the fingerprint matches" do

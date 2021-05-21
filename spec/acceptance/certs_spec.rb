@@ -2,11 +2,9 @@ require 'spec_helper_acceptance'
 
 describe 'certs' do
   context 'with default params' do
-    let(:pp) do
-      'include certs'
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) { 'include certs' }
     end
-
-    it_behaves_like 'a idempotent resource'
 
     describe package('katello-certs-tools') do
       it { is_expected.to be_installed }
