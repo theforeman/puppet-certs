@@ -98,11 +98,12 @@ class certs::candlepin (
       cert_file => $tomcat_cert,
     } ~>
     file { $keystore_password_path:
-      ensure  => file,
-      content => $keystore_password,
-      owner   => 'root',
-      group   => $group,
-      mode    => '0440',
+      ensure    => file,
+      content   => $keystore_password,
+      owner     => 'root',
+      group     => $group,
+      mode      => '0440',
+      show_diff => false,
     } ~>
     exec { 'candlepin-generate-ssl-keystore':
       command   => "openssl pkcs12 -export -in ${tomcat_cert} -inkey ${tomcat_key} -out ${keystore} -name tomcat -CAfile ${ca_cert} -caname root -password \"file:${keystore_password_path}\"",
@@ -131,11 +132,12 @@ class certs::candlepin (
     }
 
     file { $truststore_password_path:
-      ensure  => file,
-      content => $truststore_password,
-      owner   => 'root',
-      group   => $group,
-      mode    => '0440',
+      ensure    => file,
+      content   => $truststore_password,
+      owner     => 'root',
+      group     => $group,
+      mode      => '0440',
+      show_diff => false,
     }
 
     truststore_certificate { "${truststore}:${alias}":
