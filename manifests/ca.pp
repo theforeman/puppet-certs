@@ -24,11 +24,12 @@ class certs::ca (
 ) {
 
   file { $ca_key_password_file:
-    ensure  => file,
-    content => $ca_key_password,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0400',
+    ensure    => file,
+    content   => $ca_key_password,
+    owner     => 'root',
+    group     => 'root',
+    mode      => '0400',
+    show_diff => false,
   } ~>
   ca { $default_ca_name:
     ensure        => present,
