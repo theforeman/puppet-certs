@@ -1,7 +1,6 @@
 require File.expand_path('../../katello_ssl_tool', __FILE__)
 
-Puppet::Type.type(:key_bundle).provide(:katello_ssl_tool, :parent => Puppet::Provider::KatelloSslTool::CertFile) do
-
+Puppet::Type.type(:key_bundle).provide(:katello_ssl_tool, parent: Puppet::Provider::KatelloSslTool::CertFile) do
   protected
 
   def expected_content
@@ -28,5 +27,4 @@ Puppet::Type.type(:key_bundle).provide(:katello_ssl_tool, :parent => Puppet::Pro
   def pubkey_source_path
     resource[:pubkey] || cert_details[:pubkey]
   end
-
 end

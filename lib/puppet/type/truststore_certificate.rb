@@ -4,20 +4,20 @@ Puppet::Type.newtype(:truststore_certificate) do
   ensurable
 
   def self.title_patterns
-    [ [ /(.+):(.+)/m, [ [:truststore], [:alias] ] ] ]
+    [[%r{(.+):(.+)}m, [[:truststore], [:alias]]]]
   end
 
-  newparam(:alias, :namevar => true) do
-    desc "The certificate alias used to store inside the truststore"
+  newparam(:alias, namevar: true) do
+    desc 'The certificate alias used to store inside the truststore'
   end
 
-  newparam(:truststore, :namevar => true) do
-    desc "Path to the truststore to use or create when importing the certificate"
+  newparam(:truststore, namevar: true) do
+    desc 'Path to the truststore to use or create when importing the certificate'
     isrequired
   end
 
   newproperty(:certificate) do
-    desc "Path to the certificate to add to the truststore"
+    desc 'Path to the certificate to add to the truststore'
 
     def fingerprint(file)
       provider.fingerprint(file)
@@ -33,7 +33,7 @@ Puppet::Type.newtype(:truststore_certificate) do
   end
 
   newparam(:password_file) do
-    desc "Path to file containing the truststore password"
+    desc 'Path to file containing the truststore password'
     isrequired
   end
 

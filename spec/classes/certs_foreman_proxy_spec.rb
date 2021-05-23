@@ -8,7 +8,7 @@ describe 'certs::foreman_proxy' do
       end
 
       describe 'with default parameters' do
-        it { should compile.with_all_deps }
+        it { is_expected.to compile.with_all_deps }
       end
     end
   end

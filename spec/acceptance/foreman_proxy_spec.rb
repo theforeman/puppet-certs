@@ -23,79 +23,79 @@ describe 'certs::foreman_proxy' do
     end
 
     describe x509_certificate('/etc/foreman-proxy/ssl_cert.pem') do
-      it { should be_certificate }
-      it { should be_valid }
-      it { should have_purpose 'server' }
+      it { is_expected.to be_certificate }
+      it { is_expected.to be_valid }
+      it { is_expected.to have_purpose 'server' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{FQDN}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { is_expected.to be >= 2048 }
     end
 
     describe file('/etc/foreman-proxy/ssl_cert.pem') do
-      it { should be_file }
-      it { should be_mode 444 }
-      it { should be_owned_by 'root' }
-      it { should be_grouped_into 'foreman-proxy' }
+      it { is_expected.to be_file }
+      it { is_expected.to be_mode 444 }
+      it { is_expected.to be_owned_by 'root' }
+      it { is_expected.to be_grouped_into 'foreman-proxy' }
     end
 
     describe x509_private_key('/etc/foreman-proxy/ssl_key.pem') do
-      it { should_not be_encrypted }
-      it { should be_valid }
-      it { should have_matching_certificate('/etc/foreman-proxy/ssl_cert.pem') }
+      it { is_expected.not_to be_encrypted }
+      it { is_expected.to be_valid }
+      it { is_expected.to have_matching_certificate('/etc/foreman-proxy/ssl_cert.pem') }
     end
 
     describe file('/etc/foreman-proxy/ssl_key.pem') do
-      it { should be_file }
-      it { should be_mode 440 }
-      it { should be_owned_by 'root' }
-      it { should be_grouped_into 'foreman-proxy' }
+      it { is_expected.to be_file }
+      it { is_expected.to be_mode 440 }
+      it { is_expected.to be_owned_by 'root' }
+      it { is_expected.to be_grouped_into 'foreman-proxy' }
     end
 
     describe x509_certificate('/etc/foreman-proxy/ssl_ca.pem') do
-      it { should be_certificate }
-      it { should be_valid }
-      it { should have_purpose 'server' }
+      it { is_expected.to be_certificate }
+      it { is_expected.to be_valid }
+      it { is_expected.to have_purpose 'server' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { is_expected.to be >= 2048 }
     end
 
     describe x509_certificate('/etc/foreman-proxy/foreman_ssl_cert.pem') do
-      it { should be_certificate }
-      it { should be_valid }
-      it { should have_purpose 'client' }
+      it { is_expected.to be_certificate }
+      it { is_expected.to be_valid }
+      it { is_expected.to have_purpose 'client' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{FQDN}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { is_expected.to be >= 2048 }
     end
 
     describe file('/etc/foreman-proxy/foreman_ssl_cert.pem') do
-      it { should be_file }
-      it { should be_mode 444 }
-      it { should be_owned_by 'root' }
-      it { should be_grouped_into 'foreman-proxy' }
+      it { is_expected.to be_file }
+      it { is_expected.to be_mode 444 }
+      it { is_expected.to be_owned_by 'root' }
+      it { is_expected.to be_grouped_into 'foreman-proxy' }
     end
 
     describe x509_private_key('/etc/foreman-proxy/foreman_ssl_key.pem') do
-      it { should_not be_encrypted }
-      it { should be_valid }
-      it { should have_matching_certificate('/etc/foreman-proxy/foreman_ssl_cert.pem') }
+      it { is_expected.not_to be_encrypted }
+      it { is_expected.to be_valid }
+      it { is_expected.to have_matching_certificate('/etc/foreman-proxy/foreman_ssl_cert.pem') }
     end
 
     describe file('/etc/foreman-proxy/foreman_ssl_key.pem') do
-      it { should be_file }
-      it { should be_mode 440 }
-      it { should be_owned_by 'root' }
-      it { should be_grouped_into 'foreman-proxy' }
+      it { is_expected.to be_file }
+      it { is_expected.to be_mode 440 }
+      it { is_expected.to be_owned_by 'root' }
+      it { is_expected.to be_grouped_into 'foreman-proxy' }
     end
 
     describe x509_certificate('/etc/foreman-proxy/foreman_ssl_ca.pem') do
-      it { should be_certificate }
-      it { should be_valid }
-      it { should have_purpose 'server' }
+      it { is_expected.to be_certificate }
+      it { is_expected.to be_valid }
+      it { is_expected.to have_purpose 'server' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { is_expected.to be >= 2048 }
     end
   end
 end

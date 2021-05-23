@@ -18,55 +18,55 @@ describe 'certs' do
     end
 
     describe x509_certificate("/etc/pki/katello/certs/#{host_inventory['fqdn']}-qpid-broker.crt") do
-      it { should be_certificate }
-      it { should be_valid }
-      it { should have_purpose 'server' }
+      it { is_expected.to be_certificate }
+      it { is_expected.to be_valid }
+      it { is_expected.to have_purpose 'server' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, O = pulp, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { is_expected.to be >= 2048 }
     end
 
     describe x509_private_key("/etc/pki/katello/private/#{host_inventory['fqdn']}-qpid-broker.key") do
-      it { should_not be_encrypted }
-      it { should be_valid }
-      it { should have_matching_certificate("/etc/pki/katello/certs/#{host_inventory['fqdn']}-qpid-broker.crt") }
+      it { is_expected.not_to be_encrypted }
+      it { is_expected.to be_valid }
+      it { is_expected.to have_matching_certificate("/etc/pki/katello/certs/#{host_inventory['fqdn']}-qpid-broker.crt") }
     end
 
     describe file(nssdb_password_file) do
-      it { should be_file }
-      it { should be_mode 640 }
-      it { should be_owned_by 'root' }
-      it { should be_grouped_into 'qpidd' }
+      it { is_expected.to be_file }
+      it { is_expected.to be_mode 640 }
+      it { is_expected.to be_owned_by 'root' }
+      it { is_expected.to be_grouped_into 'qpidd' }
     end
 
     describe file(nssdb_dir) do
-      it { should be_directory }
-      it { should be_mode 755 }
-      it { should be_owned_by 'root' }
-      it { should be_grouped_into 'qpidd' }
+      it { is_expected.to be_directory }
+      it { is_expected.to be_mode 755 }
+      it { is_expected.to be_owned_by 'root' }
+      it { is_expected.to be_grouped_into 'qpidd' }
     end
 
     describe command("certutil -L -d #{nssdb_dir}") do
-      its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/^ca                                                           CT,C,c$/i) }
-      its(:stdout) { should match(/^broker                                                       u,u,u$/i) }
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match(%r{^ca                                                           CT,C,c$}i) }
+      its(:stdout) { is_expected.to match(%r{^broker                                                       u,u,u$}i) }
     end
 
     describe command("certutil -L -d #{nssdb_dir} -n ca") do
-      its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/\s*Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleig\n\s*h,ST=North Carolina,C=US"/) }
-      its(:stdout) { should match(/\s*Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh\n\s*,ST=North Carolina,C=US"/) }
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match(%r{\s*Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleig\n\s*h,ST=North Carolina,C=US"}) }
+      its(:stdout) { is_expected.to match(%r{\s*Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh\n\s*,ST=North Carolina,C=US"}) }
     end
 
     describe command("certutil -L -d #{nssdb_dir} -n broker") do
-      its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/\s*Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=pulp,ST=North Ca\n\s*rolina,C=US"/) }
-      its(:stdout) { should match(/\s*Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh\n\s*,ST=North Carolina,C=US"/) }
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match(%r{\s*Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=pulp,ST=North Ca\n\s*rolina,C=US"}) }
+      its(:stdout) { is_expected.to match(%r{\s*Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh\n\s*,ST=North Carolina,C=US"}) }
     end
 
     describe command("certutil -K -d #{nssdb_dir} -f #{nssdb_password_file} -n broker") do
-      its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/rsa/) }
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to match(%r{rsa}) }
     end
   end
 
@@ -81,7 +81,7 @@ describe 'certs' do
       PUPPET
     end
 
-    it "checks that the fingerprint matches" do
+    it 'checks that the fingerprint matches' do
       apply_manifest(pp, catch_failures: true)
 
       initial_fingerprint_output = on default, "openssl x509 -noout -fingerprint -sha256 -in /etc/pki/katello/certs/#{host_inventory['fqdn']}-qpid-broker.crt"

@@ -6,11 +6,11 @@ describe 'privkey' do
   it { is_expected.to be_valid_type.with_provider(:katello_ssl_tool) }
 
   describe 'autorequiring' do
-    before :each do
+    before do
       @catalog = Puppet::Resource::Catalog.new
     end
 
-    it "should autorequire files" do
+    it 'autorequires files' do
       @parent = Puppet::Type.type(:file).new(name: '/etc/pki/katello/private')
       @catalog.add_resource @parent
 

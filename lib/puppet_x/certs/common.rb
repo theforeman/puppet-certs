@@ -1,14 +1,13 @@
 module PuppetX
   module Certs
     module Common
-
-      CERT_COMMON_PARAMS = Proc.new do
+      CERT_COMMON_PARAMS = proc do
         ensurable
 
         # make ensure present default
         define_method(:managed?) { true }
 
-        newparam(:name, :namevar => true)
+        newparam(:name, namevar: true)
 
         newparam(:custom_pubkey)
 
@@ -52,16 +51,16 @@ module PuppetX
         end
 
         autorequire(:ca) do
-          if @parameters.has_key?(:ca)
+          if @parameters.key?(:ca)
             catalog.resource(@parameters[:ca].value.to_s).to_hash[:name]
           end
         end
       end
 
-      FILE_COMMON_PARAMS = Proc.new do
+      FILE_COMMON_PARAMS = proc do
         ensurable
 
-        newparam(:path, :namevar => true)
+        newparam(:path, namevar: true)
 
         newparam(:password_file)
 
@@ -81,7 +80,7 @@ module PuppetX
         end
 
         define_method(:autorequire_cert) do |type|
-          if @parameters.has_key?(:key_pair)
+          if @parameters.key?(:key_pair)
             key_pair = catalog.resource(@parameters[:key_pair].value.to_s)
             key_pair.to_hash[:name] if key_pair && key_pair.type == type
           end
@@ -100,13 +99,11 @@ module PuppetX
         autorequire(:file) do
           req = []
           path = Pathname.new(self[:path])
-          if !path.root?
+          unless path.root?
             # Start at our parent, to avoid autorequiring ourself
             parents = path.parent.enum_for(:ascend)
             found = parents.find { |p| catalog.resource(:file, p.to_s) }
-            if found
-              req << found.to_s
-            end
+            req << found.to_s if found
           end
           req
         end
