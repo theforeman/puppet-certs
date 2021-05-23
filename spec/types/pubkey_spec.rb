@@ -6,21 +6,19 @@ describe 'pubkey' do
   it { is_expected.to be_valid_type.with_provider(:katello_ssl_tool) }
 
   describe 'autorequiring' do
-    before do
-      @catalog = Puppet::Resource::Catalog.new
-    end
+    let(:catalog) { Puppet::Resource::Catalog.new }
 
     it 'autorequires files' do
-      @parent = Puppet::Type.type(:file).new(name: '/etc/pki/katello/private')
-      @catalog.add_resource @parent
+      parent = Puppet::Type.type(:file).new(name: '/etc/pki/katello/private')
+      catalog.add_resource parent
 
-      @resource = Puppet::Type.type(:pubkey).new(name: title, path: '/etc/pki/katello/private/key.pem')
-      @catalog.add_resource @resource
+      resource = Puppet::Type.type(:pubkey).new(name: title, path: '/etc/pki/katello/private/key.pem')
+      catalog.add_resource resource
 
-      req = @resource.autorequire
+      req = resource.autorequire
       expect(req.size).to eq(1)
-      expect(req[0].target).to eq(@resource)
-      expect(req[0].source).to eq(@parent)
+      expect(req[0].target).to eq(resource)
+      expect(req[0].source).to eq(parent)
     end
   end
 end

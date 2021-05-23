@@ -4,7 +4,7 @@ describe 'certs::foreman_proxy' do
   FQDN = fact('fqdn')
 
   before(:all) do
-    manifest = <<~MANIFEST
+    manifest = <<-MANIFEST
       file { '/etc/foreman-proxy':
         ensure => directory,
       }

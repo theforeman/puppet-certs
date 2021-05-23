@@ -94,7 +94,7 @@ describe 'certs' do
 
       fingerprint_output = on default, "openssl x509 -noout -fingerprint -sha256 -in /root/ssl-build/#{host_inventory['fqdn']}/#{host_inventory['fqdn']}-qpid-broker.crt"
       fingerprint = fingerprint_output.output.strip.split('=').last
-      initial_truststore_output = on default, "certutil -L -d #{nssdb_dir} -n broker"
+      on default, "certutil -L -d #{nssdb_dir} -n broker"
       truststore_output = on default, "certutil -L -d #{nssdb_dir} -n broker"
 
       expect(truststore_output.output.strip).to include(fingerprint)
