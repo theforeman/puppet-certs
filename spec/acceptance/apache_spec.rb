@@ -2,8 +2,7 @@ require 'spec_helper_acceptance'
 
 describe 'certs::apache' do
   context 'with default parameters' do
-
-    it 'should force regeneration' do
+    it 'forces regeneration' do
       on hosts, "if [ -e /root/ssl-build/#{fact('fqdn')} ] ; then touch /root/ssl-build/#{fact('fqdn')}/#{fact('fqdn')}-apache.update ; fi"
     end
 
@@ -12,28 +11,28 @@ describe 'certs::apache' do
     end
 
     describe x509_certificate('/etc/pki/katello/certs/katello-apache.crt') do
-      it { should be_certificate }
-      it { should be_valid }
-      it { should have_purpose 'server' }
+      it { is_expected.to be_certificate }
+      it { is_expected.to be_valid }
+      it { is_expected.to have_purpose 'server' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { is_expected.to be >= 2048 }
     end
 
     describe x509_private_key('/etc/pki/katello/private/katello-apache.key') do
-      it { should_not be_encrypted }
-      it { should be_valid }
-      it { should have_matching_certificate('/etc/pki/katello/certs/katello-apache.crt') }
+      it { is_expected.not_to be_encrypted }
+      it { is_expected.to be_valid }
+      it { is_expected.to have_matching_certificate('/etc/pki/katello/certs/katello-apache.crt') }
     end
 
     describe package("#{fact('fqdn')}-apache") do
-      it { should be_installed }
+      it { is_expected.to be_installed }
     end
   end
 
   context 'with server cert' do
     before(:context) do
-      ['crt', 'key'].each do |ext|
+      %w[crt key].each do |ext|
         source_path = "fixtures/example.partial.solutions.#{ext}"
         dest_path = "/server.#{ext}"
         scp_to(hosts, source_path, dest_path)
@@ -55,22 +54,22 @@ describe 'certs::apache' do
     end
 
     describe x509_certificate('/etc/pki/katello/certs/katello-apache.crt') do
-      it { should be_certificate }
+      it { is_expected.to be_certificate }
       # Doesn't have to be valid - can be expired since it's a static resource
-      it { should have_purpose 'server' }
+      it { is_expected.to have_purpose 'server' }
       include_examples 'certificate issuer', 'CN = Fake LE Intermediate X1'
       include_examples 'certificate subject', 'CN = example.partial.solutions'
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { is_expected.to be >= 2048 }
     end
 
     describe x509_private_key('/etc/pki/katello/private/katello-apache.key') do
-      it { should_not be_encrypted }
-      it { should be_valid }
-      it { should have_matching_certificate('/etc/pki/katello/certs/katello-apache.crt') }
+      it { is_expected.not_to be_encrypted }
+      it { is_expected.to be_valid }
+      it { is_expected.to have_matching_certificate('/etc/pki/katello/certs/katello-apache.crt') }
     end
 
     describe package("#{fact('fqdn')}-apache") do
-      it { should be_installed }
+      it { is_expected.to be_installed }
     end
   end
 end

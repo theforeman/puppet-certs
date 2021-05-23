@@ -1,7 +1,7 @@
 Puppet::Type.type(:nssdb_certificate).provide(:certutil) do
-  commands :certutil => 'certutil'
-  commands :openssl => 'openssl'
-  commands :pk12util => 'pk12util'
+  commands certutil: 'certutil'
+  commands openssl: 'openssl'
+  commands pk12util: 'pk12util'
 
   def create
     add_certificate
@@ -21,7 +21,7 @@ Puppet::Type.type(:nssdb_certificate).provide(:certutil) do
     nssdb_fingerprint
   end
 
-  def certificate=(value)
+  def certificate=(_value)
     delete_certificate unless nssdb_content.nil?
     add_certificate
   end
@@ -45,7 +45,7 @@ Puppet::Type.type(:nssdb_certificate).provide(:certutil) do
       '-n', resource[:cert_name],
       '-t', resource[:trustargs],
       '-i', resource[:certificate],
-      '-f', resource[:password_file]
+      '-f', resource[:password_file],
     )
   end
 
@@ -53,7 +53,7 @@ Puppet::Type.type(:nssdb_certificate).provide(:certutil) do
     certutil(
       '-D',
       '-d', resource[:nssdb],
-      '-n', resource[:cert_name]
+      '-n', resource[:cert_name],
     )
   end
 
@@ -66,14 +66,14 @@ Puppet::Type.type(:nssdb_certificate).provide(:certutil) do
         '-inkey', resource[:private_key],
         '-out', pkcs12.path,
         '-password', "file:#{resource[:password_file]}",
-        '-name', resource[:cert_name]
+        '-name', resource[:cert_name],
       )
 
       pk12util(
         '-i', pkcs12.path,
         '-d', resource[:nssdb],
         '-w', resource[:password_file],
-        '-k', resource[:password_file]
+        '-k', resource[:password_file],
       )
     end
   end
@@ -82,7 +82,7 @@ Puppet::Type.type(:nssdb_certificate).provide(:certutil) do
     certutil(
       '-F',
       '-d', resource[:nssdb],
-      '-n', resource[:cert_name]
+      '-n', resource[:cert_name],
     )
   end
 
@@ -93,7 +93,7 @@ Puppet::Type.type(:nssdb_certificate).provide(:certutil) do
       '-L',
       '-a',
       '-d', resource[:nssdb],
-      '-n', resource[:cert_name]
+      '-n', resource[:cert_name],
     )
   rescue Puppet::ExecutionFailure => e
     Puppet.debug("Failed to read nssdb contents from #{resource[:nssdb]}: #{e}")

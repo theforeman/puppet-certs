@@ -16,7 +16,6 @@ class certs::pulp_client (
   $ca_key_password_file    = $certs::ca_key_password_file,
   $group                   = $certs::group,
 ) inherits certs {
-
   $client_cert_name = 'pulp-client'
   $client_cert      = "${pki_dir}/certs/${client_cert_name}.crt"
   $client_key       = "${pki_dir}/private/${client_cert_name}.key"

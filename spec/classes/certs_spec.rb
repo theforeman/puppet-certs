@@ -7,8 +7,8 @@ describe 'certs' do
         os_facts
       end
 
-      it { should contain_class('certs::install') }
-      it { should contain_class('certs::config') }
+      it { is_expected.to contain_class('certs::install') }
+      it { is_expected.to contain_class('certs::config') }
     end
   end
 end

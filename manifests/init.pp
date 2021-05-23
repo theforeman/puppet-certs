@@ -93,7 +93,6 @@ class certs (
   String $server_ca_name = 'katello-server-ca',
   Optional[Stdlib::Absolutepath] $tar_file = undef,
 ) inherits certs::params {
-
   if $server_cert {
     validate_file_exists($server_cert, $server_key, $server_ca_cert)
     if $server_cert_req {

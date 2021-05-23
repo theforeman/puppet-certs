@@ -7,7 +7,7 @@ describe 'certs::qpid' do
         os_facts
       end
 
-      describe "with default parameters" do
+      describe 'with default parameters' do
         it { is_expected.to compile.with_all_deps }
 
         it do

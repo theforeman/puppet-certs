@@ -1,8 +1,7 @@
 require 'fileutils'
 require File.expand_path('../../katello_ssl_tool', __FILE__)
 
-Puppet::Type.type(:ca).provide(:katello_ssl_tool, :parent => Puppet::Provider::KatelloSslTool::Cert) do
-
+Puppet::Type.type(:ca).provide(:katello_ssl_tool, parent: Puppet::Provider::KatelloSslTool::Cert) do
   protected
 
   def generate!
@@ -13,7 +12,7 @@ Puppet::Type.type(:ca).provide(:katello_ssl_tool, :parent => Puppet::Provider::K
                        '--ca-cert-dir', target_path('certs'),
                        '--ca-cert', File.basename(pubkey),
                        '--ca-cert-rpm', rpmfile_base_name,
-                       '--rpm-only')
+                       '--rpm-only',)
     else
       katello_ssl_tool('--gen-ca',
                        '-p', "file:#{resource[:password_file]}",
@@ -23,7 +22,7 @@ Puppet::Type.type(:ca).provide(:katello_ssl_tool, :parent => Puppet::Provider::K
                        '--ca-cert', File.basename(pubkey),
                        '--ca-key', File.basename(privkey),
                        '--ca-cert-rpm', rpmfile_base_name,
-                       *common_args)
+                       *common_args,)
 
     end
     super
@@ -38,12 +37,12 @@ Puppet::Type.type(:ca).provide(:katello_ssl_tool, :parent => Puppet::Provider::K
   end
 
   def deploy!
-    if File.exists?(rpmfile)
+    if File.exist?(rpmfile)
       # the rpm is available locally on the file system
       rpm('-Uvh', '--force', rpmfile)
     else
       # we search the rpm in yum repo
-      yum("install", "-y", rpmfile_base_name)
+      yum('install', '-y', rpmfile_base_name)
     end
   end
 
@@ -54,5 +53,4 @@ Puppet::Type.type(:ca).provide(:katello_ssl_tool, :parent => Puppet::Provider::K
   def self.privkey(name)
     build_path("#{name}.key")
   end
-
 end

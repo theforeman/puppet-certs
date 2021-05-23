@@ -2,7 +2,7 @@
 class certs::ssltools::nssdb (
   $nss_db_dir = $certs::nss_db_dir,
   $group = 'qpidd',
-)  {
+) {
   Exec { logoutput => 'on_failure' }
 
   $nss_db_password_file   = "${nss_db_dir}/nss_db_password-file"

@@ -3,7 +3,6 @@ class certs::config (
   $pki_dir = $certs::pki_dir,
   $group   = $certs::group,
 ) {
-
   file { $pki_dir:
     ensure => directory,
     owner  => 'root',
@@ -24,5 +23,4 @@ class certs::config (
     group  => $group,
     mode   => '0750',
   }
-
 }

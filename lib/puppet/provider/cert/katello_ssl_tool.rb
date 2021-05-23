@@ -1,15 +1,14 @@
 require 'fileutils'
 require File.expand_path('../../katello_ssl_tool', __FILE__)
 
-Puppet::Type.type(:cert).provide(:katello_ssl_tool, :parent => Puppet::Provider::KatelloSslTool::Cert) do
-
+Puppet::Type.type(:cert).provide(:katello_ssl_tool, parent: Puppet::Provider::KatelloSslTool::Cert) do
   def generate!
-    args = [ "--gen-#{resource[:purpose]}",
-              '--set-hostname', resource[:hostname],
-              '--server-cert', File.basename(pubkey),
-              '--server-cert-req', File.basename(req_file),
-              '--server-key', File.basename(privkey),
-              '--server-rpm', rpmfile_base_name ]
+    args = ["--gen-#{resource[:purpose]}",
+            '--set-hostname', resource[:hostname],
+            '--server-cert', File.basename(pubkey),
+            '--server-cert-req', File.basename(req_file),
+            '--server-key', File.basename(privkey),
+            '--server-rpm', rpmfile_base_name]
 
     if resource[:custom_pubkey]
       FileUtils.mkdir_p(build_path)
@@ -27,16 +26,16 @@ Puppet::Type.type(:cert).provide(:katello_ssl_tool, :parent => Puppet::Provider:
                    '--set-hostname', resource[:hostname],
                    '--set-common-name', resource[:common_name],
                    '--ca-cert', ca_details[:pubkey],
-                   '--ca-key', ca_details[:privkey]])
+                   '--ca-key', ca_details[:privkey]],)
       args.concat(common_args)
     end
 
     if resource[:cname]
-      if resource[:cname].is_a?(String)
-        args << ['--set-cname', resource[:cname]]
-      else
-        args << resource[:cname].map { |cname| ['--set-cname', cname] }.flatten
-      end
+      args << if resource[:cname].is_a?(String)
+                ['--set-cname', resource[:cname]]
+              else
+                resource[:cname].map { |cname| ['--set-cname', cname] }.flatten
+              end
     end
 
     katello_ssl_tool(*args)
@@ -46,7 +45,7 @@ Puppet::Type.type(:cert).provide(:katello_ssl_tool, :parent => Puppet::Provider:
   protected
 
   def req_file
-    "#{self.pubkey}.req"
+    "#{pubkey}.req"
   end
 
   def build_path(file_name = '')

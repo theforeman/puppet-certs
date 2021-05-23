@@ -19,7 +19,6 @@ class certs::foreman_proxy_content (
   Stdlib::Fqdn $parent_fqdn = $certs::foreman_proxy_content::params::parent_fqdn,
   Array[Stdlib::Fqdn] $foreman_proxy_cname = $certs::foreman_proxy_content::params::foreman_proxy_cname,
 ) inherits certs::foreman_proxy_content::params {
-
   if $foreman_proxy_fqdn == $facts['networking']['fqdn'] {
     fail('The hostname is the same as the provided hostname for the foreman-proxy')
   }
