@@ -1,5 +1,5 @@
 # type to append cert to nssdb
-define certs::ssltools::certutil($nss_db_dir, $client_cert, $cert_name=$title, $refreshonly = true, $trustargs = ',,') {
+define certs::ssltools::certutil ($nss_db_dir, $client_cert, $cert_name=$title, $refreshonly = true, $trustargs = ',,') {
   include certs::ssltools::nssdb
 
   # lint:ignore:relative_classname_reference

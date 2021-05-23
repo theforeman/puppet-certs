@@ -8,7 +8,7 @@
 #
 # $foreman_proxy_fqdn::         FQDN of the foreman proxy
 #
-define certs::tar_create(
+define certs::tar_create (
   $path               = $title,
   $foreman_proxy_fqdn = $certs::foreman_proxy_content::foreman_proxy_fqdn,
 ) {

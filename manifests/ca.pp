@@ -22,7 +22,6 @@ class certs::ca (
   $ca_key_password         = $certs::ca_key_password,
   $ca_key_password_file    = $certs::ca_key_password_file,
 ) {
-
   file { $ca_key_password_file:
     ensure    => file,
     content   => $ca_key_password,

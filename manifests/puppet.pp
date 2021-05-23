@@ -20,7 +20,6 @@ class certs::puppet (
 
   $pki_dir              = $certs::pki_dir,
 ) inherits certs {
-
   $puppet_client_cert_name = "${hostname}-puppet-client"
 
   # cert for authentication of puppetmaster against foreman

@@ -16,7 +16,6 @@ class certs::foreman (
   $ca_key_password_file  = $certs::ca_key_password_file,
   $server_ca             = $certs::server_ca,
 ) inherits certs::params {
-
   $client_cert_name = "${hostname}-foreman-client"
 
   # cert for authentication of puppetmaster against foreman

@@ -19,7 +19,6 @@ class certs::apache (
   $ca_key_password_file = $certs::ca_key_password_file,
   $group                = $certs::group,
 ) inherits certs {
-
   $apache_cert_name = "${hostname}-apache"
   $apache_cert = "${pki_dir}/certs/katello-apache.crt"
   $apache_key  = "${pki_dir}/private/katello-apache.key"
