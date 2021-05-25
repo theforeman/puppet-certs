@@ -19,7 +19,7 @@ describe 'certs' do
           }
         }
 
-        package { 'java-1.8.0-openjdk-headless':
+        package { 'java-11-openjdk-headless':
           ensure => installed,
         }
 

@@ -28,7 +28,7 @@ Puppet::Type.type(:keystore).provide(:keytool) do
         '-dname', "CN=#{temp_alias}"
       )
     rescue Puppet::ExecutionFailure => e
-      Puppet.error("Failed to generate new keystore with temporary entry: #{e}")
+      Puppet.err("Failed to generate new keystore with temporary entry: #{e}")
       return nil
     end
 
@@ -40,7 +40,7 @@ Puppet::Type.type(:keystore).provide(:keytool) do
         '-alias', temp_alias
       )
     rescue Puppet::ExecutionFailure => e
-      Puppet.error("Failed to delete temporary entry when generating empty keystore: #{e}")
+      Puppet.err("Failed to delete temporary entry when generating empty keystore: #{e}")
       return nil
     end
   end
