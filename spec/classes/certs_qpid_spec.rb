@@ -31,7 +31,7 @@ describe 'certs::qpid' do
             .with_ensure('present')
             .with_certificate('/etc/pki/katello/certs/katello-default-ca.crt')
             .with_trustargs('TCu,Cu,Tuw')
-            .with_password_file('/etc/pki/katello/nssdb/nss_db_password-file')
+            .with_password_file('/etc/pki/katello/nss_db_password-file')
         end
 
         it do
@@ -40,7 +40,7 @@ describe 'certs::qpid' do
             .with_certificate('/etc/pki/katello/certs/foo.example.com-qpid-broker.crt')
             .with_private_key('/etc/pki/katello/private/foo.example.com-qpid-broker.key')
             .with_trustargs(',,')
-            .with_password_file('/etc/pki/katello/nssdb/nss_db_password-file')
+            .with_password_file('/etc/pki/katello/nss_db_password-file')
         end
       end
     end
