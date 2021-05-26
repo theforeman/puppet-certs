@@ -101,8 +101,6 @@ class certs (
     }
   }
 
-  $nss_db_dir   = "${pki_dir}/nssdb"
-
   $ca_key = "${pki_dir}/private/${default_ca_name}.key"
   $ca_cert = "${pki_dir}/certs/${default_ca_name}.crt"
   $ca_cert_stripped = "${pki_dir}/certs/${default_ca_name}-stripped.crt"

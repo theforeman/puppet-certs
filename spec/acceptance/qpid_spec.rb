@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 describe 'certs' do
   nssdb_dir = '/etc/pki/katello/nssdb'
-  nssdb_password_file = "#{nssdb_dir}/nss_db_password-file"
+  nssdb_password_file = "/etc/pki/katello/nss_db_password-file"
 
   before(:all) do
     on default, 'rm -rf /root/ssl-build'
@@ -45,7 +45,7 @@ describe 'certs' do
 
     describe file(nssdb_dir) do
       it { should be_directory }
-      it { should be_mode 755 }
+      it { should be_mode 750 }
       it { should be_owned_by 'root' }
       it { should be_grouped_into 'qpidd' }
     end
