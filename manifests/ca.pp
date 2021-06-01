@@ -43,6 +43,7 @@ class certs::ca (
     generate      => $generate,
     deploy        => $deploy,
     password_file => $ca_key_password_file,
+    build_dir     => $certs::ssl_build_dir,
   }
   $default_ca = Ca[$default_ca_name]
 
@@ -52,13 +53,15 @@ class certs::ca (
       generate      => $generate,
       deploy        => $deploy,
       custom_pubkey => $certs::server_ca_cert,
+      build_dir     => $certs::ssl_build_dir,
     }
   } else {
     ca { $server_ca_name:
-      ensure   => present,
-      generate => $generate,
-      deploy   => $deploy,
-      ca       => $default_ca,
+      ensure    => present,
+      generate  => $generate,
+      deploy    => $deploy,
+      ca        => $default_ca,
+      build_dir => $certs::ssl_build_dir,
     }
   }
   $server_ca = Ca[$server_ca_name]

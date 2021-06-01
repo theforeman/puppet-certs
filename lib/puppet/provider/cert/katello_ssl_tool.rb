@@ -5,6 +5,7 @@ Puppet::Type.type(:cert).provide(:katello_ssl_tool, :parent => Puppet::Provider:
 
   def generate!
     args = [ "--gen-#{resource[:purpose]}",
+              '--dir', resource[:build_dir],
               '--set-hostname', resource[:hostname],
               '--server-cert', File.basename(pubkey),
               '--server-cert-req', File.basename(req_file),
