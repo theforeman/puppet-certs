@@ -54,14 +54,14 @@ describe 'certs' do
 
     describe command("certutil -L -d #{nssdb_dir} -n ca") do
       its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/\s*Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleig\n\s*h,ST=North Carolina,C=US"/) }
-      its(:stdout) { should match(/\s*Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh\n\s*,ST=North Carolina,C=US"/) }
+      its(:stdout) { should match_without_whitespace(/Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US"/) }
+      its(:stdout) { should match_without_whitespace(/Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US"/) }
     end
 
     describe command("certutil -L -d #{nssdb_dir} -n broker") do
       its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/\s*Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=pulp,ST=North Ca\n\s*rolina,C=US"/) }
-      its(:stdout) { should match(/\s*Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh\n\s*,ST=North Carolina,C=US"/) }
+      its(:stdout) { should match_without_whitespace(/Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=pulp,ST=North Carolina,C=US"/) }
+      its(:stdout) { should match_without_whitespace(/Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US"/) }
     end
 
     describe command("certutil -K -d #{nssdb_dir} -f #{nssdb_password_file} -n broker") do
