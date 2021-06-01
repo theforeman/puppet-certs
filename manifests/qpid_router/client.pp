@@ -37,6 +37,7 @@ class certs::qpid_router::client (
     deploy        => $deploy,
     purpose       => 'client',
     password_file => $ca_key_password_file,
+    build_dir     => $certs::ssl_build_dir,
   }
 
   if $deploy {

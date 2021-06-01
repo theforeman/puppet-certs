@@ -10,12 +10,14 @@ Puppet::Type.type(:ca).provide(:katello_ssl_tool, :parent => Puppet::Provider::K
       FileUtils.mkdir_p(build_path)
       FileUtils.cp(existing_pubkey, build_path(File.basename(pubkey)))
       katello_ssl_tool('--gen-ca',
+                       '--dir', resource[:build_dir],
                        '--ca-cert-dir', target_path('certs'),
                        '--ca-cert', File.basename(pubkey),
                        '--ca-cert-rpm', rpmfile_base_name,
                        '--rpm-only')
     else
       katello_ssl_tool('--gen-ca',
+                       '--dir', resource[:build_dir],
                        '-p', "file:#{resource[:password_file]}",
                        '--force',
                        '--ca-cert-dir', target_path('certs'),

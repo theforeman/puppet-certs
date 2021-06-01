@@ -43,6 +43,7 @@ class certs::candlepin (
     regenerate    => $regenerate,
     deploy        => $deploy,
     password_file => $ca_key_password_file,
+    build_dir     => $certs::ssl_build_dir,
   }
 
   $tomcat_cert_name = "${hostname}-tomcat"
@@ -64,6 +65,7 @@ class certs::candlepin (
     regenerate    => $regenerate,
     deploy        => $deploy,
     password_file => $ca_key_password_file,
+    build_dir     => $certs::ssl_build_dir,
   }
 
   $keystore_password = extlib::cache_data('foreman_cache_data', $keystore_password_file, extlib::random_password(32))

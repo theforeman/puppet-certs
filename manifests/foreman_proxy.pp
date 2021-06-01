@@ -48,6 +48,7 @@ class certs::foreman_proxy (
       custom_pubkey  => $server_cert,
       custom_privkey => $server_key,
       custom_req     => $server_cert_req,
+      build_dir      => $certs::ssl_build_dir,
     }
   } else {
     # cert for ssl of foreman-proxy
@@ -66,6 +67,7 @@ class certs::foreman_proxy (
       regenerate    => $regenerate,
       deploy        => $deploy,
       password_file => $ca_key_password_file,
+      build_dir     => $certs::ssl_build_dir,
     }
   }
 
@@ -85,6 +87,7 @@ class certs::foreman_proxy (
     regenerate    => $regenerate,
     deploy        => $deploy,
     password_file => $ca_key_password_file,
+    build_dir     => $certs::ssl_build_dir,
   }
 
   if $deploy {

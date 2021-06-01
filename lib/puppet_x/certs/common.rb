@@ -42,6 +42,18 @@ module PuppetX
 
         newparam(:password_file)
 
+        newparam(:build_dir) do
+          defaultto('/root/ssl-build')
+
+          validate do |value|
+            if value.empty?
+              raise ArgumentError, "build_dir cannot be empty"
+            else
+              super(value)
+            end
+          end
+        end
+
         newparam(:ca) do
           validate do |value|
             ca_resource = resource.catalog.resource(value.to_s)
