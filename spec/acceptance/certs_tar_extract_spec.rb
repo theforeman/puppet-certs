@@ -52,7 +52,34 @@ describe 'certs with tar archive' do
     it { should have_matching_certificate('/etc/pki/katello/certs/katello-apache.crt') }
   end
 
+  describe x509_certificate('/root/ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-apache.crt') do
+    it { should be_certificate }
+    it { should be_valid }
+    it { should have_purpose 'server' }
+    include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}"
+    include_examples 'certificate subject', "C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = foreman-proxy.example.com"
+    its(:keylength) { should be >= 4096 }
+  end
+
+  describe x509_private_key('/root/ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-apache.key') do
+    it { should_not be_encrypted }
+    it { should be_valid }
+    it { should have_matching_certificate('/root/ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-apache.crt') }
+  end
+
   describe package("foreman-proxy.example.com-apache") do
     it { should be_installed }
+  end
+
+  describe file('/root/ssl-build/foreman-proxy.example.com') do
+    it { should be_directory }
+  end
+
+  describe file('/root/ssl-build/katello-default-ca.crt') do
+    it { should exist }
+  end
+
+  describe file('/root/ssl-build/katello-server-ca.crt') do
+    it { should exist }
   end
 end
