@@ -31,7 +31,7 @@ class certs::apache (
       hostname       => $hostname,
       cname          => $cname,
       generate       => $generate,
-      deploy         => false,
+      deploy         => $deploy,
       regenerate     => $regenerate,
       custom_pubkey  => $server_cert,
       custom_privkey => $server_key,
@@ -52,29 +52,24 @@ class certs::apache (
       ca            => $default_ca,
       generate      => $generate,
       regenerate    => $regenerate,
-      deploy        => false,
+      deploy        => $deploy,
       password_file => $ca_key_password_file,
       build_dir     => $certs::ssl_build_dir,
     }
   }
 
   if $deploy {
-    file { $apache_key:
-      ensure  => file,
-      source  => "${certs::ssl_build_dir}/${hostname}/${apache_cert_name}.key",
-      owner   => 'root',
-      group   => $group,
-      mode    => '0440',
-      require => Cert[$apache_cert_name],
-    }
-
-    file { $apache_cert:
-      ensure  => file,
-      source  => "${certs::ssl_build_dir}/${hostname}/${apache_cert_name}.crt",
-      owner   => 'root',
-      group   => $group,
-      mode    => '0640',
-      require => Cert[$apache_cert_name],
+    certs::key_pair { $apache_cert_name:
+      source_dir => "${certs::ssl_build_dir}/${hostname}",
+      key_file   => $apache_key,
+      key_owner  => 'root',
+      key_group  => $group,
+      key_mode   => '0440',
+      cert_file  => $apache_cert,
+      cert_owner => 'root',
+      cert_group => $group,
+      cert_mode  => '0440',
+      require    => Cert[$apache_cert_name],
     }
   }
 }
