@@ -4,6 +4,10 @@ describe 'certs' do
   nssdb_dir = '/etc/pki/katello/nssdb'
   nssdb_password_file = "#{nssdb_dir}/nss_db_password-file"
 
+  before(:all) do
+    on default, 'rm -rf /root/ssl-build'
+  end
+
   context 'with default params' do
     it_behaves_like 'an idempotent resource' do
       let(:manifest) do

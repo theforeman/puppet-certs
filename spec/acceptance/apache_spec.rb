@@ -1,6 +1,10 @@
 require 'spec_helper_acceptance'
 
 describe 'certs::apache' do
+  before(:all) do
+    on default, 'rm -rf /root/ssl-build'
+  end
+
   context 'with default parameters' do
 
     it 'should force regeneration' do

@@ -4,6 +4,8 @@ describe 'certs::foreman_proxy' do
   FQDN = fact('fqdn')
 
   before(:all) do
+    on default, 'rm -rf /root/ssl-build'
+
     manifest = <<~MANIFEST
       file { '/etc/foreman-proxy':
         ensure => directory,
