@@ -9,10 +9,6 @@
   "issues_url": "https://projects.theforeman.org/projects/katello/issues",
   "dependencies": [
     {
-      "name": "puppet-trusted_ca",
-      "version_requirement": ">= 2.0.0 < 4.0.0"
-    },
-    {
       "name": "puppetlabs-stdlib",
       "version_requirement": ">= 4.25.0 < 8.0.0"
     },
