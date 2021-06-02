@@ -4,6 +4,10 @@ describe 'certs' do
   keystore_password_file = '/etc/pki/katello/keystore_password-file'
   truststore_password_file = '/etc/pki/katello/truststore_password-file'
 
+  before(:all) do
+    on default, 'rm -rf /root/ssl-build'
+  end
+
   context 'with default params' do
     it_behaves_like 'an idempotent resource' do
       let(:manifest) do

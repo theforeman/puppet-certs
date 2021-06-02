@@ -1,6 +1,10 @@
 require 'spec_helper_acceptance'
 
 describe 'certs' do
+  before(:all) do
+    on default, 'rm -rf /root/ssl-build'
+  end
+
   context 'with default params' do
     it_behaves_like 'an idempotent resource' do
       let(:manifest) { 'include certs' }
