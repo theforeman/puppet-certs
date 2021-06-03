@@ -25,10 +25,6 @@ describe 'certs::apache' do
       it { should be_valid }
       it { should have_matching_certificate('/etc/pki/katello/certs/katello-apache.crt') }
     end
-
-    describe package("#{fact('fqdn')}-apache") do
-      it { should be_installed }
-    end
   end
 
   context 'with server cert' do
@@ -67,10 +63,6 @@ describe 'certs::apache' do
       it { should_not be_encrypted }
       it { should be_valid }
       it { should have_matching_certificate('/etc/pki/katello/certs/katello-apache.crt') }
-    end
-
-    describe package("#{fact('fqdn')}-apache") do
-      it { should be_installed }
     end
   end
 end

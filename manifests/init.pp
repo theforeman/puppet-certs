@@ -124,7 +124,7 @@ class certs (
 
   Class['certs::install'] ->
   Class['certs::config'] ->
-  Class['certs::ca']
+  Class['certs::ca'] ->
 
   $default_ca = $certs::ca::default_ca
   $server_ca = $certs::ca::server_ca
