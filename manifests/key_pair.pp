@@ -8,7 +8,6 @@ define certs::key_pair (
   $cert_owner  = undef,
   $cert_group  = undef,
   $cert_mode   = undef,
-  $require     = undef,
 ) {
 
   file { $key_file:
@@ -17,16 +16,14 @@ define certs::key_pair (
     owner   => $key_owner,
     group   => $key_group,
     mode    => $key_mode,
-    require => $require,
   }
 
-  file { $cert_file:
+  certificate_file { $cert_file:
     ensure  => file,
     source  => "${source_dir}/${title}.crt",
     owner   => $cert_owner,
     group   => $cert_group,
     mode    => $cert_mode,
-    require => $require,
   }
 
 }
