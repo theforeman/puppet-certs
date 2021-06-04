@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'certs::qpid_router::server' do
+describe 'certs::qpid_router::client' do
   FQDN = fact('fqdn')
 
   before(:all) do
@@ -17,51 +17,51 @@ describe 'certs::qpid_router::server' do
 
   context 'with default parameters' do
     it_behaves_like 'an idempotent resource' do
-      let(:manifest) { 'include certs::qpid_router::server' }
+      let(:manifest) { 'include certs::qpid_router::client' }
     end
 
-    describe x509_certificate('/etc/pki/katello/qpid_router_server.crt') do
+    describe x509_certificate('/etc/pki/katello/qpid_router_client.crt') do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'client' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, O = dispatch server, OU = SomeOrgUnit, CN = #{FQDN}"
+      include_examples 'certificate subject', "C = US, ST = North Carolina, O = dispatch client, OU = SomeOrgUnit, CN = #{FQDN}"
       its(:keylength) { should be >= 4096 }
     end
 
-    describe file('/etc/pki/katello/qpid_router_server.crt') do
+    describe file('/etc/pki/katello/qpid_router_client.crt') do
       it { should be_file }
       it { should be_mode 640 }
       it { should be_owned_by 'qdrouterd' }
       it { should be_grouped_into 'root' }
     end
 
-    describe x509_private_key('/etc/pki/katello/qpid_router_server.key') do
+    describe x509_private_key('/etc/pki/katello/qpid_router_client.key') do
       it { should_not be_encrypted }
       it { should be_valid }
-      it { should have_matching_certificate('/etc/pki/katello/qpid_router_server.crt') }
+      it { should have_matching_certificate('/etc/pki/katello/qpid_router_client.crt') }
     end
 
-    describe file('/etc/pki/katello/qpid_router_server.key') do
+    describe file('/etc/pki/katello/qpid_router_client.key') do
       it { should be_file }
       it { should be_mode 640 }
       it { should be_owned_by 'qdrouterd' }
       it { should be_grouped_into 'root' }
     end
 
-    describe x509_certificate("/root/ssl-build/#{FQDN}/#{FQDN}-qpid-router-server.crt") do
+    describe x509_certificate("/root/ssl-build/#{FQDN}/#{FQDN}-qpid-router-client.crt") do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'client' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, O = dispatch server, OU = SomeOrgUnit, CN = #{FQDN}"
+      include_examples 'certificate subject', "C = US, ST = North Carolina, O = dispatch client, OU = SomeOrgUnit, CN = #{FQDN}"
       its(:keylength) { should be >= 4096 }
     end
 
-    describe x509_private_key("/root/ssl-build/#{FQDN}/#{FQDN}-qpid-router-server.key") do
+    describe x509_private_key("/root/ssl-build/#{FQDN}/#{FQDN}-qpid-router-client.key") do
       it { should_not be_encrypted }
       it { should be_valid }
-      it { should have_matching_certificate("/root/ssl-build/#{FQDN}/#{FQDN}-qpid-router-server.crt") }
+      it { should have_matching_certificate("/root/ssl-build/#{FQDN}/#{FQDN}-qpid-router-client.crt") }
     end
   end
 end
