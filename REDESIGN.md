@@ -67,10 +67,16 @@ By differentiating between generation of certificates and deployment/management 
 
 This section aims to outline the set of steps, at level of individual pull request changes, needed to achieve the design.
 
-  * Add acceptance tests for tar_create and tar_extract [Pull Request](https://github.com/theforeman/puppet-certs/pull/351)
+  * Add acceptance tests for tar_create and tar_extract
+    * [x] [Pull Request](https://github.com/theforeman/puppet-certs/pull/351)
   * Add acceptance tests for any missing service classes
-  * Add certificates from /root/ssl-build/${hostname} into tarball creation [Pull Request](https://github.com/theforeman/puppet-certs/pull/352)
+    * [x] [foreman](https://github.com/theforeman/puppet-certs/pull/355)
+    * [x] [qpid_router](https://github.com/theforeman/puppet-certs/pull/356)
+    * [x] [pulp_client](https://github.com/theforeman/puppet-certs/pull/357)
+    * [x] [puppet](https://github.com/theforeman/puppet-certs/pull/358)
+  * Add certificates from /root/ssl-build/${hostname} into tarball creation
     * Needed for being able to deploy certificates from the build directory on a content proxy as the current design only copies over RPMs and then installs those RPMs resulting in the `/etc/pki/katello-certs-tools` location being available
+    * [x] [Pull Request](https://github.com/theforeman/puppet-certs/pull/352)
   * Investigate configuring where certificates are generated for a given service by katello-ssl-tool
   * Add new type for managing a certificate
     * This type and provider would handle copying the provided certificate to a destination, validating it and setting properties on the file
@@ -111,9 +117,9 @@ The new design moves the management/deployment of certificates and certificate s
 
  * Complete "Split certificate generation from certificate deployment and management"
  * Add types and providers for all certificate stores in use
-   * keystore
-   * truststore
-   * nssdb
+   * [x] keystore
+   * [x] truststore
+   * [x] nssdb
  * For each service module:
    * Add parameters for the required certificates, private keys and CA certificates
    * Add management of the input certificates via the new types in puppet-certs
