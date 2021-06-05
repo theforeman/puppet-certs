@@ -3,6 +3,10 @@ Puppet::Type.newtype(:certificate_file) do
 
   ensurable
 
+  def exists?
+    self[:ensure] == :present
+  end
+
   newparam(:path, :namevar => true) do
     desc "Path the certificate will be copied to."
   end
@@ -19,19 +23,24 @@ Puppet::Type.newtype(:certificate_file) do
     desc "Specifies the permissions mode of the truststore. Valid options: a string containing a permission mode value in octal notation."
   end
 
-  newparam(:source, parent: Puppet::Type::File::ParameterSource) do
+  newproperty(:source_cert) do
     desc "Specifies the source certificate that will be copied to the declared location."
   end
 
   def generate
     file_opts = {
       ensure: (self[:ensure] == :absent) ? :absent : :file,
+      source: self[:source_cert],
     }
 
-    [:owner,
-     :group,
-     :source,
-     :mode].each do |param|
+    params = [
+      :path,
+      :owner,
+      :group,
+      :mode
+    ]
+
+    params.each do |param|
       file_opts[param] = self[param] unless self[param].nil?
     end
 

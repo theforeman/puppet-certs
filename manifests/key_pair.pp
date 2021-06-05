@@ -19,11 +19,11 @@ define certs::key_pair (
   }
 
   certificate_file { $cert_file:
-    ensure  => file,
-    source  => "${source_dir}/${title}.crt",
-    owner   => $cert_owner,
-    group   => $cert_group,
-    mode    => $cert_mode,
+    ensure           => present,
+    source_cert      => "${source_dir}/${title}.crt",
+    owner            => $cert_owner,
+    group            => $cert_group,
+    mode             => $cert_mode,
   }
 
 }

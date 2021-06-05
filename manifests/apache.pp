@@ -20,10 +20,9 @@ class certs::apache (
   $group                = $certs::group,
 ) inherits certs {
 
-  $apache_cert_name = "${hostname}-apache"
   $apache_cert = "${pki_dir}/certs/katello-apache.crt"
   $apache_key  = "${pki_dir}/private/katello-apache.key"
-  $apache_ca_cert = $certs::katello_server_ca_cert
+  $apache_cert_name = "${hostname}-apache"
 
   if $server_cert {
     cert { $apache_cert_name:
@@ -31,7 +30,7 @@ class certs::apache (
       hostname       => $hostname,
       cname          => $cname,
       generate       => $generate,
-      deploy         => $deploy,
+      deploy         => false,
       regenerate     => $regenerate,
       custom_pubkey  => $server_cert,
       custom_privkey => $server_key,
@@ -52,7 +51,7 @@ class certs::apache (
       ca            => $default_ca,
       generate      => $generate,
       regenerate    => $regenerate,
-      deploy        => $deploy,
+      deploy        => false,
       password_file => $ca_key_password_file,
       build_dir     => $certs::ssl_build_dir,
     }
