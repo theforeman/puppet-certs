@@ -30,7 +30,7 @@ describe 'certs::foreman_proxy' do
       it { should have_purpose 'server' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{FQDN}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { should be >= 4096 }
     end
 
     describe file('/etc/foreman-proxy/ssl_cert.pem') do
@@ -59,7 +59,7 @@ describe 'certs::foreman_proxy' do
       it { should have_purpose 'server' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { should be >= 4096 }
     end
 
     describe x509_certificate('/etc/foreman-proxy/foreman_ssl_cert.pem') do
@@ -68,7 +68,7 @@ describe 'certs::foreman_proxy' do
       it { should have_purpose 'client' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{FQDN}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { should be >= 4096 }
     end
 
     describe file('/etc/foreman-proxy/foreman_ssl_cert.pem') do
@@ -97,7 +97,7 @@ describe 'certs::foreman_proxy' do
       it { should have_purpose 'server' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { should be >= 4096 }
     end
   end
 end

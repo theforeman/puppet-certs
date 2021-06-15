@@ -27,7 +27,7 @@ describe 'certs' do
       it { should have_purpose 'server' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, O = pulp, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { should be >= 4096 }
     end
 
     describe x509_private_key("/etc/pki/katello/private/#{host_inventory['fqdn']}-qpid-broker.key") do

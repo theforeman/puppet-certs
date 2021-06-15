@@ -21,7 +21,7 @@ describe 'certs::apache' do
       it { should have_purpose 'server' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { should be >= 4096 }
     end
 
     describe x509_private_key('/etc/pki/katello/private/katello-apache.key') do
