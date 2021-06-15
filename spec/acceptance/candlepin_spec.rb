@@ -38,7 +38,7 @@ describe 'certs' do
       it { should have_purpose 'server' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { should be >= 4096 }
     end
 
     describe x509_private_key('/etc/pki/katello/private/katello-tomcat.key') do
@@ -53,7 +53,7 @@ describe 'certs' do
       it { should have_purpose 'server' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, O = candlepin, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { should be >= 4096 }
     end
 
     describe x509_private_key('/etc/pki/katello/private/java-client.key') do
@@ -150,7 +150,7 @@ describe 'certs' do
     it { should have_purpose 'server' }
     include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
     include_examples 'certificate subject', 'C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = localhost'
-    its(:keylength) { should be >= 2048 }
+    its(:keylength) { should be >= 4096 }
   end
 
   describe x509_certificate('/etc/pki/katello/certs/java-client.crt') do
@@ -159,7 +159,7 @@ describe 'certs' do
     it { should have_purpose 'server' }
     include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
     include_examples 'certificate subject', 'C = US, ST = North Carolina, O = candlepin, OU = SomeOrgUnit, CN = localhost'
-    its(:keylength) { should be >= 2048 }
+    its(:keylength) { should be >= 4096 }
   end
 
   describe command("keytool -list -v -keystore /etc/candlepin/certs/keystore -alias tomcat -storepass $(cat #{keystore_password_file})") do
