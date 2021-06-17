@@ -15,7 +15,7 @@ class certs::foreman (
   $default_ca            = $certs::default_ca,
   $ca_key_password_file  = $certs::ca_key_password_file,
   $server_ca             = $certs::server_ca,
-) inherits certs::params {
+) inherits certs {
 
   $client_cert_name = "${hostname}-foreman-client"
 
