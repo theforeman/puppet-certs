@@ -24,8 +24,8 @@ describe 'certs::foreman' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{FQDN}"
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{FQDN}") }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -52,8 +52,8 @@ describe 'certs::foreman' do
     describe x509_certificate('/etc/pki/katello/puppet/puppet_client_ca.crt') do
       it { should be_certificate }
       it { should be_valid }
-      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -68,8 +68,8 @@ describe 'certs::foreman' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{FQDN}"
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{FQDN}") }
       its(:keylength) { should be >= 4096 }
     end
 

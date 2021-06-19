@@ -28,8 +28,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
-      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{FQDN}"
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{FQDN}") }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -57,8 +57,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
-      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -66,8 +66,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{FQDN}"
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{FQDN}") }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -95,8 +95,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
-      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
       its(:keylength) { should be >= 4096 }
     end
   end

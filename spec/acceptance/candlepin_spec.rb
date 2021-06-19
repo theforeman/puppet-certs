@@ -36,8 +36,8 @@ describe 'certs' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
-      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}") }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -51,8 +51,8 @@ describe 'certs' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
-      include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
-      include_examples 'certificate subject', "C = US, ST = North Carolina, O = candlepin, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = candlepin, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}") }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -148,8 +148,8 @@ describe 'certs' do
     it { should be_certificate }
     it { should be_valid }
     it { should have_purpose 'server' }
-    include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
-    include_examples 'certificate subject', 'C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = localhost'
+    its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}") }
+    its(:subject) { should eq('C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = localhost') }
     its(:keylength) { should be >= 4096 }
   end
 
@@ -157,8 +157,8 @@ describe 'certs' do
     it { should be_certificate }
     it { should be_valid }
     it { should have_purpose 'server' }
-    include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}"
-    include_examples 'certificate subject', 'C = US, ST = North Carolina, O = candlepin, OU = SomeOrgUnit, CN = localhost'
+    its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}") }
+    its(:subject) { should eq('C = US, ST = North Carolina, O = candlepin, OU = SomeOrgUnit, CN = localhost') }
     its(:keylength) { should be >= 4096 }
   end
 
