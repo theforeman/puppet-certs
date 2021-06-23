@@ -28,7 +28,7 @@ describe 'certs::foreman' do
       it { should have_purpose 'client' }
       include_examples 'certificate issuer', "C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}"
       include_examples 'certificate subject', "C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{FQDN}"
-      its(:keylength) { should be >= 2048 }
+      its(:keylength) { should be >= 4096 }
     end
 
     describe file('/etc/foreman/client_cert.pem') do
