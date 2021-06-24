@@ -50,24 +50,24 @@ describe 'certs' do
       it { should be_grouped_into 'qpidd' }
     end
 
-    describe command("certutil -L -d #{nssdb_dir}") do
-      its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/^ca                                                           CT,C,c$/i) }
-      its(:stdout) { should match(/^broker                                                       u,u,u$/i) }
+    describe nssdb(nssdb_dir) do
+      its(:certificates) { should match(/^ca                                                           CT,C,c$/i) }
+      its(:certificates) { should match(/^broker                                                       u,u,u$/i) }
     end
 
-    describe command("certutil -L -d #{nssdb_dir} -n ca") do
+    describe nssdb_certificate(nssdb_dir, name: 'ca') do
       its(:exit_status) { should eq 0 }
-      its(:stdout) { should match_without_whitespace(/Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US"/) }
-      its(:stdout) { should match_without_whitespace(/Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US"/) }
+      its(:subject) { should match(/CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US/) }
+      its(:issuer) { should match(/CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US/) }
     end
 
-    describe command("certutil -L -d #{nssdb_dir} -n broker") do
+    describe nssdb_certificate(nssdb_dir, name: 'broker') do
       its(:exit_status) { should eq 0 }
-      its(:stdout) { should match_without_whitespace(/Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=pulp,ST=North Carolina,C=US"/) }
-      its(:stdout) { should match_without_whitespace(/Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US"/) }
+      its(:subject) { should match(/CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=pulp,ST=North Carolina,C=US/) }
+      its(:issuer) { should match(/CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US/) }
     end
 
+    # TODO: nssdb_private_key
     describe command("certutil -K -d #{nssdb_dir} -f #{nssdb_password_file} -n broker") do
       its(:exit_status) { should eq 0 }
       its(:stdout) { should match(/rsa/) }
