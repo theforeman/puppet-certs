@@ -52,4 +52,33 @@ describe 'certs::keypair' do
     it { is_expected.not_to contain_file('/path/to/key.pem') }
     it { is_expected.to contain_file('/path/to/cert.pem').that_requires('Pubkey[/path/to/cert.pem]') }
   end
+
+  context 'with ensure_key => absent' do
+    let(:params) { super().merge(ensure_key: 'absent', manage_key: true) }
+
+    it { is_expected.to compile.with_all_deps }
+    it do
+      is_expected.to contain_privkey('/path/to/key.pem')
+        .with_ensure('absent')
+        .with_key_pair('Ca[default]')
+        .with_unprotect(false)
+        .with_password_file(nil)
+        .that_subscribes_to('Ca[default]')
+    end
+    it { is_expected.to contain_file('/path/to/key.pem').with_ensure('absent').that_requires('Privkey[/path/to/key.pem]') }
+  end
+
+  context 'with ensure_cert => absent' do
+    let(:params) { super().merge(ensure_cert: 'absent', manage_cert: true) }
+
+    it { is_expected.to compile.with_all_deps }
+    it do
+      is_expected.to contain_pubkey('/path/to/cert.pem')
+        .with_ensure('absent')
+        .with_key_pair('Ca[default]')
+        .with_strip(false)
+        .that_subscribes_to(['Ca[default]', 'Privkey[/path/to/key.pem]'])
+    end
+    it { is_expected.to contain_file('/path/to/cert.pem').with_ensure('absent').that_requires('Pubkey[/path/to/cert.pem]') }
+  end
 end

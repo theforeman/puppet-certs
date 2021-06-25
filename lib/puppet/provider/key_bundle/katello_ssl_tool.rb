@@ -2,6 +2,13 @@ require File.expand_path('../../katello_ssl_tool', __FILE__)
 
 Puppet::Type.type(:key_bundle).provide(:katello_ssl_tool, :parent => Puppet::Provider::KatelloSslTool::CertFile) do
 
+  def exists?
+    return false unless File.exists?(resource[:path])
+    return false unless File.exists?(privkey_source_path)
+    return false unless File.exists?(pubkey_source_path)
+    expected_content_processed == current_content
+  end
+
   protected
 
   def expected_content
