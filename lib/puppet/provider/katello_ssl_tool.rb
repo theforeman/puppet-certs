@@ -18,6 +18,16 @@ module Puppet::Provider::KatelloSslTool
       deploy!   if deploy?
     end
 
+    def destroy
+      files_to_deploy.each do |file|
+        File.delete(file) if File.exist?(file)
+      end
+
+      if(system("rpm -q #{rpmfile_base_name} &>/dev/null"))
+        rpm('-e', rpmfile_base_name)
+      end
+    end
+
     def self.details(cert_name)
       details = { :pubkey  => pubkey(cert_name),
                   :privkey   => privkey(cert_name) }
@@ -173,11 +183,16 @@ module Puppet::Provider::KatelloSslTool
 
     def exists?
       return false unless File.exists?(resource[:path])
+      return false unless File.exists?(source_path)
       expected_content_processed == current_content
     end
 
     def create
       File.open(resource[:path], "w", mode) { |f| f << expected_content_processed }
+    end
+
+    def destroy
+      File.delete(resource[:path]) if File.exist?(resource[:path])
     end
 
     protected
