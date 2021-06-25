@@ -23,12 +23,31 @@ class certs::candlepin (
   $user                     = $certs::user,
   $group                    = 'tomcat',
   $client_keypair_group     = 'tomcat',
+  $artemis_client_cert      = undef,
 ) inherits certs {
   $java_client_cert_name = 'java-client'
   $artemis_alias = 'artemis-client'
 
+  $keystore_password = extlib::cache_data('foreman_cache_data', $keystore_password_file, extlib::random_password(32))
+  $truststore_password = extlib::cache_data('foreman_cache_data', $truststore_password_file, extlib::random_password(32))
+  $keystore_password_path = "${pki_dir}/${keystore_password_file}"
+  $truststore_password_path = "${pki_dir}/${truststore_password_file}"
+  $client_cert = "${pki_dir}/certs/${java_client_cert_name}.crt"
+  $client_key = "${pki_dir}/private/${java_client_cert_name}.key"
+  $alias = 'candlepin-ca'
+
+  if $artemis_client_cert {
+    $_artemis_client_cert = $artemis_client_cert
+    $ensure_client_cert = 'absent'
+  } else {
+    $_artemis_client_cert = $client_cert
+    $ensure_client_cert = 'present'
+  }
+
+  $artemis_client_dn = Deferred('certs::certificate_subject', [$_artemis_client_cert])
+
   cert { $java_client_cert_name:
-    ensure        => present,
+    ensure        => $ensure_client_cert,
     hostname      => $hostname,
     cname         => $cname,
     country       => $country,
@@ -67,16 +86,6 @@ class certs::candlepin (
     build_dir     => $certs::ssl_build_dir,
   }
 
-  $keystore_password = extlib::cache_data('foreman_cache_data', $keystore_password_file, extlib::random_password(32))
-  $truststore_password = extlib::cache_data('foreman_cache_data', $truststore_password_file, extlib::random_password(32))
-  $keystore_password_path = "${pki_dir}/${keystore_password_file}"
-  $truststore_password_path = "${pki_dir}/${truststore_password_file}"
-  $client_req = "${pki_dir}/java-client.req"
-  $client_cert = "${pki_dir}/certs/${java_client_cert_name}.crt"
-  $client_key = "${pki_dir}/private/${java_client_cert_name}.key"
-  $alias = 'candlepin-ca'
-  $artemis_client_dn = Deferred('certs::certificate_subject', [$client_cert])
-
   if $deploy {
     certs::keypair { 'candlepin-ca':
       manage_cert   => true,
@@ -114,10 +123,12 @@ class certs::candlepin (
       key_file    => $client_key,
       cert_file   => $client_cert,
       manage_cert => true,
+      ensure_cert => $ensure_client_cert,
       cert_owner  => 'root',
       cert_group  => $client_keypair_group,
       cert_mode   => '0440',
       manage_key  => true,
+      ensure_key  => $ensure_client_cert,
       key_owner   => 'root',
       key_group   => $client_keypair_group,
       key_mode    => '0440',
@@ -174,7 +185,7 @@ class certs::candlepin (
     truststore_certificate { "${truststore}:${artemis_alias}":
       ensure        => present,
       password_file => $truststore_password_path,
-      certificate   => $client_cert,
+      certificate   => $_artemis_client_cert,
     }
   }
 }

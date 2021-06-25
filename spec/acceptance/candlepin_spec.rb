@@ -250,4 +250,38 @@ describe 'certs' do
       expect(keystore_output.output.strip).not_to include(initial_fingerprint)
     end
   end
+
+  context 'with artemis_client_cert' do
+    before(:context) do
+      ['crt'].each do |ext|
+        source_path = "fixtures/example.partial.solutions.#{ext}"
+        dest_path = "/client.#{ext}"
+        scp_to(hosts, source_path, dest_path)
+      end
+    end
+
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+        class { 'certs::candlepin':
+          artemis_client_cert => '/client.crt',
+        }
+        PUPPET
+      end
+    end
+
+    describe file('/etc/pki/katello/certs/java-client.crt') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/pki/katello/private/java-client.key') do
+      it { should_not exist }
+    end
+
+    describe command("keytool -list -v -keystore /etc/candlepin/certs/truststore -alias artemis-client -storepass $(cat #{truststore_password_file})") do
+      its(:exit_status) { should eq 0 }
+      its(:stdout) { should match(/^Owner: CN=example.partial.solutions$/) }
+      its(:stdout) { should match(/^Issuer: CN=Fake LE Intermediate X1$/) }
+    end
+  end
 end
