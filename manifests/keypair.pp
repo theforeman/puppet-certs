@@ -1,18 +1,19 @@
+# Deploy a key pair
 define certs::keypair (
   $key_pair,
-  $key_file,
-  $cert_file,
-  $manage_key  = false,
-  $key_owner   = undef,
-  $key_group   = undef,
-  $key_mode    = undef,
-  $manage_cert = false,
-  $cert_owner  = undef,
-  $cert_group  = undef,
-  $cert_mode   = undef,
-  $unprotect   = false,
-  $strip       = false,
-  $password_file = undef,
+  Stdlib::Absolutepath $key_file,
+  Stdlib::Absolutepath $cert_file,
+  Boolean $manage_key = false,
+  Optional[String[1]] $key_owner = undef,
+  Optional[String[1]] $key_group = undef,
+  Optional[Stdlib::Filemode] $key_mode = undef,
+  Boolean $manage_cert = false,
+  Optional[String[1]] $cert_owner = undef,
+  Optional[String[1]] $cert_group = undef,
+  Optional[Stdlib::Filemode] $cert_mode = undef,
+  Boolean $unprotect = false,
+  Boolean $strip = false,
+  Optional[Stdlib::Absolutepath] $password_file = undef,
 ) {
   $key_pair ~>
   privkey { $key_file:

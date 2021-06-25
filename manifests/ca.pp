@@ -1,26 +1,26 @@
-# == Class: certs
-# Sets up the CA for Katello
+# @summary set up the CA for Katello
+# @api private
 class certs::ca (
-  $default_ca_name         = $certs::default_ca_name,
-  $server_ca_name          = $certs::server_ca_name,
-  $ca_common_name          = $certs::ca_common_name,
-  $country                 = $certs::country,
-  $state                   = $certs::state,
-  $city                    = $certs::city,
-  $org                     = $certs::org,
-  $org_unit                = $certs::org_unit,
-  $ca_expiration           = $certs::ca_expiration,
-  $generate                = $certs::generate,
-  $deploy                  = $certs::deploy,
-  $server_cert             = $certs::server_cert,
-  $ssl_build_dir           = $certs::ssl_build_dir,
-  $group                   = $certs::group,
-  $katello_server_ca_cert  = $certs::katello_server_ca_cert,
-  $ca_key                  = $certs::ca_key,
-  $ca_cert                 = $certs::ca_cert,
-  $ca_cert_stripped        = $certs::ca_cert_stripped,
-  $ca_key_password         = $certs::ca_key_password,
-  $ca_key_password_file    = $certs::ca_key_password_file,
+  String $default_ca_name                       = $certs::default_ca_name,
+  String $server_ca_name                        = $certs::server_ca_name,
+  Stdlib::Fqdn $ca_common_name                  = $certs::ca_common_name,
+  String[2,2] $country                          = $certs::country,
+  String $state                                 = $certs::state,
+  String $city                                  = $certs::city,
+  String $org                                   = $certs::org,
+  String $org_unit                              = $certs::org_unit,
+  String $ca_expiration                         = $certs::ca_expiration,
+  Boolean $generate                             = $certs::generate,
+  Boolean $deploy                               = $certs::deploy,
+  Optional[Stdlib::Absolutepath] $server_cert   = $certs::server_cert,
+  Optional[Stdlib::Absolutepath] $ssl_build_dir = $certs::ssl_build_dir,
+  String $group                                 = $certs::group,
+  Stdlib::Absolutepath $katello_server_ca_cert  = $certs::katello_server_ca_cert,
+  Stdlib::Absolutepath $ca_key                  = $certs::ca_key,
+  Stdlib::Absolutepath $ca_cert                 = $certs::ca_cert,
+  Stdlib::Absolutepath $ca_cert_stripped        = $certs::ca_cert_stripped,
+  String $ca_key_password                       = $certs::ca_key_password,
+  Stdlib::Absolutepath $ca_key_password_file    = $certs::ca_key_password_file,
 ) {
 
   file { $ca_key_password_file:
@@ -75,12 +75,7 @@ class certs::ca (
   }
 
   if $deploy {
-    Ca[$default_ca_name] ~>
     pubkey { $ca_cert:
-      key_pair => $default_ca,
-    } ~>
-    pubkey { $ca_cert_stripped:
-      strip    => true,
       key_pair => $default_ca,
     } ~>
     file { $ca_cert:
@@ -90,7 +85,11 @@ class certs::ca (
       mode   => '0644',
     }
 
-    Ca[$server_ca_name] ~>
+    pubkey { $ca_cert_stripped:
+      strip    => true,
+      key_pair => $default_ca,
+    }
+
     pubkey { $katello_server_ca_cert:
       key_pair => $server_ca,
     } ~>
@@ -102,7 +101,6 @@ class certs::ca (
     }
 
     if $generate {
-      Ca[$default_ca_name] ~>
       privkey { $ca_key:
         key_pair      => $default_ca,
         unprotect     => true,
