@@ -75,7 +75,7 @@ class certs::candlepin (
   $client_cert = "${pki_dir}/certs/${java_client_cert_name}.crt"
   $client_key = "${pki_dir}/private/${java_client_cert_name}.key"
   $alias = 'candlepin-ca'
-  $artemis_client_dn = Deferred('certs::certificate_subject', [$client_cert])
+  $artemis_client_dn = Deferred('certs::certificate_subject', [$client_cert, true])
 
   if $deploy {
     certs::keypair { 'candlepin-ca':
