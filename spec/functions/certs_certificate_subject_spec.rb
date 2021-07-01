@@ -85,7 +85,7 @@ describe 'certs::certificate_subject' do
       end
 
       it 'should return a certificate subject in OpenSSL compat format' do
-        is_expected.to run.with_params('/tmp/client_cert.crt').and_return("C=US,O=Internet Security Research Group,CN=ISRG Root X1")
+        is_expected.to run.with_params('/tmp/client_cert.crt').and_return("C=US, O=Internet Security Research Group, CN=ISRG Root X1")
       end
     end
 

@@ -14,7 +14,7 @@ Puppet::Functions.create_function(:'certs::certificate_subject') do
   def certificate_subject(certificate_path)
     begin
       cert = OpenSSL::X509::Certificate.new(File.read(certificate_path))
-      cert.subject.to_s(OpenSSL::X509::Name::RFC2253)
+      cert.subject.to_s(OpenSSL::X509::Name::COMPAT)
     rescue OpenSSL::X509::CertificateError, Errno::ENOENT => e
       Puppet.debug("The file at #{certificate_path} could not be read or is not a valid x509 certificate: #{e}")
       nil
