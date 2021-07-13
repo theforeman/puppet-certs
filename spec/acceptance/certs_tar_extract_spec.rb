@@ -72,7 +72,7 @@ describe 'certs with tar archive' do
   end
 
   describe package("foreman-proxy.example.com-apache") do
-    it { should be_installed }
+    it { should_not be_installed }
   end
 
   describe file('/root/ssl-build/foreman-proxy.example.com') do

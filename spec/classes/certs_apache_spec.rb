@@ -19,7 +19,7 @@ describe 'certs::apache' do
         it { should compile.with_all_deps }
 
         it do
-          is_expected.to contain_certs__keypair('apache')
+          is_expected.to contain_certs__key_pair("#{facts[:fqdn]}-apache")
             .with_key_group('foreman')
         end
       end
