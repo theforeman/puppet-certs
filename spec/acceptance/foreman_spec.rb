@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 describe 'certs::foreman' do
-  FQDN = fact('fqdn')
+  fqdn = fact('fqdn')
 
   before(:all) do
     manifest = <<~MANIFEST
@@ -26,8 +26,8 @@ describe 'certs::foreman' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{FQDN}") }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{fqdn}") }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -54,24 +54,24 @@ describe 'certs::foreman' do
     describe x509_certificate('/etc/foreman/proxy_ca.pem') do
       it { should be_certificate }
       it { should be_valid }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
       its(:keylength) { should be >= 4096 }
     end
 
-    describe x509_certificate("/root/ssl-build/#{FQDN}/#{FQDN}-foreman-client.crt") do
+    describe x509_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-foreman-client.crt") do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{FQDN}") }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{fqdn}") }
       its(:keylength) { should be >= 4096 }
     end
 
-    describe x509_private_key("/root/ssl-build/#{FQDN}/#{FQDN}-foreman-client.key") do
+    describe x509_private_key("/root/ssl-build/#{fqdn}/#{fqdn}-foreman-client.key") do
       it { should_not be_encrypted }
       it { should be_valid }
-      it { should have_matching_certificate("/root/ssl-build/#{FQDN}/#{FQDN}-foreman-client.crt") }
+      it { should have_matching_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-foreman-client.crt") }
     end
   end
 end

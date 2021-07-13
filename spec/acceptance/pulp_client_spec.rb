@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 describe 'certs::pulp-client' do
-  FQDN = fact('fqdn')
+  fqdn = fact('fqdn')
 
   before(:all) do
     on default, 'rm -rf /root/ssl-build'
@@ -16,7 +16,7 @@ describe 'certs::pulp-client' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
       its(:subject) { should eq("C = US, ST = North Carolina, O = PULP, OU = NODES, CN = admin") }
       its(:keylength) { should be >= 4096 }
     end
@@ -41,19 +41,19 @@ describe 'certs::pulp-client' do
       it { should be_grouped_into 'root' }
     end
 
-    describe x509_certificate("/root/ssl-build/#{FQDN}/pulp-client.crt") do
+    describe x509_certificate("/root/ssl-build/#{fqdn}/pulp-client.crt") do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
       its(:subject) { should eq("C = US, ST = North Carolina, O = PULP, OU = NODES, CN = admin") }
       its(:keylength) { should be >= 4096 }
     end
 
-    describe x509_private_key("/root/ssl-build/#{FQDN}/pulp-client.key") do
+    describe x509_private_key("/root/ssl-build/#{fqdn}/pulp-client.key") do
       it { should_not be_encrypted }
       it { should be_valid }
-      it { should have_matching_certificate("/root/ssl-build/#{FQDN}/pulp-client.crt") }
+      it { should have_matching_certificate("/root/ssl-build/#{fqdn}/pulp-client.crt") }
     end
   end
 end
