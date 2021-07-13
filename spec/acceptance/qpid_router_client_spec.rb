@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 describe 'certs::qpid_router::client' do
-  FQDN = fact('fqdn')
+  fqdn = fact('fqdn')
 
   before(:all) do
     on default, 'rm -rf /root/ssl-build'
@@ -24,8 +24,8 @@ describe 'certs::qpid_router::client' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = dispatch client, OU = SomeOrgUnit, CN = #{FQDN}") }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = dispatch client, OU = SomeOrgUnit, CN = #{fqdn}") }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -49,19 +49,19 @@ describe 'certs::qpid_router::client' do
       it { should be_grouped_into 'root' }
     end
 
-    describe x509_certificate("/root/ssl-build/#{FQDN}/#{FQDN}-qpid-router-client.crt") do
+    describe x509_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-qpid-router-client.crt") do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{FQDN}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = dispatch client, OU = SomeOrgUnit, CN = #{FQDN}") }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = dispatch client, OU = SomeOrgUnit, CN = #{fqdn}") }
       its(:keylength) { should be >= 4096 }
     end
 
-    describe x509_private_key("/root/ssl-build/#{FQDN}/#{FQDN}-qpid-router-client.key") do
+    describe x509_private_key("/root/ssl-build/#{fqdn}/#{fqdn}-qpid-router-client.key") do
       it { should_not be_encrypted }
       it { should be_valid }
-      it { should have_matching_certificate("/root/ssl-build/#{FQDN}/#{FQDN}-qpid-router-client.crt") }
+      it { should have_matching_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-qpid-router-client.crt") }
     end
   end
 end
