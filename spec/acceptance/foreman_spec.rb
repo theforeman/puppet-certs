@@ -33,9 +33,9 @@ describe 'certs::foreman' do
 
     describe file('/etc/foreman/client_cert.pem') do
       it { should be_file }
-      it { should be_mode 644 }
+      it { should be_mode 440 }
       it { should be_owned_by 'root' }
-      it { should be_grouped_into 'root' }
+      it { should be_grouped_into 'foreman' }
     end
 
     describe x509_private_key('/etc/foreman/client_key.pem') do

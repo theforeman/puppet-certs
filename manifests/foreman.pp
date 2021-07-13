@@ -11,6 +11,8 @@ class certs::foreman (
   $country               = $certs::country,
   $state                 = $certs::state,
   $city                  = $certs::city,
+  $org                   = 'FOREMAN',
+  $org_unit              = 'PUPPET',
   $expiration            = $certs::expiration,
   $default_ca            = $certs::default_ca,
   $ca_key_password_file  = $certs::ca_key_password_file,
@@ -18,6 +20,7 @@ class certs::foreman (
 ) inherits certs {
 
   $client_cert_name = "${hostname}-foreman-client"
+  $client_dn = "CN=${hostname}, OU=${org_unit}, O=${org}, ST=${state}, C=${country}"
 
   # cert for authentication of puppetmaster against foreman
   cert { $client_cert_name:
@@ -27,8 +30,8 @@ class certs::foreman (
     country       => $country,
     state         => $state,
     city          => $city,
-    org           => 'FOREMAN',
-    org_unit      => 'PUPPET',
+    org           => $org,
+    org_unit      => $org_unit,
     expiration    => $expiration,
     ca            => $default_ca,
     generate      => $generate,
@@ -40,13 +43,17 @@ class certs::foreman (
 
   if $deploy {
     certs::keypair { 'foreman':
-      key_pair   => Cert[$client_cert_name],
-      key_file   => $client_key,
-      manage_key => true,
-      key_owner  => 'root',
-      key_group  => 'foreman',
-      key_mode   => '0440',
-      cert_file  => $client_cert,
+      key_pair    => Cert[$client_cert_name],
+      key_file    => $client_key,
+      manage_key  => true,
+      key_owner   => 'root',
+      key_group   => 'foreman',
+      key_mode    => '0440',
+      cert_file   => $client_cert,
+      manage_cert => true,
+      cert_owner  => 'root',
+      cert_group  => 'foreman',
+      cert_mode   => '440',
     } ->
     pubkey { $ssl_ca_cert:
       key_pair => $server_ca,
