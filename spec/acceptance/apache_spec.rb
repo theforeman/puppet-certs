@@ -30,8 +30,23 @@ describe 'certs::apache' do
       it { should have_matching_certificate('/etc/pki/katello/certs/katello-apache.crt') }
     end
 
+    describe x509_certificate("/root/ssl-build/#{fact('fqdn')}/#{fact('fqdn')}-apache.crt") do
+      it { should be_certificate }
+      it { should be_valid }
+      it { should have_purpose 'server' }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}") }
+      its(:keylength) { should be >= 4096 }
+    end
+
+    describe x509_private_key("/root/ssl-build/#{fact('fqdn')}/#{fact('fqdn')}-apache.key") do
+      it { should_not be_encrypted }
+      it { should be_valid }
+      it { should have_matching_certificate("/root/ssl-build/#{fact('fqdn')}/#{fact('fqdn')}-apache.crt") }
+    end
+
     describe package("#{fact('fqdn')}-apache") do
-      it { should be_installed }
+      it { should_not be_installed }
     end
   end
 
@@ -74,7 +89,46 @@ describe 'certs::apache' do
     end
 
     describe package("#{fact('fqdn')}-apache") do
-      it { should be_installed }
+      it { should_not be_installed }
+    end
+  end
+
+  context 'with deploy false' do
+    before(:context) do
+      on default, 'rm -rf /root/ssl-build /etc/pki/katello'
+    end
+
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+          class { 'certs::apache':
+            deploy => false
+          }
+        PUPPET
+      end
+    end
+
+    describe x509_certificate("/root/ssl-build/#{fact('fqdn')}/#{fact('fqdn')}-apache.crt") do
+      it { should be_certificate }
+      it { should be_valid }
+      it { should have_purpose 'server' }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}") }
+      its(:keylength) { should be >= 4096 }
+    end
+
+    describe x509_private_key("/root/ssl-build/#{fact('fqdn')}/#{fact('fqdn')}-apache.key") do
+      it { should_not be_encrypted }
+      it { should be_valid }
+      it { should have_matching_certificate("/root/ssl-build/#{fact('fqdn')}/#{fact('fqdn')}-apache.crt") }
+    end
+
+    describe file('/etc/pki/katello/certs/katello-apache.crt') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/pki/katello/private/katello-apache.key') do
+      it { should_not exist }
     end
   end
 end

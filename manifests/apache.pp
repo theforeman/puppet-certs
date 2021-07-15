@@ -23,7 +23,6 @@ class certs::apache (
   $apache_cert_name = "${hostname}-apache"
   $apache_cert = "${pki_dir}/certs/katello-apache.crt"
   $apache_key  = "${pki_dir}/private/katello-apache.key"
-  $apache_ca_cert = $certs::katello_server_ca_cert
 
   if $server_cert {
     cert { $apache_cert_name:
@@ -31,7 +30,7 @@ class certs::apache (
       hostname       => $hostname,
       cname          => $cname,
       generate       => $generate,
-      deploy         => $deploy,
+      deploy         => false,
       regenerate     => $regenerate,
       custom_pubkey  => $server_cert,
       custom_privkey => $server_key,
@@ -52,21 +51,24 @@ class certs::apache (
       ca            => $default_ca,
       generate      => $generate,
       regenerate    => $regenerate,
-      deploy        => $deploy,
+      deploy        => false,
       password_file => $ca_key_password_file,
       build_dir     => $certs::ssl_build_dir,
     }
   }
 
   if $deploy {
-    certs::keypair { 'apache':
-      key_pair   => Cert[$apache_cert_name],
+    certs::key_pair { $apache_cert_name:
+      source_dir => "${certs::ssl_build_dir}/${hostname}",
       key_file   => $apache_key,
-      manage_key => true,
       key_owner  => 'root',
       key_group  => $group,
       key_mode   => '0440',
       cert_file  => $apache_cert,
+      cert_owner => 'root',
+      cert_group => $group,
+      cert_mode  => '0440',
+      require    => Cert[$apache_cert_name],
     }
   }
 }
