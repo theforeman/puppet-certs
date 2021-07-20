@@ -17,6 +17,8 @@ class certs::foreman (
   $default_ca            = $certs::default_ca,
   $ca_key_password_file  = $certs::ca_key_password_file,
   $server_ca             = $certs::server_ca,
+  $owner                 = 'root',
+  $group                 = 'foreman',
 ) inherits certs {
 
   $client_cert_name = "${hostname}-foreman-client"
@@ -46,13 +48,13 @@ class certs::foreman (
       key_pair    => Cert[$client_cert_name],
       key_file    => $client_key,
       manage_key  => true,
-      key_owner   => 'root',
-      key_group   => 'foreman',
+      key_owner   => $owner,
+      key_group   => $group,
       key_mode    => '0440',
       cert_file   => $client_cert,
       manage_cert => true,
-      cert_owner  => 'root',
-      cert_group  => 'foreman',
+      cert_owner  => $owner,
+      cert_group  => $group,
       cert_mode   => '440',
     } ->
     pubkey { $ssl_ca_cert:
