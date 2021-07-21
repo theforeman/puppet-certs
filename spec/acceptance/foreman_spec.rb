@@ -59,6 +59,13 @@ describe 'certs::foreman' do
       its(:keylength) { should be >= 4096 }
     end
 
+    describe file('/etc/foreman/proxy_ca.pem') do
+      it { should be_file }
+      it { should be_mode 440 }
+      it { should be_owned_by 'root' }
+      it { should be_grouped_into 'foreman' }
+    end
+
     describe x509_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-foreman-client.crt") do
       it { should be_certificate }
       it { should be_valid }
