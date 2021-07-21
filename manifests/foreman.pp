@@ -60,5 +60,13 @@ class certs::foreman (
     pubkey { $ssl_ca_cert:
       key_pair => $server_ca,
     }
+
+    file { $ssl_ca_cert:
+      ensure  => file,
+      owner   => $owner,
+      group   => $group,
+      mode    => '0440',
+      require => Pubkey[$ssl_ca_cert],
+    }
   }
 }
