@@ -16,7 +16,7 @@ class certs::foreman (
   String $expiration = $certs::expiration,
   $default_ca = $certs::default_ca,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
-  $server_ca = $certs::server_ca,
+  Stdlib::Absolutepath $server_ca = $certs::katello_server_ca_cert,
   String $owner = 'root',
   String $group = 'foreman',
 ) inherits certs {
@@ -38,35 +38,32 @@ class certs::foreman (
     ca            => $default_ca,
     generate      => $generate,
     regenerate    => $regenerate,
-    deploy        => $deploy,
+    deploy        => false,
     password_file => $ca_key_password_file,
     build_dir     => $certs::ssl_build_dir,
   }
 
   if $deploy {
-    certs::keypair { 'foreman':
-      key_pair    => Cert[$client_cert_name],
-      key_file    => $client_key,
-      manage_key  => true,
-      key_owner   => $owner,
-      key_group   => $group,
-      key_mode    => '0440',
-      cert_file   => $client_cert,
-      manage_cert => true,
-      cert_owner  => $owner,
-      cert_group  => $group,
-      cert_mode   => '440',
-    } ->
-    pubkey { $ssl_ca_cert:
-      key_pair => $server_ca,
+    certs::key_pair { $client_cert_name:
+      source_dir => "${certs::ssl_build_dir}/${hostname}",
+      key_file   => $client_key,
+      key_owner  => $owner,
+      key_group  => $group,
+      key_mode   => '0440',
+      cert_file  => $client_cert,
+      cert_owner => $owner,
+      cert_group => $group,
+      cert_mode  => '0440',
+      require    => Cert[$client_cert_name],
     }
 
     file { $ssl_ca_cert:
       ensure  => file,
-      owner   => $owner,
+      source  => $server_ca,
+      owner   => 'root',
       group   => $group,
       mode    => '0440',
-      require => Pubkey[$ssl_ca_cert],
+      require => File[$server_ca],
     }
   }
 }

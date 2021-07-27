@@ -80,5 +80,52 @@ describe 'certs::foreman' do
       it { should be_valid }
       it { should have_matching_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-foreman-client.crt") }
     end
+
+    describe package("#{fqdn}-foreman-client") do
+      it { should_not be_installed }
+    end
+  end
+
+  context 'with deploy false' do
+    before(:context) do
+      on default, 'rm -rf /root/ssl-build /etc/foreman'
+    end
+
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+          class { 'certs::foreman':
+            deploy => false
+          }
+        PUPPET
+      end
+    end
+
+    describe x509_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-foreman-client.crt") do
+      it { should be_certificate }
+      it { should be_valid }
+      it { should have_purpose 'client' }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{fqdn}") }
+      its(:keylength) { should be >= 4096 }
+    end
+
+    describe x509_private_key("/root/ssl-build/#{fqdn}/#{fqdn}-foreman-client.key") do
+      it { should_not be_encrypted }
+      it { should be_valid }
+      it { should have_matching_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-foreman-client.crt") }
+    end
+
+    describe file('/etc/foreman/client_key.pem') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/foreman/client_cert.pem') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/foreman/proxy_ca.pem') do
+      it { should_not exist }
+    end
   end
 end
