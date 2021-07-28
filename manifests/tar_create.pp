@@ -9,8 +9,8 @@
 # $foreman_proxy_fqdn::         FQDN of the foreman proxy
 #
 define certs::tar_create(
-  $path               = $title,
-  $foreman_proxy_fqdn = $certs::foreman_proxy_content::foreman_proxy_fqdn,
+  Stdlib::Absolutepath $path = $title,
+  Stdlib::Fqdn $foreman_proxy_fqdn = $certs::foreman_proxy_content::foreman_proxy_fqdn,
 ) {
 
   $ca_rpms = 'ssl-build/*.noarch.rpm'

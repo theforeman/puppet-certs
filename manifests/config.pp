@@ -1,7 +1,7 @@
 # Certs Configuration
 class certs::config (
-  $pki_dir = $certs::pki_dir,
-  $group   = $certs::group,
+  Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
+  String $group = $certs::group,
 ) {
 
   file { $pki_dir:
