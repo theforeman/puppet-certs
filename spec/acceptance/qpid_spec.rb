@@ -3,6 +3,7 @@ require 'spec_helper_acceptance'
 describe 'certs' do
   nssdb_dir = '/etc/pki/katello/nssdb'
   nssdb_password_file = "/etc/pki/katello/nss_db_password-file"
+  fqdn = fact('fqdn')
 
   before(:all) do
     on default, 'rm -rf /root/ssl-build'
@@ -21,19 +22,12 @@ describe 'certs' do
       end
     end
 
-    describe x509_certificate("/etc/pki/katello/certs/#{host_inventory['fqdn']}-qpid-broker.crt") do
-      it { should be_certificate }
-      it { should be_valid }
-      it { should have_purpose 'server' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = pulp, OU = SomeOrgUnit, CN = #{host_inventory['fqdn']}") }
-      its(:keylength) { should be >= 4096 }
+    describe file("/etc/pki/katello/certs/#{fqdn}-qpid-broker.crt") do
+      it { should_not exist }
     end
 
-    describe x509_private_key("/etc/pki/katello/private/#{host_inventory['fqdn']}-qpid-broker.key") do
-      it { should_not be_encrypted }
-      it { should be_valid }
-      it { should have_matching_certificate("/etc/pki/katello/certs/#{host_inventory['fqdn']}-qpid-broker.crt") }
+    describe file("/etc/pki/katello/private/#{fqdn}-qpid-broker.key") do
+      it { should_not exist }
     end
 
     describe file(nssdb_password_file) do
@@ -58,14 +52,14 @@ describe 'certs' do
 
     describe command("certutil -L -d #{nssdb_dir} -n ca") do
       its(:exit_status) { should eq 0 }
-      its(:stdout) { should match_without_whitespace(/Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US"/) }
-      its(:stdout) { should match_without_whitespace(/Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US"/) }
+      its(:stdout) { should match_without_whitespace(/Subject: "CN=#{fqdn},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US"/) }
+      its(:stdout) { should match_without_whitespace(/Issuer: "CN=#{fqdn},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US"/) }
     end
 
     describe command("certutil -L -d #{nssdb_dir} -n broker") do
       its(:exit_status) { should eq 0 }
-      its(:stdout) { should match_without_whitespace(/Subject: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=pulp,ST=North Carolina,C=US"/) }
-      its(:stdout) { should match_without_whitespace(/Issuer: "CN=#{host_inventory['fqdn']},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US"/) }
+      its(:stdout) { should match_without_whitespace(/Subject: "CN=#{fqdn},OU=SomeOrgUnit,O=pulp,ST=North Carolina,C=US"/) }
+      its(:stdout) { should match_without_whitespace(/Issuer: "CN=#{fqdn},OU=SomeOrgUnit,O=Katello,L=Raleigh,ST=North Carolina,C=US"/) }
     end
 
     describe command("certutil -K -d #{nssdb_dir} -f #{nssdb_password_file} -n broker") do
@@ -88,15 +82,15 @@ describe 'certs' do
     it "checks that the fingerprint matches" do
       apply_manifest(pp, catch_failures: true)
 
-      initial_fingerprint_output = on default, "openssl x509 -noout -fingerprint -sha256 -in /etc/pki/katello/certs/#{host_inventory['fqdn']}-qpid-broker.crt"
+      initial_fingerprint_output = on default, "openssl x509 -noout -fingerprint -sha256 -in /root/ssl-build/#{fqdn}/#{fqdn}-qpid-broker.crt"
       initial_fingerprint = initial_fingerprint_output.output.strip.split('=').last
       initial_truststore_output = on default, "certutil -L -d #{nssdb_dir} -n broker"
       expect(initial_truststore_output.output.strip).to include(initial_fingerprint)
 
-      on default, "rm -rf /root/ssl-build/#{host_inventory['fqdn']}"
+      on default, "rm -rf /root/ssl-build/#{fqdn}"
       apply_manifest(pp, catch_failures: true)
 
-      fingerprint_output = on default, "openssl x509 -noout -fingerprint -sha256 -in /root/ssl-build/#{host_inventory['fqdn']}/#{host_inventory['fqdn']}-qpid-broker.crt"
+      fingerprint_output = on default, "openssl x509 -noout -fingerprint -sha256 -in /root/ssl-build/#{fqdn}/#{fqdn}-qpid-broker.crt"
       fingerprint = fingerprint_output.output.strip.split('=').last
       initial_truststore_output = on default, "certutil -L -d #{nssdb_dir} -n broker"
       truststore_output = on default, "certutil -L -d #{nssdb_dir} -n broker"
