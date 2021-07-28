@@ -91,7 +91,6 @@ class certs::candlepin (
       key_group     => 'tomcat',
       key_mode      => '0440',
       cert_mode     => '0640',
-      unprotect     => true,
       strip         => true,
       password_file => $ca_key_password_file,
     }
