@@ -1,22 +1,21 @@
 # Constains certs specific configurations for qpid dispatch router
 class certs::qpid_router::server (
-  $hostname               = $certs::node_fqdn,
-  $cname                  = $certs::cname,
-  $generate               = $certs::generate,
-  $regenerate             = $certs::regenerate,
-  $deploy                 = $certs::deploy,
-  $cert                   = $certs::qpid_router_server_cert,
-  $key                    = $certs::qpid_router_server_key,
-  $owner                  = 'qdrouterd',
-  $group                  = 'root',
-
-  $country               = $certs::country,
-  $state                 = $certs::state,
-  $city                  = $certs::city,
-  $org_unit              = $certs::org_unit,
-  $expiration            = $certs::expiration,
-  $default_ca            = $certs::default_ca,
-  $ca_key_password_file  = $certs::ca_key_password_file,
+  Stdlib::Fqdn $hostname = $certs::node_fqdn,
+  Array[Stdlib::Fqdn] $cname = $certs::cname,
+  Boolean $generate = $certs::generate,
+  Boolean $regenerate = $certs::regenerate,
+  Boolean $deploy = $certs::deploy,
+  Stdlib::Absolutepath $cert = $certs::qpid_router_server_cert,
+  Stdlib::Absolutepath $key = $certs::qpid_router_server_key,
+  String $owner = 'qdrouterd',
+  String $group = 'root',
+  String[2,2] $country = $certs::country,
+  String $state = $certs::state,
+  String $city = $certs::city,
+  String $org_unit = $certs::org_unit,
+  String $expiration = $certs::expiration,
+  $default_ca = $certs::default_ca,
+  Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
 ) inherits certs {
 
   $server_keypair = "${hostname}-qpid-router-server"

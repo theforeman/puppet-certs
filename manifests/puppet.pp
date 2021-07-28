@@ -1,24 +1,21 @@
 # Class for handling Puppet cert configuration
 class certs::puppet (
-  $hostname             = $certs::node_fqdn,
-  $cname                = $certs::cname,
-  $generate             = $certs::generate,
-  $regenerate           = $certs::regenerate,
-  $deploy               = $certs::deploy,
-
-  $client_cert          = $certs::puppet_client_cert,
-  $client_key           = $certs::puppet_client_key,
-  $ssl_ca_cert          = $certs::puppet_ssl_ca_cert,
-
-  $country              = $certs::country,
-  $state                = $certs::state,
-  $city                 = $certs::city,
-  $expiration           = $certs::expiration,
-  $default_ca           = $certs::default_ca,
-  $ca_key_password_file = $certs::ca_key_password_file,
-  $server_ca            = $certs::server_ca,
-
-  $pki_dir              = $certs::pki_dir,
+  Stdlib::Fqdn $hostname = $certs::node_fqdn,
+  Array[Stdlib::Fqdn] $cname = $certs::cname,
+  Boolean $generate = $certs::generate,
+  Boolean $regenerate = $certs::regenerate,
+  Boolean $deploy = $certs::deploy,
+  Stdlib::Absolutepath $client_cert = $certs::puppet_client_cert,
+  Stdlib::Absolutepath $client_key = $certs::puppet_client_key,
+  Stdlib::Absolutepath $ssl_ca_cert = $certs::puppet_ssl_ca_cert,
+  String[2,2] $country = $certs::country,
+  String $state = $certs::state,
+  String $city = $certs::city,
+  String $expiration = $certs::expiration,
+  $default_ca = $certs::default_ca,
+  Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
+  $server_ca = $certs::server_ca,
+  Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
 ) inherits certs {
 
   $puppet_client_cert_name = "${hostname}-puppet-client"
