@@ -15,6 +15,7 @@ class certs::pulp_client (
   $default_ca = $certs::default_ca,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
   String $group = $certs::group,
+  String $owner = 'root',
 ) inherits certs {
 
   $client_cert_name = 'pulp-client'
@@ -36,20 +37,23 @@ class certs::pulp_client (
     ca            => $default_ca,
     generate      => $generate,
     regenerate    => $regenerate,
-    deploy        => $deploy,
+    deploy        => false,
     password_file => $ca_key_password_file,
     build_dir     => $certs::ssl_build_dir,
   }
 
   if $deploy {
-    certs::keypair { 'pulp_client':
-      key_pair   => Cert[$client_cert_name],
+    certs::key_pair { $client_cert_name:
+      source_dir => "${certs::ssl_build_dir}/${hostname}",
       key_file   => $client_key,
-      manage_key => true,
+      key_owner  => $owner,
       key_group  => $group,
-      key_owner  => 'root',
       key_mode   => '0440',
       cert_file  => $client_cert,
+      cert_owner => $owner,
+      cert_group => $group,
+      cert_mode  => '0440',
+      require    => Cert[$client_cert_name],
     }
   }
 }
