@@ -33,7 +33,7 @@ class certs::qpid (
     ca            => $default_ca,
     generate      => $generate,
     regenerate    => $regenerate,
-    deploy        => $deploy,
+    deploy        => false,
     password_file => $ca_key_password_file,
     build_dir     => $certs::ssl_build_dir,
   }
@@ -45,16 +45,18 @@ class certs::qpid (
 
     $client_cert            = "${pki_dir}/certs/${qpid_cert_name}.crt"
     $client_key             = "${pki_dir}/private/${qpid_cert_name}.key"
-    $pfx_path               = "${pki_dir}/${qpid_cert_name}.pfx"
 
+    # Ensure files located at /etc/pki/katello no longer exist
     certs::keypair { 'qpid':
-      key_pair   => Cert[$qpid_cert_name],
-      key_file   => $client_key,
-      manage_key => true,
-      key_owner  => 'root',
-      key_group  => $qpidd_group,
-      key_mode   => '0440',
-      cert_file  => $client_cert,
+      ensure_key  => 'absent',
+      key_pair    => Cert[$qpid_cert_name],
+      key_file    => $client_key,
+      manage_key  => true,
+      key_owner   => 'root',
+      key_group   => $qpidd_group,
+      key_mode    => '0440',
+      ensure_cert => 'absent',
+      cert_file   => $client_cert,
     }
 
     nssdb_certificate { "${nss_db_dir}:ca":
@@ -66,8 +68,8 @@ class certs::qpid (
 
     nssdb_certificate { "${nss_db_dir}:${nss_cert_name}":
       ensure        => present,
-      certificate   => $client_cert,
-      private_key   => $client_key,
+      certificate   => "${certs::ssl_build_dir}/${hostname}/${qpid_cert_name}.crt",
+      private_key   => "${certs::ssl_build_dir}/${hostname}/${qpid_cert_name}.key",
       trustargs     => ',,',
       password_file => $nss_db_password_file,
     }

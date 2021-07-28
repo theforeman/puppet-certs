@@ -37,8 +37,8 @@ describe 'certs::qpid' do
         it do
           is_expected.to contain_nssdb_certificate('/etc/pki/katello/nssdb:broker')
             .with_ensure('present')
-            .with_certificate('/etc/pki/katello/certs/foo.example.com-qpid-broker.crt')
-            .with_private_key('/etc/pki/katello/private/foo.example.com-qpid-broker.key')
+            .with_certificate('/root/ssl-build/foo.example.com/foo.example.com-qpid-broker.crt')
+            .with_private_key('/root/ssl-build/foo.example.com/foo.example.com-qpid-broker.key')
             .with_trustargs(',,')
             .with_password_file('/etc/pki/katello/nss_db_password-file')
         end
