@@ -46,7 +46,7 @@ describe 'certs' do
       end
     end
 
-    describe x509_certificate('/etc/pki/katello/certs/katello-tomcat.crt') do
+    describe x509_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-tomcat.crt") do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
@@ -55,10 +55,22 @@ describe 'certs' do
       its(:keylength) { should be >= 4096 }
     end
 
-    describe x509_private_key('/etc/pki/katello/private/katello-tomcat.key') do
+    describe x509_private_key("/root/ssl-build/#{fqdn}/#{fqdn}-tomcat.key") do
       it { should_not be_encrypted }
       it { should be_valid }
-      it { should have_matching_certificate('/etc/pki/katello/certs/katello-tomcat.crt') }
+      it { should have_matching_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-tomcat.crt") }
+    end
+
+    describe file('/etc/pki/katello/certs/katello-tomcat.crt') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/pki/katello/private/katello-tomcat.key') do
+      it { should_not exist }
+    end
+
+    describe package("#{fqdn}-tomcat") do
+      it { should_not be_installed }
     end
 
     describe x509_certificate('/etc/foreman/client_cert.pem') do
@@ -136,15 +148,15 @@ describe 'certs' do
 
     describe file('/etc/candlepin/certs/candlepin-ca.crt') do
       it { should be_file }
-      it { should be_mode 640 }
-      it { should be_owned_by 'tomcat' }
+      it { should be_mode 440 }
+      it { should be_owned_by 'root' }
       it { should be_grouped_into 'tomcat' }
     end
 
     describe file('/etc/candlepin/certs/candlepin-ca.key') do
       it { should be_file }
       it { should be_mode 440 }
-      it { should be_owned_by 'tomcat' }
+      it { should be_owned_by 'root' }
       it { should be_grouped_into 'tomcat' }
     end
 
@@ -176,7 +188,7 @@ describe 'certs' do
     end
   end
 
-  describe 'with localhost' do
+  context 'with localhost' do
     it_behaves_like 'an idempotent resource' do
       let(:manifest) do
         <<-PUPPET
@@ -186,21 +198,21 @@ describe 'certs' do
         PUPPET
       end
     end
-  end
 
-  describe x509_certificate('/etc/pki/katello/certs/katello-tomcat.crt') do
-    it { should be_certificate }
-    it { should be_valid }
-    it { should have_purpose 'server' }
-    its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-    its(:subject) { should eq('C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = localhost') }
-    its(:keylength) { should be >= 4096 }
-  end
+    describe x509_certificate("/root/ssl-build/localhost/localhost-tomcat.crt") do
+      it { should be_certificate }
+      it { should be_valid }
+      it { should have_purpose 'server' }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:subject) { should eq('C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = localhost') }
+      its(:keylength) { should be >= 4096 }
+    end
 
-  describe command("keytool -list -v -keystore /etc/candlepin/certs/keystore -alias tomcat -storepass $(cat #{keystore_password_file})") do
-    its(:exit_status) { should eq 0 }
-    its(:stdout) { should match(/^Owner: CN=localhost, OU=SomeOrgUnit, O=Katello, ST=North Carolina, C=US$/) }
-    its(:stdout) { should match(/^Issuer: CN=#{fqdn}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
+    describe command("keytool -list -v -keystore /etc/candlepin/certs/keystore -alias tomcat -storepass $(cat #{keystore_password_file})") do
+      its(:exit_status) { should eq 0 }
+      its(:stdout) { should match(/^Owner: CN=localhost, OU=SomeOrgUnit, O=Katello, ST=North Carolina, C=US$/) }
+      its(:stdout) { should match(/^Issuer: CN=#{fqdn}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
+    end
   end
 
   context 'updates java-client certificate in truststore if it changes' do
@@ -268,7 +280,7 @@ describe 'certs' do
     it "checks that the fingerprint matches" do
       apply_manifest(pp, catch_failures: true)
 
-      initial_fingerprint_output = on default, 'openssl x509 -noout -fingerprint -sha256 -in /etc/pki/katello/certs/katello-tomcat.crt'
+      initial_fingerprint_output = on default, "openssl x509 -noout -fingerprint -sha256 -in /root/ssl-build/#{fqdn}/#{fqdn}-tomcat.crt"
       initial_fingerprint = initial_fingerprint_output.output.strip.split('=').last
       initial_keystore_output = on default, "keytool -list -keystore /etc/candlepin/certs/keystore -storepass $(cat #{keystore_password_file})"
       expect(initial_keystore_output.output.strip).to include(initial_fingerprint)
@@ -276,13 +288,60 @@ describe 'certs' do
       on default, "rm -rf /root/ssl-build/#{fqdn}"
       apply_manifest(pp, catch_failures: true)
 
-      fingerprint_output = on default, 'openssl x509 -noout -fingerprint -sha256 -in /etc/pki/katello/certs/katello-tomcat.crt'
+      fingerprint_output = on default, "openssl x509 -noout -fingerprint -sha256 -in /root/ssl-build/#{fqdn}/#{fqdn}-tomcat.crt"
       fingerprint = fingerprint_output.output.strip.split('=').last
       keystore_output = on default, "keytool -list -keystore /etc/candlepin/certs/keystore -storepass $(cat #{keystore_password_file})"
 
       expect(keystore_output.output.strip).to include(fingerprint)
       expect(fingerprint).not_to equal(initial_fingerprint)
       expect(keystore_output.output.strip).not_to include(initial_fingerprint)
+    end
+  end
+
+  context 'with deploy false' do
+    before(:context) do
+      on default, 'rm -rf /root/ssl-build /etc/candlepin'
+    end
+
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+          class { 'certs::candlepin':
+            deploy => false
+          }
+        PUPPET
+      end
+    end
+
+    describe x509_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-tomcat.crt") do
+      it { should be_certificate }
+      it { should be_valid }
+      it { should have_purpose 'server' }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:keylength) { should be >= 4096 }
+    end
+
+    describe x509_private_key("/root/ssl-build/#{fqdn}/#{fqdn}-tomcat.key") do
+      it { should_not be_encrypted }
+      it { should be_valid }
+      it { should have_matching_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-tomcat.crt") }
+    end
+
+    describe file('/etc/candlepin/certs/keystore') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/candlepin/certs/truststore') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/candlepin/certs/candlepin-ca.crt') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/candlepin/certs/candlepin-ca.key') do
+      it { should_not exist }
     end
   end
 end

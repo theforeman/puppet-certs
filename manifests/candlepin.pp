@@ -20,7 +20,7 @@ class certs::candlepin (
   String $expiration = $certs::expiration,
   $default_ca = $certs::default_ca,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
-  String $user = $certs::user,
+  String $user = 'root',
   String $group = 'tomcat',
   String $client_keypair_group = 'tomcat',
 ) inherits certs {
@@ -43,14 +43,12 @@ class certs::candlepin (
     ca            => $default_ca,
     generate      => $generate,
     regenerate    => $regenerate,
-    deploy        => $deploy,
+    deploy        => false,
     password_file => $ca_key_password_file,
     build_dir     => $certs::ssl_build_dir,
   }
 
   $tomcat_cert_name = "${hostname}-tomcat"
-  $tomcat_cert = "${pki_dir}/certs/katello-tomcat.crt"
-  $tomcat_key  = "${pki_dir}/private/katello-tomcat.key"
 
   cert { $tomcat_cert_name:
     ensure        => present,
@@ -65,7 +63,7 @@ class certs::candlepin (
     ca            => $default_ca,
     generate      => $generate,
     regenerate    => $regenerate,
-    deploy        => $deploy,
+    deploy        => false,
     password_file => $ca_key_password_file,
     build_dir     => $certs::ssl_build_dir,
   }
@@ -79,31 +77,30 @@ class certs::candlepin (
   $alias = 'candlepin-ca'
 
   if $deploy {
-    certs::keypair { 'candlepin-ca':
-      manage_cert   => true,
-      manage_key    => true,
-      key_pair      => $default_ca,
-      key_file      => $ca_key,
-      cert_file     => $ca_cert,
-      cert_owner    => 'tomcat',
-      cert_group    => 'tomcat',
-      key_owner     => 'tomcat',
-      key_group     => 'tomcat',
-      key_mode      => '0440',
-      cert_mode     => '0640',
-      strip         => true,
-      password_file => $ca_key_password_file,
+    certs::key_pair { $certs::default_ca_name:
+      source_dir => $certs::ssl_build_dir,
+      key_file   => $ca_key,
+      key_owner  => $user,
+      key_group  => $group,
+      key_mode   => '0440',
+      cert_file  => $ca_cert,
+      cert_owner => $user,
+      cert_group => $group,
+      cert_mode  => '0440',
+      require    => $default_ca,
     }
 
     certs::keypair { 'tomcat':
       key_pair    => Cert[$tomcat_cert_name],
-      key_file    => $tomcat_key,
+      key_file    => "${pki_dir}/private/katello-tomcat.key",
       manage_key  => true,
+      ensure_key  => 'absent',
       key_owner   => 'root',
       key_group   => $client_keypair_group,
       key_mode    => '0440',
-      cert_file   => $tomcat_cert,
+      cert_file   => "${pki_dir}/certs/katello-tomcat.crt",
       manage_cert => true,
+      ensure_cert => 'absent',
       cert_owner  => 'root',
       cert_group  => $client_keypair_group,
       cert_mode   => '0440',
@@ -145,8 +142,8 @@ class certs::candlepin (
     keystore_certificate { "${keystore}:tomcat":
       ensure        => present,
       password_file => $keystore_password_path,
-      certificate   => $tomcat_cert,
-      private_key   => $tomcat_key,
+      certificate   => "${certs::ssl_build_dir}/${hostname}/${tomcat_cert_name}.crt",
+      private_key   => "${certs::ssl_build_dir}/${hostname}/${tomcat_cert_name}.key",
       ca            => $ca_cert,
     }
 
