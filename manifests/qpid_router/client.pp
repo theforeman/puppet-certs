@@ -33,25 +33,24 @@ class certs::qpid_router::client (
     ca            => $default_ca,
     generate      => $generate,
     regenerate    => $regenerate,
-    deploy        => $deploy,
+    deploy        => false,
     purpose       => 'client',
     password_file => $ca_key_password_file,
     build_dir     => $certs::ssl_build_dir,
   }
 
   if $deploy {
-    certs::keypair { 'qpid_router_client':
-      key_pair    => Cert[$client_keypair],
-      key_file    => $key,
-      manage_key  => true,
-      key_owner   => $owner,
-      key_group   => $group,
-      key_mode    => '0640',
-      cert_file   => $cert,
-      manage_cert => true,
-      cert_owner  => $owner,
-      cert_group  => $group,
-      cert_mode   => '0640',
+    certs::key_pair { $client_keypair:
+      source_dir => "${certs::ssl_build_dir}/${hostname}",
+      key_file   => $key,
+      key_owner  => $owner,
+      key_group  => $group,
+      key_mode   => '0440',
+      cert_file  => $cert,
+      cert_owner => $owner,
+      cert_group => $group,
+      cert_mode  => '0640',
+      require    => Cert[$client_keypair],
     }
   }
 }
