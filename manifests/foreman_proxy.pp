@@ -18,7 +18,7 @@ class certs::foreman_proxy (
   Stdlib::Absolutepath $foreman_ssl_key = '/etc/foreman-proxy/foreman_ssl_key.pem',
   Stdlib::Absolutepath $foreman_ssl_ca_cert = '/etc/foreman-proxy/foreman_ssl_ca.pem',
   Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
-  $server_ca = $certs::server_ca,
+  Stdlib::Absolutepath $server_ca_cert = $certs::katello_server_ca_cert,
   Optional[Stdlib::Absolutepath] $server_cert = $certs::server_cert,
   Optional[Stdlib::Absolutepath] $server_key = $certs::server_key,
   Optional[Stdlib::Absolutepath] $server_cert_req = $certs::server_cert_req,
@@ -27,8 +27,10 @@ class certs::foreman_proxy (
   String $city = $certs::city,
   String $expiration = $certs::expiration,
   $default_ca = $certs::default_ca,
+  Stdlib::Absolutepath $default_ca_cert = $certs::katello_default_ca_cert,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
   String $group = 'foreman-proxy',
+  String $owner = 'root',
   Stdlib::Filemode $private_key_mode = '0440',
   Stdlib::Filemode $public_key_mode = '0444',
 ) inherits certs {
@@ -44,7 +46,7 @@ class certs::foreman_proxy (
       cname          => $cname,
       generate       => $generate,
       regenerate     => $regenerate,
-      deploy         => $deploy,
+      deploy         => false,
       custom_pubkey  => $server_cert,
       custom_privkey => $server_key,
       custom_req     => $server_cert_req,
@@ -65,7 +67,7 @@ class certs::foreman_proxy (
       ca            => $default_ca,
       generate      => $generate,
       regenerate    => $regenerate,
-      deploy        => $deploy,
+      deploy        => false,
       password_file => $ca_key_password_file,
       build_dir     => $certs::ssl_build_dir,
     }
@@ -85,56 +87,66 @@ class certs::foreman_proxy (
     ca            => $default_ca,
     generate      => $generate,
     regenerate    => $regenerate,
-    deploy        => $deploy,
+    deploy        => false,
     password_file => $ca_key_password_file,
     build_dir     => $certs::ssl_build_dir,
   }
 
   if $deploy {
 
-    certs::keypair { 'foreman_proxy':
-      key_pair    => Cert[$proxy_cert_name],
-      key_file    => $proxy_key,
-      manage_key  => true,
-      key_owner   => 'root',
-      key_mode    => $private_key_mode,
-      key_group   => $group,
-      cert_file   => $proxy_cert,
-      manage_cert => true,
-      cert_owner  => 'root',
-      cert_group  => $group,
-      cert_mode   => $public_key_mode,
-    } ->
-    pubkey { $proxy_ca_cert:
-      key_pair => $default_ca,
+    certs::key_pair { $proxy_cert_name:
+      source_dir => "${certs::ssl_build_dir}/${hostname}",
+      key_file   => $proxy_key,
+      key_owner  => $owner,
+      key_group  => $group,
+      key_mode   => $private_key_mode,
+      cert_file  => $proxy_cert,
+      cert_owner => $owner,
+      cert_group => $group,
+      cert_mode  => $public_key_mode,
+      require    => Cert[$proxy_cert_name],
     }
 
-    certs::keypair { 'foreman_proxy_client':
-      key_pair    => Cert[$foreman_proxy_client_cert_name],
-      key_file    => $foreman_ssl_key,
-      manage_key  => true,
-      key_owner   => 'root',
-      key_group   => $group,
-      key_mode    => $private_key_mode,
-      cert_file   => $foreman_ssl_cert,
-      manage_cert => true,
-      cert_owner  => 'root',
-      cert_group  => $group,
-      cert_mode   => $public_key_mode,
-    } ->
-    pubkey { $foreman_ssl_ca_cert:
-      key_pair => $server_ca,
+    file { $proxy_ca_cert:
+      ensure  => file,
+      source  => $default_ca_cert,
+      owner   => $owner,
+      group   => $group,
+      mode    => '0440',
+      require => File[$default_ca_cert],
+    }
+
+    certs::key_pair { $foreman_proxy_client_cert_name:
+      source_dir => "${certs::ssl_build_dir}/${hostname}",
+      key_file   => $foreman_ssl_key,
+      key_owner  => $owner,
+      key_group  => $group,
+      key_mode   => $private_key_mode,
+      cert_file  => $foreman_ssl_cert,
+      cert_owner => $owner,
+      cert_group => $group,
+      cert_mode  => $public_key_mode,
+      require    => Cert[$foreman_proxy_client_cert_name],
+    }
+
+    file { $foreman_ssl_ca_cert:
+      ensure  => file,
+      source  => $server_ca_cert,
+      owner   => $owner,
+      group   => $group,
+      mode    => '0440',
+      require => File[$server_ca_cert],
     }
 
     cert_key_bundle { $foreman_proxy_ssl_client_bundle:
       ensure       => present,
-      certificate  => $foreman_ssl_cert,
-      private_key  => $foreman_ssl_key,
+      certificate  => "${certs::ssl_build_dir}/${hostname}/${foreman_proxy_client_cert_name}.crt",
+      private_key  => "${certs::ssl_build_dir}/${hostname}/${foreman_proxy_client_cert_name}.key",
       force_pkcs_1 => true,
       owner        => 'root',
       group        => $group,
       mode         => $public_key_mode,
-      require      => Certs::Keypair['foreman_proxy_client'],
+      require      => Cert[$foreman_proxy_client_cert_name],
     }
 
   }
