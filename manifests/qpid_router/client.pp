@@ -1,6 +1,6 @@
 # Constains certs specific configurations for qpid dispatch router
 class certs::qpid_router::client (
-  Stdlib::Fqdn $hostname = $certs::node_fqdn,
+  String $hostname = $certs::node_fqdn,
   Array[Stdlib::Fqdn] $cname = $certs::cname,
   Boolean $generate = $certs::generate,
   Boolean $regenerate = $certs::regenerate,
