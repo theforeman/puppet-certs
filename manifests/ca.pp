@@ -15,6 +15,7 @@ class certs::ca (
   Optional[Stdlib::Absolutepath] $server_cert = $certs::server_cert,
   Optional[Stdlib::Absolutepath] $ssl_build_dir = $certs::ssl_build_dir,
   String $group = $certs::group,
+  String $owner = $certs::user,
   Stdlib::Absolutepath $katello_server_ca_cert = $certs::katello_server_ca_cert,
   Stdlib::Absolutepath $ca_key = $certs::ca_key,
   Stdlib::Absolutepath $ca_cert = $certs::ca_cert,
@@ -41,79 +42,60 @@ class certs::ca (
     org_unit      => $org_unit,
     expiration    => $ca_expiration,
     generate      => $generate,
-    deploy        => $deploy,
+    deploy        => false,
     password_file => $ca_key_password_file,
     build_dir     => $certs::ssl_build_dir,
   }
   $default_ca = Ca[$default_ca_name]
 
+
   if $server_cert {
     ca { $server_ca_name:
       ensure        => present,
       generate      => $generate,
-      deploy        => $deploy,
+      deploy        => false,
       custom_pubkey => $certs::server_ca_cert,
       build_dir     => $certs::ssl_build_dir,
     }
   } else {
     ca { $server_ca_name:
-      ensure    => present,
-      generate  => $generate,
-      deploy    => $deploy,
-      ca        => $default_ca,
-      build_dir => $certs::ssl_build_dir,
+      ensure        => present,
+      generate      => $generate,
+      deploy        => false,
+      custom_pubkey => "${certs::ssl_build_dir}/${default_ca_name}.crt",
+      build_dir     => $certs::ssl_build_dir,
     }
   }
-  $server_ca = Ca[$server_ca_name]
 
   if $generate {
     file { "${ssl_build_dir}/KATELLO-TRUSTED-SSL-CERT":
       ensure  => link,
       target  => "${ssl_build_dir}/${server_ca_name}.crt",
-      require => $server_ca,
+      require => Ca[$server_ca_name],
     }
   }
 
   if $deploy {
-    Ca[$default_ca_name] ~>
-    pubkey { $ca_cert:
-      key_pair => $default_ca,
-    } ~>
-    pubkey { $ca_cert_stripped:
-      strip    => true,
-      key_pair => $default_ca,
-    } ~>
-    file { $ca_cert:
+    # Ensure CA key deployed to /etc/pki/katello/private no longer exists
+    # The CA key is not used by anything from this directory and does not need to be deployed
+    file { $ca_key:
+      ensure => absent,
+    }
+
+    file { $certs::katello_default_ca_cert:
       ensure => file,
+      source => "${certs::ssl_build_dir}/${default_ca_name}.crt",
       owner  => 'root',
-      group  => $group,
+      group  => 'root',
       mode   => '0644',
     }
 
-    Ca[$server_ca_name] ~>
-    pubkey { $katello_server_ca_cert:
-      key_pair => $server_ca,
-    } ~>
     file { $katello_server_ca_cert:
       ensure => file,
-      owner  => 'root',
+      source => "${certs::ssl_build_dir}/${server_ca_name}.crt",
+      owner  => $owner,
       group  => $group,
-      mode   => '0644',
-    }
-
-    if $generate {
-      Ca[$default_ca_name] ~>
-      privkey { $ca_key:
-        key_pair      => $default_ca,
-        unprotect     => true,
-        password_file => $ca_key_password_file,
-      } ~>
-      file { $ca_key:
-        ensure => file,
-        owner  => 'root',
-        group  => $group,
-        mode   => '0440',
-      }
+      mode   => '0440',
     }
   }
 }

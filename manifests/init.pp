@@ -125,5 +125,4 @@ class certs (
   Class['certs::ca']
 
   $default_ca = $certs::ca::default_ca
-  $server_ca = $certs::ca::server_ca
 }
