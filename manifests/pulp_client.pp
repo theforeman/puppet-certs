@@ -43,7 +43,7 @@ class certs::pulp_client (
   }
 
   if $deploy {
-    certs::key_pair { $client_cert_name:
+    certs::keypair { $client_cert_name:
       source_dir => "${certs::ssl_build_dir}/${hostname}",
       key_file   => $client_key,
       key_owner  => $owner,

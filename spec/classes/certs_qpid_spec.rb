@@ -19,14 +19,6 @@ describe 'certs::qpid' do
         it { is_expected.to contain_class('certs::ssltools::nssdb') }
 
         it do
-          is_expected.to contain_certs__keypair('qpid')
-            .with_key_pair('Cert[foo.example.com-qpid-broker]')
-            .with_key_file('/etc/pki/katello/private/foo.example.com-qpid-broker.key')
-            .with_cert_file('/etc/pki/katello/certs/foo.example.com-qpid-broker.crt')
-            .with_key_group('qpidd')
-        end
-
-        it do
           is_expected.to contain_nssdb_certificate('/etc/pki/katello/nssdb:ca')
             .with_ensure('present')
             .with_certificate('/etc/pki/katello/certs/katello-default-ca.crt')

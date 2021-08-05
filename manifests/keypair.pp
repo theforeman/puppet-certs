@@ -1,54 +1,34 @@
-# Deploy a key pair
+# @summary Deploy a certificate and its matching key
+# @api private
 define certs::keypair (
-  $key_pair,
+  Stdlib::Absolutepath $source_dir,
   Stdlib::Absolutepath $key_file,
   Stdlib::Absolutepath $cert_file,
-  Boolean $manage_key = false,
-  Enum['present', 'absent'] $ensure_key  = 'present',
-  Optional[String[1]] $key_owner = undef,
-  Optional[String[1]] $key_group = undef,
-  Optional[Stdlib::Filemode] $key_mode = undef,
-  Boolean $manage_cert = false,
-  Enum['present', 'absent'] $ensure_cert = 'present',
-  Optional[String[1]] $cert_owner = undef,
-  Optional[String[1]] $cert_group = undef,
-  Optional[Stdlib::Filemode] $cert_mode = undef,
-  Boolean $unprotect = false,
-  Boolean $strip = false,
-  Optional[Stdlib::Absolutepath] $password_file = undef,
+  Enum['present', 'absent'] $key_ensure = 'present',
+  String $key_owner = 'root',
+  String $key_group = undef,
+  Stdlib::Filemode $key_mode = '440',
+  Enum['present', 'absent'] $cert_ensure = 'present',
+  String $cert_owner = 'root',
+  String $cert_group = undef,
+  Stdlib::Filemode $cert_mode = '440',
 ) {
-  privkey { $key_file:
-    ensure        => $ensure_key,
-    key_pair      => $key_pair,
-    unprotect     => $unprotect,
-    password_file => $password_file,
-    subscribe     => $key_pair,
+
+  file { $key_file:
+    ensure    => $key_ensure,
+    source    => "${source_dir}/${title}.key",
+    owner     => $key_owner,
+    group     => $key_group,
+    mode      => $key_mode,
+    show_diff => false,
   }
 
-  pubkey { $cert_file:
-    ensure    => $ensure_cert,
-    key_pair  => $key_pair,
-    strip     => $strip,
-    subscribe => Privkey[$key_file],
+  file { $cert_file:
+    ensure => $cert_ensure,
+    source => "${source_dir}/${title}.crt",
+    owner  => $cert_owner,
+    group  => $cert_group,
+    mode   => $cert_mode,
   }
 
-  if $manage_key {
-    file { $key_file:
-      ensure  => $ensure_key,
-      owner   => $key_owner,
-      group   => $key_group,
-      mode    => $key_mode,
-      require => Privkey[$key_file],
-    }
-  }
-
-  if $manage_cert {
-    file { $cert_file:
-      ensure  => $ensure_cert,
-      owner   => $cert_owner,
-      group   => $cert_group,
-      mode    => $cert_mode,
-      require => Pubkey[$cert_file],
-    }
-  }
 }

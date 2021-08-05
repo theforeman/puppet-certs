@@ -58,7 +58,7 @@ class certs::apache (
   }
 
   if $deploy {
-    certs::key_pair { $apache_cert_name:
+    certs::keypair { $apache_cert_name:
       source_dir => "${certs::ssl_build_dir}/${hostname}",
       key_file   => $apache_key,
       key_owner  => 'root',

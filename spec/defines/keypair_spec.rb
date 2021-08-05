@@ -4,9 +4,11 @@ describe 'certs::keypair' do
   let(:title) { 'mykeypair' }
   let(:params) do
     {
-      key_pair: 'Ca[default]',
+      source_dir: '/root/ssl-build/example.com',
       key_file: '/path/to/key.pem',
       cert_file: '/path/to/cert.pem',
+      key_group: 'root',
+      cert_group: 'root',
     }
   end
   let(:pre_condition) do
@@ -19,66 +21,46 @@ describe 'certs::keypair' do
   context 'with minimal parameters' do
     it { is_expected.to compile.with_all_deps }
     it do
-      is_expected.to contain_privkey('/path/to/key.pem')
-        .with_key_pair('Ca[default]')
-        .with_unprotect(false)
-        .with_password_file(nil)
-        .that_subscribes_to('Ca[default]')
+      is_expected.to contain_file('/path/to/key.pem')
+        .with_ensure('present')
+        .with_source('/root/ssl-build/example.com/mykeypair.key')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode('440')
+        .with_show_diff(false)
     end
 
     it do
-      is_expected.to contain_pubkey('/path/to/cert.pem')
-        .with_key_pair('Ca[default]')
-        .with_strip(false)
-        .that_subscribes_to(['Ca[default]', 'Privkey[/path/to/key.pem]'])
+      is_expected.to contain_file('/path/to/cert.pem')
+        .with_ensure('present')
+        .with_source('/root/ssl-build/example.com/mykeypair.crt')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode('440')
     end
-
-    it { is_expected.not_to contain_file('/path/to/key.pem') }
-    it { is_expected.not_to contain_file('/path/to/cert.pem') }
   end
 
-  context 'with manage_key => true' do
-    let(:params) { super().merge(manage_key: true) }
-
-    it { is_expected.to compile.with_all_deps }
-    it { is_expected.to contain_file('/path/to/key.pem').that_requires('Privkey[/path/to/key.pem]') }
-    it { is_expected.not_to contain_file('/path/to/cert.pem') }
-  end
-
-  context 'with manage_cert => true' do
-    let(:params) { super().merge(manage_cert: true) }
-
-    it { is_expected.to compile.with_all_deps }
-    it { is_expected.not_to contain_file('/path/to/key.pem') }
-    it { is_expected.to contain_file('/path/to/cert.pem').that_requires('Pubkey[/path/to/cert.pem]') }
-  end
-
-  context 'with ensure_key => absent' do
-    let(:params) { super().merge(ensure_key: 'absent', manage_key: true) }
+  context 'with key_ensure => absent and cert_ensure => absent' do
+    let(:params) { super().merge(key_ensure: 'absent', cert_ensure: 'absent') }
 
     it { is_expected.to compile.with_all_deps }
     it do
-      is_expected.to contain_privkey('/path/to/key.pem')
+      is_expected.to contain_file('/path/to/key.pem')
         .with_ensure('absent')
-        .with_key_pair('Ca[default]')
-        .with_unprotect(false)
-        .with_password_file(nil)
-        .that_subscribes_to('Ca[default]')
+        .with_source('/root/ssl-build/example.com/mykeypair.key')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode('440')
+        .with_show_diff(false)
     end
-    it { is_expected.to contain_file('/path/to/key.pem').with_ensure('absent').that_requires('Privkey[/path/to/key.pem]') }
-  end
 
-  context 'with ensure_cert => absent' do
-    let(:params) { super().merge(ensure_cert: 'absent', manage_cert: true) }
-
-    it { is_expected.to compile.with_all_deps }
     it do
-      is_expected.to contain_pubkey('/path/to/cert.pem')
+      is_expected.to contain_file('/path/to/cert.pem')
         .with_ensure('absent')
-        .with_key_pair('Ca[default]')
-        .with_strip(false)
-        .that_subscribes_to(['Ca[default]', 'Privkey[/path/to/key.pem]'])
+        .with_source('/root/ssl-build/example.com/mykeypair.crt')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode('440')
     end
-    it { is_expected.to contain_file('/path/to/cert.pem').with_ensure('absent').that_requires('Pubkey[/path/to/cert.pem]') }
   end
 end
