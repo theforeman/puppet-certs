@@ -40,7 +40,7 @@ class certs::qpid_router::server (
   }
 
   if $deploy {
-    certs::key_pair { $server_keypair:
+    certs::keypair { $server_keypair:
       source_dir => "${certs::ssl_build_dir}/${hostname}",
       key_file   => $key,
       key_owner  => $owner,

@@ -94,7 +94,7 @@ class certs::foreman_proxy (
 
   if $deploy {
 
-    certs::key_pair { $proxy_cert_name:
+    certs::keypair { $proxy_cert_name:
       source_dir => "${certs::ssl_build_dir}/${hostname}",
       key_file   => $proxy_key,
       key_owner  => $owner,
@@ -116,7 +116,7 @@ class certs::foreman_proxy (
       require => File[$default_ca_cert],
     }
 
-    certs::key_pair { $foreman_proxy_client_cert_name:
+    certs::keypair { $foreman_proxy_client_cert_name:
       source_dir => "${certs::ssl_build_dir}/${hostname}",
       key_file   => $foreman_ssl_key,
       key_owner  => $owner,

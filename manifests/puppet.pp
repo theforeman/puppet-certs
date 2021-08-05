@@ -49,7 +49,7 @@ class certs::puppet (
       mode   => '0750',
     }
 
-    certs::key_pair { $puppet_client_cert_name:
+    certs::keypair { $puppet_client_cert_name:
       source_dir => "${certs::ssl_build_dir}/${hostname}",
       key_file   => $client_key,
       key_owner  => $owner,

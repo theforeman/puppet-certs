@@ -47,16 +47,12 @@ class certs::qpid (
     $client_key             = "${pki_dir}/private/${qpid_cert_name}.key"
 
     # Ensure files located at /etc/pki/katello no longer exist
-    certs::keypair { 'qpid':
-      ensure_key  => 'absent',
-      key_pair    => Cert[$qpid_cert_name],
-      key_file    => $client_key,
-      manage_key  => true,
-      key_owner   => 'root',
-      key_group   => $qpidd_group,
-      key_mode    => '0440',
-      ensure_cert => 'absent',
-      cert_file   => $client_cert,
+    file { $client_key:
+      ensure  => absent,
+    }
+
+    file { $client_cert:
+      ensure  => absent,
     }
 
     nssdb_certificate { "${nss_db_dir}:ca":
