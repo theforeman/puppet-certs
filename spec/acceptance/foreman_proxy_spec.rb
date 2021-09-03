@@ -99,5 +99,28 @@ describe 'certs::foreman_proxy' do
       its(:subject) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
       its(:keylength) { should be >= 4096 }
     end
+
+    describe file("/etc/pki/katello/private/#{fqdn}-foreman-proxy-client-bundle.pem") do
+      it { should be_file }
+      it { should be_mode 444 }
+      it { should be_owned_by 'root' }
+      it { should be_grouped_into 'foreman-proxy' }
+    end
+
+    describe x509_certificate("/etc/pki/katello/private/#{fqdn}-foreman-proxy-client-bundle.pem") do
+      it { should be_certificate }
+      it { should be_valid }
+      it { should have_purpose 'client' }
+      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{fqdn}") }
+      its(:keylength) { should be >= 4096 }
+    end
+
+    describe x509_private_key("/etc/pki/katello/private/#{fqdn}-foreman-proxy-client-bundle.pem") do
+      it { should_not be_encrypted }
+      it { should be_valid }
+      it { should have_matching_certificate("/etc/pki/katello/private/#{fqdn}-foreman-proxy-client-bundle.pem") }
+    end
+
   end
 end
