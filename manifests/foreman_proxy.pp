@@ -124,16 +124,17 @@ class certs::foreman_proxy (
     } ->
     pubkey { $foreman_ssl_ca_cert:
       key_pair => $server_ca,
-    } ~>
-    key_bundle { $foreman_proxy_ssl_client_bundle:
-      key_pair  => Cert[$foreman_proxy_client_cert_name],
-      force_rsa => true,
-    } ~>
-    file { $foreman_proxy_ssl_client_bundle:
-      ensure => file,
-      owner  => 'root',
-      group  => $group,
-      mode   => $public_key_mode,
+    }
+
+    cert_key_bundle { $foreman_proxy_ssl_client_bundle:
+      ensure       => present,
+      certificate  => $foreman_ssl_cert,
+      private_key  => $foreman_ssl_key,
+      force_pkcs_1 => true,
+      owner        => 'root',
+      group        => $group,
+      mode         => $public_key_mode,
+      require      => Certs::Keypair['foreman_proxy_client'],
     }
 
   }
