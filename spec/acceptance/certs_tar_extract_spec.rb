@@ -37,6 +37,10 @@ describe 'certs with tar archive' do
     apply_manifest(install_certs, catch_failures: true)
   end
 
+  after(:context) do
+    on default, 'yum -y remove foreman-proxy.example.com*noarch*'
+  end
+
   describe x509_certificate('/etc/pki/katello/certs/katello-apache.crt') do
     it { should be_certificate }
     it { should be_valid }
