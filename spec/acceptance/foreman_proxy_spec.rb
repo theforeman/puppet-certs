@@ -105,6 +105,7 @@ describe 'certs::foreman_proxy' do
       it { should be_mode 444 }
       it { should be_owned_by 'root' }
       it { should be_grouped_into 'foreman-proxy' }
+      its(:content) { should include('BEGIN RSA PRIVATE KEY') }
     end
 
     describe x509_certificate("/etc/pki/katello/private/#{fqdn}-foreman-proxy-client-bundle.pem") do

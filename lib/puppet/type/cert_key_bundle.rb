@@ -11,20 +11,11 @@ Puppet::Type.newtype(:cert_key_bundle) do
   newparam(:certificate) do
     desc "Path to certificate file to include in bundle"
     isrequired
-
-    def insync?(is)
-      File.read(self[:path]).include?(File.read(should))
-    end
   end
 
   newparam(:private_key) do
     desc "Path to private key file to include in bundle"
     isrequired
-
-    def insync?(is)
-      should = format_as_pkcs_1(should) if self[:force_pkcs_1]
-      File.read(self[:path]).include?(File.read(should))
-    end
   end
 
   newparam(:owner, parent: Puppet::Type::File::Owner) do
@@ -48,7 +39,8 @@ Puppet::Type.newtype(:cert_key_bundle) do
   end
 
   def exists?
-    return false unless File.exist?(self[:path])
+    return false unless File.file?(self[:path])
+    return false unless File.readable?(self[:path])
     bundle == File.read(self[:path])
   end
 
@@ -66,7 +58,7 @@ Puppet::Type.newtype(:cert_key_bundle) do
   end
 
   def format_as_pkcs_1(content)
-    content.gsub(/(BEGIN|END) (PRIVATE KEY)/, '\1 RSA \2')
+    OpenSSL::PKey::RSA.new(content).to_pem
   end
 
   def generate
