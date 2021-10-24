@@ -1,5 +1,23 @@
 # Changelog
 
+## [14.0.0](https://github.com/theforeman/puppet-certs/tree/14.0.0) (2021-10-29)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/13.0.0...14.0.0)
+
+**Breaking changes:**
+
+- Deploy certificates from build directory and drop the use of RPMs [\#370](https://github.com/theforeman/puppet-certs/pull/370) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- New cert key bundle type [\#380](https://github.com/theforeman/puppet-certs/pull/380) ([ehelms](https://github.com/ehelms))
+- Add types for parameters for all classes [\#377](https://github.com/theforeman/puppet-certs/pull/377) ([ehelms](https://github.com/ehelms))
+- Keep Candlepin CA key password protected [\#376](https://github.com/theforeman/puppet-certs/pull/376) ([ehelms](https://github.com/ehelms))
+
+**Fixed bugs:**
+
+- Allow passing string for hostname to certs::qpid\_router::client [\#379](https://github.com/theforeman/puppet-certs/pull/379) ([ehelms](https://github.com/ehelms))
+
 ## [13.0.0](https://github.com/theforeman/puppet-certs/tree/13.0.0) (2021-07-22)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/12.0.0...13.0.0)
