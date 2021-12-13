@@ -38,7 +38,7 @@ Puppet::Type.type(:keystore_certificate).provide(:openssl) do
         '-export',
         '-in', resource[:certificate],
         '-inkey', resource[:private_key],
-        '-out', temp_store,
+        '-out', temp_store.path,
         '-name', resource[:alias],
         '-CAfile', resource[:ca],
         '-password', "file:#{resource[:password_file]}"
@@ -47,7 +47,7 @@ Puppet::Type.type(:keystore_certificate).provide(:openssl) do
       keytool(
         '-importkeystore',
         '-noprompt',
-        '-srckeystore', temp_store,
+        '-srckeystore', temp_store.path,
         '-srcstorepass:file', resource[:password_file],
         '-destkeystore', resource[:keystore],
         '-deststorepass:file', resource[:password_file],
