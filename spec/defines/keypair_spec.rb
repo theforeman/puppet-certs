@@ -21,13 +21,12 @@ describe 'certs::keypair' do
   context 'with minimal parameters' do
     it { is_expected.to compile.with_all_deps }
     it do
-      is_expected.to contain_file('/path/to/key.pem')
+      is_expected.to contain_private_key('/path/to/key.pem')
         .with_ensure('present')
         .with_source('/root/ssl-build/example.com/mykeypair.key')
         .with_owner('root')
         .with_group('root')
         .with_mode('440')
-        .with_show_diff(false)
     end
 
     it do
@@ -45,13 +44,12 @@ describe 'certs::keypair' do
 
     it { is_expected.to compile.with_all_deps }
     it do
-      is_expected.to contain_file('/path/to/key.pem')
+      is_expected.to contain_private_key('/path/to/key.pem')
         .with_ensure('absent')
         .with_source('/root/ssl-build/example.com/mykeypair.key')
         .with_owner('root')
         .with_group('root')
         .with_mode('440')
-        .with_show_diff(false)
     end
 
     it do

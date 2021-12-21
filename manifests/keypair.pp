@@ -12,15 +12,18 @@ define certs::keypair (
   String $cert_owner = 'root',
   String $cert_group = undef,
   Stdlib::Filemode $cert_mode = '440',
+  Boolean $key_decrypt = false,
+  Optional[Stdlib::Absolutepath] $key_password_file = undef,
 ) {
 
-  file { $key_file:
-    ensure    => $key_ensure,
-    source    => "${source_dir}/${title}.key",
-    owner     => $key_owner,
-    group     => $key_group,
-    mode      => $key_mode,
-    show_diff => false,
+  private_key { $key_file:
+    ensure        => $key_ensure,
+    source        => "${source_dir}/${title}.key",
+    decrypt       => $key_decrypt,
+    password_file => $key_password_file,
+    owner         => $key_owner,
+    group         => $key_group,
+    mode          => $key_mode,
   }
 
   file { $cert_file:

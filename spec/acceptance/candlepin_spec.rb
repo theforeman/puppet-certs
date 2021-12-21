@@ -153,6 +153,11 @@ describe 'certs' do
       it { should be_grouped_into 'tomcat' }
     end
 
+    describe x509_private_key('/etc/candlepin/certs/candlepin-ca.key') do
+      it { should_not be_encrypted }
+      it { should be_valid }
+    end
+
     describe file('/etc/candlepin/certs/candlepin-ca.key') do
       it { should be_file }
       it { should be_mode 440 }
