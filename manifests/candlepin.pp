@@ -78,16 +78,18 @@ class certs::candlepin (
 
   if $deploy {
     certs::keypair { $certs::default_ca_name:
-      source_dir => $certs::ssl_build_dir,
-      key_file   => $ca_key,
-      key_owner  => $user,
-      key_group  => $group,
-      key_mode   => '0440',
-      cert_file  => $ca_cert,
-      cert_owner => $user,
-      cert_group => $group,
-      cert_mode  => '0440',
-      require    => $default_ca,
+      source_dir        => $certs::ssl_build_dir,
+      key_file          => $ca_key,
+      key_owner         => $user,
+      key_group         => $group,
+      key_mode          => '0440',
+      cert_file         => $ca_cert,
+      cert_owner        => $user,
+      cert_group        => $group,
+      cert_mode         => '0440',
+      require           => $default_ca,
+      key_password_file => $ca_key_password_file,
+      key_decrypt       => true,
     }
 
     file { "${pki_dir}/private/katello-tomcat.key":
