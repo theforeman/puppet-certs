@@ -1,5 +1,23 @@
 # Changelog
 
+## [15.0.0](https://github.com/theforeman/puppet-certs/tree/15.0.0) (2022-02-03)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/14.0.0...15.0.0)
+
+**Breaking changes:**
+
+- Fixes [\#34189](https://projects.theforeman.org/issues/34189): Unencrypt CA key when deploying for Candlepin [\#386](https://github.com/theforeman/puppet-certs/pull/386) ([ehelms](https://github.com/ehelms))
+
+**Fixed bugs:**
+
+- Correctly pass the path to the tempfile when adding keystore certificates [\#385](https://github.com/theforeman/puppet-certs/pull/385) ([ehelms](https://github.com/ehelms))
+- Reintroduce $apache\_ca\_cert [\#384](https://github.com/theforeman/puppet-certs/pull/384) ([ekohl](https://github.com/ekohl))
+
+**Merged pull requests:**
+
+- use foreman::repo to setup foreman repos during CI [\#390](https://github.com/theforeman/puppet-certs/pull/390) ([evgeni](https://github.com/evgeni))
+- Mark classes as private using Puppet Strings [\#389](https://github.com/theforeman/puppet-certs/pull/389) ([ekohl](https://github.com/ekohl))
+
 ## [14.0.0](https://github.com/theforeman/puppet-certs/tree/14.0.0) (2021-10-29)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/13.0.0...14.0.0)
