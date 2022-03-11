@@ -32,7 +32,8 @@ module Puppet_X
               '-keystore', store,
               '-storepass:file', resource[:password_file],
               '-alias', temp_alias,
-              '-dname', "CN=#{temp_alias}"
+              '-dname', "CN=#{temp_alias}",
+              '-J-Dcom.redhat.fips=false'
             )
           rescue Puppet::ExecutionFailure => e
             Puppet.err("Failed to generate new #{type} with temporary entry: #{e}")
@@ -44,7 +45,8 @@ module Puppet_X
               '-delete',
               '-keystore', store,
               '-storepass:file', resource[:password_file],
-              '-alias', temp_alias
+              '-alias', temp_alias,
+              '-J-Dcom.redhat.fips=false'
             )
           rescue Puppet::ExecutionFailure => e
             Puppet.err("Failed to delete temporary entry when generating empty #{type}: #{e}")

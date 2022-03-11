@@ -52,7 +52,8 @@ Puppet::Type.type(:keystore_certificate).provide(:openssl) do
         '-destkeystore', resource[:keystore],
         '-deststorepass:file', resource[:password_file],
         '-srcalias', resource[:alias],
-        '-destalias', resource[:alias]
+        '-destalias', resource[:alias],
+        '-J-Dcom.redhat.fips=false'
       )
     end
   rescue Puppet::ExecutionFailure => e
@@ -66,7 +67,8 @@ Puppet::Type.type(:keystore_certificate).provide(:openssl) do
       '-noprompt',
       '-keystore', resource[:keystore],
       '-alias', resource[:alias],
-      '-storepass:file', resource[:password_file]
+      '-storepass:file', resource[:password_file],
+      '-J-Dcom.redhat.fips=false'
     )
   end
 
@@ -78,7 +80,8 @@ Puppet::Type.type(:keystore_certificate).provide(:openssl) do
       '-list',
       '-keystore', resource[:keystore],
       '-storepass:file', resource[:password_file],
-      '-alias', resource[:alias]
+      '-alias', resource[:alias],
+      '-J-Dcom.redhat.fips=false'
     )
   rescue Puppet::ExecutionFailure => e
     Puppet.debug("Failed to read keystore contents: #{e}")
