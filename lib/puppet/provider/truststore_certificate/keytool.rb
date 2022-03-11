@@ -49,7 +49,8 @@ Puppet::Type.type(:truststore_certificate).provide(:keytool) do
       '-file',
       resource[:certificate],
       '-storepass:file',
-      resource[:password_file]
+      resource[:password_file],
+      '-J-Dcom.redhat.fips=false'
     )
   end
 
@@ -63,7 +64,8 @@ Puppet::Type.type(:truststore_certificate).provide(:keytool) do
       '-alias',
       resource[:alias],
       '-storepass:file',
-      resource[:password_file]
+      resource[:password_file],
+      '-J-Dcom.redhat.fips=false'
     )
   end
 
@@ -76,6 +78,7 @@ Puppet::Type.type(:truststore_certificate).provide(:keytool) do
       '-keystore', resource[:truststore],
       '-storepass:file', resource[:password_file],
       '-alias', resource[:alias],
+      '-J-Dcom.redhat.fips=false'
     )
   rescue Puppet::ExecutionFailure => e
     Puppet.debug("Failed to read truststore contents: #{e}")
