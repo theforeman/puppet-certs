@@ -1,5 +1,17 @@
 # Changelog
 
+## [15.1.0](https://github.com/theforeman/puppet-certs/tree/15.1.0) (2022-03-14)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/15.0.0...15.1.0)
+
+**Implemented enhancements:**
+
+- Allow stdlib 8.x, extlib 6.x [\#392](https://github.com/theforeman/puppet-certs/pull/392) ([ekohl](https://github.com/ekohl))
+
+**Fixed bugs:**
+
+- Fixes [\#34598](https://projects.theforeman.org/issues/34598): Disable fips for keytool  [\#394](https://github.com/theforeman/puppet-certs/pull/394) ([ehelms](https://github.com/ehelms))
+
 ## [15.0.0](https://github.com/theforeman/puppet-certs/tree/15.0.0) (2022-02-03)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/14.0.0...15.0.0)
