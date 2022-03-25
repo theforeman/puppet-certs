@@ -107,13 +107,26 @@ class certs::foreman_proxy (
       require    => Cert[$proxy_cert_name],
     }
 
-    file { $proxy_ca_cert:
-      ensure  => file,
-      source  => $default_ca_cert,
+    concat { $proxy_ca_cert:
+      ensure  => present,
       owner   => $owner,
       group   => $group,
       mode    => '0440',
-      require => File[$default_ca_cert],
+      require => File[$server_ca_cert],
+    }
+
+    concat::fragment { 'default_ca_cert':
+      target => $proxy_ca_cert,
+      source => $default_ca_cert,
+      order  => '01',
+    }
+
+    if $server_cert {
+      concat::fragment { 'server_ca_cert':
+        target => $proxy_ca_cert,
+        source => $server_ca_cert,
+        order  => '02',
+      }
     }
 
     certs::keypair { $foreman_proxy_client_cert_name:
