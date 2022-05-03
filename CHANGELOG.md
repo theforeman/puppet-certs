@@ -1,6 +1,14 @@
 # Changelog
 
-## [15.1.0](https://github.com/theforeman/puppet-certs/tree/15.1.0) (2022-03-14)
+## [15.1.1](https://github.com/theforeman/puppet-certs/tree/15.1.1) (2022-05-03)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/15.1.0...15.1.1)
+
+**Fixed bugs:**
+
+- Ensure nssdb private key changes when certificate changes [\#397](https://github.com/theforeman/puppet-certs/pull/397) ([ehelms](https://github.com/ehelms))
+
+## [15.1.0](https://github.com/theforeman/puppet-certs/tree/15.1.0) (2022-03-15)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/15.0.0...15.1.0)
 
