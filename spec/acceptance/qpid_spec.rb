@@ -85,6 +85,8 @@ describe 'certs' do
       initial_fingerprint_output = on default, "openssl x509 -noout -fingerprint -sha256 -in /root/ssl-build/#{fqdn}/#{fqdn}-qpid-broker.crt"
       initial_fingerprint = initial_fingerprint_output.output.strip.split('=').last
       initial_truststore_output = on default, "certutil -L -d #{nssdb_dir} -n broker"
+      initial_nssdb_private_key_output = on default, "certutil -K -d #{nssdb_dir} -f #{nssdb_password_file} -n broker"
+      initial_nssdb_private_key_modulus = initial_nssdb_private_key_output.output.strip.split("\n").last.match(%r{.*rsa(?<modulus>.*)broker})[:modulus].strip
       expect(initial_truststore_output.output.strip).to include(initial_fingerprint)
 
       on default, "rm -rf /root/ssl-build/#{fqdn}"
@@ -94,9 +96,12 @@ describe 'certs' do
       fingerprint = fingerprint_output.output.strip.split('=').last
       initial_truststore_output = on default, "certutil -L -d #{nssdb_dir} -n broker"
       truststore_output = on default, "certutil -L -d #{nssdb_dir} -n broker"
+      nssdb_private_key_output = on default, "certutil -K -d #{nssdb_dir} -f #{nssdb_password_file} -n broker"
+      nssdb_private_key_modulus = nssdb_private_key_output.output.strip.split("\n").last.match(%r{.*rsa(?<modulus>.*)broker})[:modulus].strip
 
+      expect(nssdb_private_key_modulus.to_s).not_to eq(initial_nssdb_private_key_modulus.to_s)
       expect(truststore_output.output.strip).to include(fingerprint)
-      expect(fingerprint).not_to equal(initial_fingerprint)
+      expect(fingerprint).not_to eq(initial_fingerprint)
       expect(truststore_output.output.strip).not_to include(initial_fingerprint)
     end
   end

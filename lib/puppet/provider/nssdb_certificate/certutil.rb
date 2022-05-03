@@ -9,8 +9,11 @@ Puppet::Type.type(:nssdb_certificate).provide(:certutil) do
   end
 
   def destroy
-    delete_certificate
-    delete_private_key if resource[:private_key]
+    if resource[:private_key]
+      delete_combined_private_key_and_certificate
+    else
+      delete_certificate
+    end
   end
 
   def exists?
@@ -22,8 +25,15 @@ Puppet::Type.type(:nssdb_certificate).provide(:certutil) do
   end
 
   def certificate=(value)
-    delete_certificate unless nssdb_content.nil?
+    unless nssdb_content.nil?
+      if resource[:private_key]
+        delete_combined_private_key_and_certificate
+      else
+        delete_certificate
+      end
+    end
     add_certificate
+    add_private_key if resource[:private_key]
   end
 
   def fingerprint(file)
@@ -78,11 +88,12 @@ Puppet::Type.type(:nssdb_certificate).provide(:certutil) do
     end
   end
 
-  def delete_private_key
+  def delete_combined_private_key_and_certificate
     certutil(
       '-F',
       '-d', resource[:nssdb],
-      '-n', resource[:cert_name]
+      '-n', resource[:cert_name],
+      '-f', resource[:password_file]
     )
   end
 
