@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'certs::qpid' do
   on_supported_os.each do |os, os_facts|
-    context "on #{os}", if: os_facts[:operatingsystemmajrelease] == '7' do
+    context "on #{os}" do
       let :facts do
         os_facts
       end
