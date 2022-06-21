@@ -15,7 +15,6 @@ define certs::keypair (
   Boolean $key_decrypt = false,
   Optional[Stdlib::Absolutepath] $key_password_file = undef,
 ) {
-
   private_key { $key_file:
     ensure        => $key_ensure,
     source        => "${source_dir}/${title}.key",
@@ -33,5 +32,4 @@ define certs::keypair (
     group  => $cert_group,
     mode   => $cert_mode,
   }
-
 }

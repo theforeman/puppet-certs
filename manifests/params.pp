@@ -1,6 +1,5 @@
 # Certs Parameters
 class certs::params {
-
   $pki_dir = '/etc/pki/katello'
   $node_fqdn = $facts['networking']['fqdn']
 

@@ -19,7 +19,6 @@ class certs::puppet (
   String $owner = 'root',
   String $group = 'puppet',
 ) inherits certs {
-
   $puppet_client_cert_name = "${hostname}-puppet-client"
 
   # cert for authentication of puppetmaster against foreman

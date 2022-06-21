@@ -1,5 +1,5 @@
 # type to append cert to nssdb
-define certs::ssltools::certutil(
+define certs::ssltools::certutil (
   Stdlib::Absolutepath $nss_db_dir,
   Stdlib::Absoluatepath $client_cert,
   String $cert_name = $title,
