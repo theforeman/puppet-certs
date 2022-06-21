@@ -14,7 +14,7 @@ class certs::foreman (
   String $org = 'FOREMAN',
   String $org_unit = 'PUPPET',
   String $expiration = $certs::expiration,
-  $default_ca = $certs::default_ca,
+  Type[Ca] $default_ca = $certs::default_ca,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
   Stdlib::Absolutepath $server_ca = $certs::katello_server_ca_cert,
   String $owner = 'root',

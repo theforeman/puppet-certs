@@ -18,7 +18,7 @@ class certs::candlepin (
   String $org = $certs::org,
   String $org_unit = $certs::org_unit,
   String $expiration = $certs::expiration,
-  $default_ca = $certs::default_ca,
+  Type[Ca] $default_ca = $certs::default_ca,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
   String $user = 'root',
   String $group = 'tomcat',

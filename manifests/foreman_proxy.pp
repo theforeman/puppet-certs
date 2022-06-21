@@ -26,7 +26,7 @@ class certs::foreman_proxy (
   String $state = $certs::state,
   String $city = $certs::city,
   String $expiration = $certs::expiration,
-  $default_ca = $certs::default_ca,
+  Type[Ca] $default_ca = $certs::default_ca,
   Stdlib::Absolutepath $default_ca_cert = $certs::katello_default_ca_cert,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
   String $group = 'foreman-proxy',
