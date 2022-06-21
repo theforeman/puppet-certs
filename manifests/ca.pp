@@ -23,7 +23,6 @@ class certs::ca (
   String $ca_key_password = $certs::ca_key_password,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
 ) {
-
   file { $ca_key_password_file:
     ensure    => file,
     content   => $ca_key_password,
@@ -47,7 +46,6 @@ class certs::ca (
     build_dir     => $certs::ssl_build_dir,
   }
   $default_ca = Ca[$default_ca_name]
-
 
   if $server_cert {
     ca { $server_ca_name:

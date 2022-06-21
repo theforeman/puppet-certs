@@ -17,7 +17,6 @@ class certs::qpid (
   String $qpidd_group = 'qpidd',
   String $nss_cert_name = 'broker',
 ) inherits certs {
-
   $qpid_cert_name = "${hostname}-qpid-broker"
 
   cert { $qpid_cert_name:

@@ -34,7 +34,6 @@ class certs::foreman_proxy (
   Stdlib::Filemode $private_key_mode = '0440',
   Stdlib::Filemode $public_key_mode = '0444',
 ) inherits certs {
-
   $proxy_cert_name = "${hostname}-foreman-proxy"
   $foreman_proxy_client_cert_name = "${hostname}-foreman-proxy-client"
   $foreman_proxy_ssl_client_bundle = "${pki_dir}/private/${foreman_proxy_client_cert_name}-bundle.pem"
@@ -93,7 +92,6 @@ class certs::foreman_proxy (
   }
 
   if $deploy {
-
     certs::keypair { $proxy_cert_name:
       source_dir => "${certs::ssl_build_dir}/${hostname}",
       key_file   => $proxy_key,
@@ -148,6 +146,5 @@ class certs::foreman_proxy (
       mode         => $public_key_mode,
       require      => Cert[$foreman_proxy_client_cert_name],
     }
-
   }
 }

@@ -8,7 +8,7 @@
 # Actions:
 # - Extracts a tarball
 #
-define certs::tar_extract(
+define certs::tar_extract (
   Stdlib::Absolutepath $path = $title,
 ) {
   validate_file_exists($path)

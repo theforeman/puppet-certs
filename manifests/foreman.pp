@@ -20,7 +20,6 @@ class certs::foreman (
   String $owner = 'root',
   String $group = 'foreman',
 ) inherits certs {
-
   $client_cert_name = "${hostname}-foreman-client"
   $client_dn = "CN=${hostname}, OU=${org_unit}, O=${org}, ST=${state}, C=${country}"
 

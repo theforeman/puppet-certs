@@ -17,7 +17,6 @@ class certs::qpid_router::server (
   $default_ca = $certs::default_ca,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
 ) inherits certs {
-
   $server_keypair = "${hostname}-qpid-router-server"
 
   cert { $server_keypair:
