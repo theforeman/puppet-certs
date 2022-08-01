@@ -1,5 +1,22 @@
 # Changelog
 
+## [16.0.0](https://github.com/theforeman/puppet-certs/tree/16.0.0) (2022-10-28)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/15.1.1...16.0.0)
+
+**Breaking changes:**
+
+- Drop EL7 support [\#400](https://github.com/theforeman/puppet-certs/pull/400) ([ehelms](https://github.com/ehelms))
+- Refs [\#35005](https://projects.theforeman.org/issues/35005): Drop certs::pulp\_client [\#399](https://github.com/theforeman/puppet-certs/pull/399) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- Update to voxpupuli-test 5 [\#401](https://github.com/theforeman/puppet-certs/pull/401) ([ekohl](https://github.com/ekohl))
+
+**Fixed bugs:**
+
+- Fixes [\#35335](https://projects.theforeman.org/issues/35335) - allow everyone to read the Katello CA certificate [\#403](https://github.com/theforeman/puppet-certs/pull/403) ([evgeni](https://github.com/evgeni))
+
 ## [15.1.1](https://github.com/theforeman/puppet-certs/tree/15.1.1) (2022-05-03)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/15.1.0...15.1.1)
