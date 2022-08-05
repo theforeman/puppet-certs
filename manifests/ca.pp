@@ -93,7 +93,7 @@ class certs::ca (
       source => "${certs::ssl_build_dir}/${server_ca_name}.crt",
       owner  => $owner,
       group  => $group,
-      mode   => '0440',
+      mode   => '0644',
     }
   }
 }
