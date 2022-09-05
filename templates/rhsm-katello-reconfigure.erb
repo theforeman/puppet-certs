@@ -130,6 +130,10 @@ fi
 [ -f /usr/lib/systemd/system/goferd.service ] && \
 [ -f /bin/systemctl ] && \
   systemctl try-restart goferd >/dev/null 2>&1
+  
+# restart yggdrasild if it is installed and running
+[ -f /usr/lib/systemd/system/yggdrasil.service ] && \
+  systemctl try-restart yggdrasil >/dev/null 2>&1
 
 # EL5 systems and subscription-manager versions before 1.18.1-1 don't have the network.fqdn fact.
 # For these cases, we have to update the "hostname-override" fact
