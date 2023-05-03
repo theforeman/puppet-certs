@@ -1,6 +1,5 @@
 fixtures:
   repositories:
-    concat:            "https://github.com/puppetlabs/puppetlabs-concat"
     extlib:            "https://github.com/voxpupuli/puppet-extlib"
     foreman:           "https://github.com/theforeman/puppet-foreman"
     redis:             "https://github.com/voxpupuli/puppet-redis"
