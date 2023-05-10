@@ -1,5 +1,13 @@
 # Changelog
 
+## [16.0.1](https://github.com/theforeman/puppet-certs/tree/16.0.1) (2023-05-15)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.0.0...16.0.1)
+
+**Fixed bugs:**
+
+- Remove unused puppetlabs-concat dependency [\#406](https://github.com/theforeman/puppet-certs/pull/406) ([ekohl](https://github.com/ekohl))
+
 ## [16.0.0](https://github.com/theforeman/puppet-certs/tree/16.0.0) (2022-10-28)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/15.1.1...16.0.0)
