@@ -19,4 +19,8 @@ class certs::params {
   $candlepin_ca_key                 = "${candlepin_certs_dir}/candlepin-ca.key"
 
   $pulp_pki_dir = '/etc/pki/pulp'
+
+  # Generate and cache the password on the master once
+  # In multi-puppetmaster setups, the user should specify their own
+  $ca_key_password = extlib::cache_data('foreman_cache_data', 'ca_key_password', extlib::random_password(24))
 }
