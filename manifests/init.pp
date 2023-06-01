@@ -39,6 +39,8 @@
 # $deploy::               Deploy the certs on the configured system. False means
 #                         we want to apply it to a different system
 #
+# $ca_key_password::      Optional string to use for the CA key password
+#
 # $ca_common_name::       Common name for the generated CA certificate
 #
 # $country::              Country attribute for managed certificates
@@ -73,6 +75,7 @@ class certs (
   Boolean $generate = true,
   Boolean $regenerate = false,
   Boolean $deploy = true,
+  String[10] $ca_key_password = $certs::params::ca_key_password,
   String $ca_common_name = $certs::params::ca_common_name,
   String[2,2] $country = 'US',
   String $state = 'North Carolina',
@@ -103,7 +106,6 @@ class certs (
   $ca_key = "${pki_dir}/private/${default_ca_name}.key"
   $ca_cert = "${pki_dir}/certs/${default_ca_name}.crt"
   $ca_cert_stripped = "${pki_dir}/certs/${default_ca_name}-stripped.crt"
-  $ca_key_password = extlib::cache_data('foreman_cache_data', 'ca_key_password', extlib::random_password(24))
   $ca_key_password_file = "${ssl_build_dir}/${default_ca_name}.pwd"
 
   $katello_server_ca_cert = "${pki_dir}/certs/${server_ca_name}.crt"
