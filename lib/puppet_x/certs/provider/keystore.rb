@@ -1,4 +1,4 @@
-module Puppet_X
+module PuppetX
   module Certs
     module Provider
       module Keystore

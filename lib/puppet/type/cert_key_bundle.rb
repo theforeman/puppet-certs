@@ -1,3 +1,7 @@
+require 'puppet/type/file/owner'
+require 'puppet/type/file/group'
+require 'puppet/type/file/mode'
+
 Puppet::Type.newtype(:cert_key_bundle) do
   desc 'combines a certificate and private key into a single file'
 
