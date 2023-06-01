@@ -1,3 +1,7 @@
+require 'puppet/type/file/owner'
+require 'puppet/type/file/group'
+require 'puppet/type/file/mode'
+
 Puppet::Type.newtype(:private_key) do
   desc 'manage a private key'
 
