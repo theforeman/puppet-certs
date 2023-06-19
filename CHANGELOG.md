@@ -1,5 +1,13 @@
 # Changelog
 
+## [16.0.2](https://github.com/theforeman/puppet-certs/tree/16.0.2) (2023-06-19)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.0.1...16.0.2)
+
+**Fixed bugs:**
+
+- Fix bad requires and old Puppet\_X notation [\#408](https://github.com/theforeman/puppet-certs/pull/408) ([coreone](https://github.com/coreone))
+
 ## [16.0.1](https://github.com/theforeman/puppet-certs/tree/16.0.1) (2023-05-15)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.0.0...16.0.1)
