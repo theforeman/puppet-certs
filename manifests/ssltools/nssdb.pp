@@ -5,7 +5,7 @@ class certs::ssltools::nssdb (
   String[10] $nss_db_password = extlib::cache_data('foreman_cache_data', 'certs-nss-db-password', extlib::random_password(32)),
   String[1] $group = 'qpidd',
 ) {
-  ensure_packages(['nss-tools'])
+  stdlib::ensure_packages(['nss-tools'])
 
   file { $nss_db_password_file:
     ensure    => file,
