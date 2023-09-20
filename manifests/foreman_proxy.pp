@@ -107,11 +107,11 @@ class certs::foreman_proxy (
 
     file { $proxy_ca_cert:
       ensure  => file,
-      source  => $default_ca_cert,
+      source  => $server_ca_cert,
       owner   => $owner,
       group   => $group,
       mode    => '0440',
-      require => File[$default_ca_cert],
+      require => File[$server_ca_cert],
     }
 
     certs::keypair { $foreman_proxy_client_cert_name:
