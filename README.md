@@ -32,10 +32,6 @@ for communication between services inside the Katello deployment.
 | ${hostname}-foreman-proxy     | a server certificate for Foreman-proxy https                                               | server  |
 | ${hostname}-foreman-client    | a client certificate for Foreman -> Foreman-proxy communication                            | default |
 | ${hostname}-puppet-client     | a client certificate for Puppet ENC -> Foreman communication                               | default |
-| ${hostname}-parent-cert       | a client certificate to read content from Pulp parent (distributed to the child over qpid) | default |
-| ${hostname}-qpid-broker       | a client certificate for qpid broker                                                       | default |
-| ${hostname}-qpid-client-cert  | a client certificate for Pulp to connect to qpid                                           | default |
-| java-client                   | a client certificate for Candlepin to connect to qpid                                      | default |
 
 # Phases
 

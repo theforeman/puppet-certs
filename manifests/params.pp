@@ -19,12 +19,4 @@ class certs::params {
   $candlepin_ca_key                 = "${candlepin_certs_dir}/candlepin-ca.key"
 
   $pulp_pki_dir = '/etc/pki/pulp'
-
-  $qpid_client_cert = "${pulp_pki_dir}/qpid/client.crt"
-  $qpid_client_ca_cert = "${pulp_pki_dir}/qpid/ca.crt"
-
-  $qpid_router_server_cert = "${pki_dir}/qpid_router_server.crt"
-  $qpid_router_client_cert = "${pki_dir}/qpid_router_client.crt"
-  $qpid_router_server_key  = "${pki_dir}/qpid_router_server.key"
-  $qpid_router_client_key  = "${pki_dir}/qpid_router_client.key"
 }
