@@ -27,11 +27,8 @@ class certs::foreman_proxy_content (
   class { 'certs::foreman':             hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
   class { 'certs::foreman_proxy':       hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
   class { 'certs::apache':              hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { 'certs::qpid':                hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { 'certs::qpid_router::server': hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
-  class { 'certs::qpid_router::client': hostname => $foreman_proxy_fqdn, cname => $foreman_proxy_cname }
 
   certs::tar_create { $certs_tar:
-    subscribe => Class['certs::puppet', 'certs::foreman', 'certs::foreman_proxy', 'certs::qpid', 'certs::qpid_router::server', 'certs::qpid_router::client', 'certs::apache'],
+    subscribe => Class['certs::puppet', 'certs::foreman', 'certs::foreman_proxy', 'certs::apache'],
   }
 }
