@@ -45,11 +45,9 @@ class certs::ca (
     org_unit      => $org_unit,
     expiration    => $ca_expiration,
     generate      => $generate,
-    deploy        => false,
     password_file => $ca_key_password_file,
     build_dir     => $certs::ssl_build_dir,
   }
-  $default_ca = Ca[$default_ca_name]
 
   if $certs::server_ca_cert {
     file { $server_ca_path:
