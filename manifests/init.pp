@@ -123,5 +123,5 @@ class certs (
   Class['certs::config'] ->
   Class['certs::ca']
 
-  $default_ca = $certs::ca::default_ca
+  $default_ca = Ca[$default_ca_name]
 }

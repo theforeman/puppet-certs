@@ -99,7 +99,6 @@ class certs::apache (
       ca            => $certs::default_ca,
       generate      => $generate,
       regenerate    => $regenerate,
-      deploy        => false,
       password_file => $ca_key_password_file,
       build_dir     => $certs::ssl_build_dir,
     } ->
