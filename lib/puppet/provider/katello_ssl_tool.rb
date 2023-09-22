@@ -145,10 +145,6 @@ module Puppet::Provider::KatelloSslTool
       self.class.privkey(resource[:name])
     end
 
-    def full_path(file_name)
-      self.class.full_path(file_name)
-    end
-
     def target_path(file_name = '')
       self.class.target_path(file_name)
     end
