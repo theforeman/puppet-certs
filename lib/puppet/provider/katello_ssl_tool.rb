@@ -5,43 +5,24 @@ module Puppet::Provider::KatelloSslTool
 
     initvars
 
-    commands :rpm => 'rpm'
-    commands :yum => 'yum'
     commands :katello_ssl_tool_command => 'katello-ssl-tool'
 
     def exists?
-      ! generate? && ! deploy?
+      !generate?
     end
 
     def create
       generate! if generate?
-      deploy!   if deploy?
     end
 
     def destroy
-      files_to_deploy.each do |file|
-        FileUtils.rm_f(file)
-      end
-
-      output = execute([:rpm, '-q', rpmfile_base_name], failonfail: false)
-      if output.exitstatus == 0
-        rpm('-e', rpmfile_base_name)
-      end
     end
 
-    def self.details(cert_name)
-      details = { :pubkey  => pubkey(cert_name),
-                  :privkey   => privkey(cert_name) }
-
-      return details
-    end
-
-    def self.pubkey(name)
-      target_path("certs/#{name}.crt")
-    end
-
-    def self.privkey(name)
-      target_path("private/#{name}.key")
+    def details(cert_name)
+      return {
+        :pubkey  => pubkey(cert_name),
+        :privkey => privkey(cert_name)
+      }
     end
 
     protected
@@ -59,49 +40,12 @@ module Puppet::Provider::KatelloSslTool
     def generate?
       return false unless resource[:generate]
       return true if resource[:regenerate]
-      return true if File.exist?(update_file)
-      return files_to_generate.any? { |file| ! File.exist?(file) }
+      return true if File.exists?(update_file)
+      return true unless (File.exist?(pubkey) && File.exist?(privkey))
     end
 
-    def files_to_generate
-      [rpmfile]
-    end
-
-    def deploy?
-      return false unless resource[:deploy]
-      return true if resource[:regenerate]
-      return true if files_to_deploy.any? { |file| ! File.exist?(file) }
-      return true if needs_deploy?
-    end
-
-    def files_to_deploy
-      [pubkey, privkey]
-    end
-
-    def deploy!
-      if File.exist?(rpmfile)
-        if(system("rpm -q #{rpmfile_base_name} &>/dev/null"))
-          rpm('-e', rpmfile_base_name)
-        end
-        rpm('-Uvh', '--force', rpmfile)
-      else
-        # we search the rpm in yum repo
-        yum("install", "-y", rpmfile_base_name)
-      end
-    end
-
-    def needs_deploy?
-      if File.exist?(rpmfile)
-        # the installed version doesn't match the rpmfile
-        !system("rpm --verify -p #{rpmfile} &>/dev/null")
-      else
-        `yum check-update #{rpmfile_base_name} &>/dev/null`
-        $?.exitstatus == 100
-      end
-    end
-
-    def version_from_name(rpmname)
-      rpmname.scan(/\d+/).map(&:to_i)
+    def update_file
+      build_path("#{resource[:name]}.update")
     end
 
     def common_args
@@ -114,56 +58,29 @@ module Puppet::Provider::KatelloSslTool
        '--cert-expiration', resource[:expiration]]
     end
 
-    def rpmfile
-      path = self.build_path("#{rpmfile_base_name}")
-      path = path + "-[0-9].*" + "noarch.rpm"
-
-      rpmfile = Dir[path].max_by do |file|
-        version_from_name(file)
-      end
-
-      rpmfile ||= self.build_path("#{rpmfile_base_name}.noarch.rpm")
-      return rpmfile
+    def pubkey(cert_name = resource[:name])
+      build_path("#{cert_name}.crt")
     end
 
-    # file that indicates that a new version of the rpm should be updated
-    def update_file
-      self.build_path("#{rpmfile_base_name}.update")
-    end
-
-    def rpmfile_base_name
-      resource[:name]
-    end
-
-    def pubkey
-      self.class.pubkey(resource[:name])
-    end
-
-    def privkey
-      self.class.privkey(resource[:name])
-    end
-
-    def target_path(file_name = '')
-      self.class.target_path(file_name)
-    end
-
-    def self.target_path(file_name = '')
-      File.join("/etc/pki/katello-certs-tools", file_name)
+    def privkey(key_name = resource[:name])
+      build_path("#{key_name}.key")
     end
 
     def build_path(file_name = '')
-      self.class.build_path(file_name)
-    end
+      path = resource[:build_dir]
 
-    def self.build_path(file_name = '')
-      File.join("/root/ssl-build", file_name)
+      if resource.to_hash.key?(:hostname)
+        path = "#{path}/#{resource[:hostname]}"
+      end
+
+      File.join(path, file_name)
     end
 
     def ca_details
       return @ca_details if defined? @ca_details
       if ca_resource = resource.catalog.resource(@resource[:ca].to_s)
         name = ca_resource.to_hash[:name]
-        @ca_details = Puppet::Provider::KatelloSslTool::Cert.details(name)
+        @ca_details = details(name)
       else
         raise 'Wanted to generate cert without ca specified'
       end
@@ -221,7 +138,7 @@ module Puppet::Provider::KatelloSslTool
       return @cert_details if defined? @cert_details
       if cert_resource = resource.catalog.resource(@resource[:key_pair].to_s)
         name = cert_resource.to_hash[:name]
-        @cert_details = Puppet::Provider::KatelloSslTool::Cert.details(name)
+        @cert_details = details(name)
       else
         raise 'Cert or Ca was not specified'
       end

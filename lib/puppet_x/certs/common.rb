@@ -10,12 +10,6 @@ module PuppetX
 
         newparam(:name, :namevar => true)
 
-        newparam(:custom_pubkey)
-
-        newparam(:custom_privkey)
-
-        newparam(:custom_req)
-
         newparam(:common_name)
 
         newparam(:cname)
@@ -37,8 +31,6 @@ module PuppetX
         newparam(:generate)
 
         newparam(:regenerate)
-
-        newparam(:deploy)
 
         newparam(:password_file)
 

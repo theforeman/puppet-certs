@@ -10,27 +10,15 @@ Puppet::Type.type(:cert).provide(:katello_ssl_tool, :parent => Puppet::Provider:
               '--server-cert', File.basename(pubkey),
               '--server-cert-req', File.basename(req_file),
               '--server-key', File.basename(privkey),
-              '--server-rpm', rpmfile_base_name ]
+              '--no-rpm' ]
 
-    if resource[:custom_pubkey]
-      FileUtils.mkdir_p(build_path)
-      FileUtils.cp(resource[:custom_pubkey], build_path(File.basename(pubkey)))
-      FileUtils.cp(resource[:custom_privkey], build_path(File.basename(privkey)))
-      if resource[:custom_req]
-        FileUtils.cp(resource[:custom_req], build_path(File.basename(req_file)))
-      else
-        File.open(build_path(File.basename(req_file)), 'w') { |f| f.write('') }
-      end
-      args << '--rpm-only'
-    else
-      resource[:common_name] ||= resource[:hostname]
-      args.concat(['-p', "file:#{resource[:password_file]}",
-                   '--set-hostname', resource[:hostname],
-                   '--set-common-name', resource[:common_name],
-                   '--ca-cert', ca_details[:pubkey],
-                   '--ca-key', ca_details[:privkey]])
-      args.concat(common_args)
-    end
+    resource[:common_name] ||= resource[:hostname]
+    args.concat(['--password', "file:#{resource[:password_file]}",
+                 '--set-hostname', resource[:hostname],
+                 '--set-common-name', resource[:common_name],
+                 '--ca-cert', ca_details[:pubkey],
+                 '--ca-key', ca_details[:privkey]])
+    args.concat(common_args)
 
     if resource[:cname]
       if resource[:cname].is_a?(String)
@@ -47,10 +35,6 @@ Puppet::Type.type(:cert).provide(:katello_ssl_tool, :parent => Puppet::Provider:
   protected
 
   def req_file
-    "#{self.pubkey}.req"
-  end
-
-  def build_path(file_name = '')
-    self.class.build_path(File.join(resource[:hostname], file_name))
+    "#{pubkey}.req"
   end
 end
