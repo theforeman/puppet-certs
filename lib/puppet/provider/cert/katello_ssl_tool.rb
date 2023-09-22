@@ -51,6 +51,6 @@ Puppet::Type.type(:cert).provide(:katello_ssl_tool, :parent => Puppet::Provider:
   end
 
   def build_path(file_name = '')
-    self.class.build_path(File.join(resource[:hostname], file_name))
+    self.class.build_path(File.join(resource[:hostname], file_name), resource[:build_dir])
   end
 end

@@ -53,8 +53,4 @@ Puppet::Type.type(:ca).provide(:katello_ssl_tool, :parent => Puppet::Provider::K
     [pubkey]
   end
 
-  def self.privkey(name)
-    build_path("#{name}.key")
-  end
-
 end

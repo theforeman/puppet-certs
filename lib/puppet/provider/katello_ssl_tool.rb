@@ -47,9 +47,7 @@ module Puppet::Provider::KatelloSslTool
     protected
 
     def katello_ssl_tool(*args)
-      Dir.chdir('/root') do
-        katello_ssl_tool_command(*args)
-      end
+      katello_ssl_tool_command(*args)
     end
 
     def generate!
@@ -154,11 +152,11 @@ module Puppet::Provider::KatelloSslTool
     end
 
     def build_path(file_name = '')
-      self.class.build_path(file_name)
+      self.class.build_path(file_name, resource[:build_dir])
     end
 
-    def self.build_path(file_name = '')
-      File.join("/root/ssl-build", file_name)
+    def self.build_path(file_name = '', build_dir)
+      File.join(build_dir, file_name)
     end
 
     def ca_details
