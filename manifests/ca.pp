@@ -23,6 +23,10 @@ class certs::ca (
   String $ca_key_password = $certs::ca_key_password,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
 ) {
+  file { "${certs::pki_dir}/private/${default_ca_name}.pwd":
+    ensure => absent,
+  }
+
   file { $ca_key_password_file:
     ensure    => file,
     content   => $ca_key_password,

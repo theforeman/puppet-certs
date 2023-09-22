@@ -65,6 +65,14 @@ describe 'certs' do
     describe package("katello-server-ca") do
       it { should_not be_installed }
     end
+
+    describe file('/root/ssl-build/katello-default-ca.pwd') do
+      it { should exist }
+    end
+
+    describe file('/etc/pki/katello/private/katello-default-ca.pwd') do
+      it { should_not exist }
+    end
   end
 
   context 'with deploy false' do

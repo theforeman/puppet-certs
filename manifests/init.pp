@@ -104,7 +104,7 @@ class certs (
   $ca_cert = "${pki_dir}/certs/${default_ca_name}.crt"
   $ca_cert_stripped = "${pki_dir}/certs/${default_ca_name}-stripped.crt"
   $ca_key_password = extlib::cache_data('foreman_cache_data', 'ca_key_password', extlib::random_password(24))
-  $ca_key_password_file = "${pki_dir}/private/${default_ca_name}.pwd"
+  $ca_key_password_file = "${ssl_build_dir}/${default_ca_name}.pwd"
 
   $katello_server_ca_cert = "${pki_dir}/certs/${server_ca_name}.crt"
   $katello_default_ca_cert = "${pki_dir}/certs/${default_ca_name}.crt"
