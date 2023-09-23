@@ -54,7 +54,6 @@ class certs::apache (
   Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
   Optional[Stdlib::Absolutepath] $server_cert = $certs::server_cert,
   Optional[Stdlib::Absolutepath] $server_key = $certs::server_key,
-  Optional[Stdlib::Absolutepath] $server_cert_req = $certs::server_cert_req,
   String[2,2] $country = $certs::country,
   String $state = $certs::state,
   String $city = $certs::city,
@@ -70,19 +69,25 @@ class certs::apache (
   # This variable is unused but considered public API
   $apache_ca_cert = $certs::katello_server_ca_cert
 
+  $apache_cert_path = "${certs::ssl_build_dir}/${hostname}/${apache_cert_name}"
+
   if $server_cert {
-    cert { $apache_cert_name:
-      ensure         => present,
-      hostname       => $hostname,
-      cname          => $cname,
-      generate       => $generate,
-      deploy         => false,
-      regenerate     => $regenerate,
-      custom_pubkey  => $server_cert,
-      custom_privkey => $server_key,
-      custom_req     => $server_cert_req,
-      build_dir      => $certs::ssl_build_dir,
+    file { "${apache_cert_path}.crt":
+      ensure => file,
+      source => $server_cert,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0440',
     }
+    file { "${apache_cert_path}.key":
+      ensure => file,
+      source => $server_key,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0440',
+    }
+
+    $require_cert = File["${apache_cert_path}.crt"]
   } else {
     cert { $apache_cert_name:
       ensure        => present,
@@ -101,6 +106,8 @@ class certs::apache (
       password_file => $ca_key_password_file,
       build_dir     => $certs::ssl_build_dir,
     }
+
+    $require_cert = Cert[$apache_cert_name]
   }
 
   if $deploy {
@@ -114,7 +121,7 @@ class certs::apache (
       cert_owner => 'root',
       cert_group => $group,
       cert_mode  => '0440',
-      require    => Cert[$apache_cert_name],
+      require    => $require_cert,
     }
   }
 }
