@@ -124,4 +124,31 @@ describe 'certs' do
       it { should_not exist }
     end
   end
+
+  context 'with server CA cert' do
+    before(:context) do
+      source_path = "fixtures/example.partial.solutions-chain.pem"
+      dest_path = "/server-ca.crt"
+      scp_to(hosts, source_path, dest_path)
+    end
+
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+        class { 'certs':
+          server_ca_cert => '/server-ca.crt',
+        }
+        PUPPET
+      end
+    end
+
+    describe x509_certificate('/root/ssl-build/katello-server-ca.crt') do
+      it { should be_certificate }
+      # Doesn't have to be valid - can be expired since it's a static resource
+      it { should have_purpose 'CA' }
+      its(:issuer) { should eq('CN = Fake LE Root X1') }
+      its(:subject) { should eq('CN = Fake LE Intermediate X1') }
+      its(:keylength) { should be >= 2048 }
+    end
+  end
 end
