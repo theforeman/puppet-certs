@@ -26,15 +26,8 @@ describe 'certs::foreman_proxy_content' do
 
     let(:expected_files_in_tar) do
       [
-        'ssl-build/katello-default-ca-1.0-1.noarch.rpm',
-        'ssl-build/katello-server-ca-1.0-1.noarch.rpm',
         'ssl-build/katello-default-ca.crt',
         'ssl-build/katello-server-ca.crt',
-        'ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-apache-1.0-1.noarch.rpm',
-        'ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-foreman-client-1.0-1.noarch.rpm',
-        'ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-foreman-proxy-1.0-1.noarch.rpm',
-        'ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-foreman-proxy-client-1.0-1.noarch.rpm',
-        'ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-puppet-client-1.0-1.noarch.rpm',
         'ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-apache.crt',
         'ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-foreman-client.crt',
         'ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-foreman-proxy-client.crt',
