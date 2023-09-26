@@ -44,8 +44,6 @@
 #
 # $group::                The group who should own the certs
 #
-# $default_ca::           The internal CA
-#
 # $ca_key_password_file:: Location of the password file for the CA key
 class certs::apache (
   Stdlib::Fqdn $hostname,
@@ -63,7 +61,6 @@ class certs::apache (
   String $org,
   String $org_unit,
   String $expiration,
-  Type[Ca] $default_ca,
   Stdlib::Absolutepath $ca_key_password_file,
   String $group,
 ) inherits certs {
@@ -97,7 +94,7 @@ class certs::apache (
       org           => $org,
       org_unit      => $org_unit,
       expiration    => $expiration,
-      ca            => $default_ca,
+      ca            => $certs::default_ca,
       generate      => $generate,
       regenerate    => $regenerate,
       deploy        => false,
