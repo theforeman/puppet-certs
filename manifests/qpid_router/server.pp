@@ -14,7 +14,6 @@ class certs::qpid_router::server (
   String $city = $certs::city,
   String $org_unit = $certs::org_unit,
   String $expiration = $certs::expiration,
-  Type[Ca] $default_ca = $certs::default_ca,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
 ) inherits certs {
   $server_keypair = "${hostname}-qpid-router-server"
@@ -29,7 +28,7 @@ class certs::qpid_router::server (
     org           => 'dispatch server',
     org_unit      => $org_unit,
     expiration    => $expiration,
-    ca            => $default_ca,
+    ca            => $certs::default_ca,
     generate      => $generate,
     regenerate    => $regenerate,
     deploy        => false,
