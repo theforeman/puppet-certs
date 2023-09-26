@@ -52,9 +52,6 @@ class certs::apache (
   Boolean $regenerate,
   Boolean $deploy,
   Stdlib::Absolutepath $pki_dir,
-  Optional[Stdlib::Absolutepath] $server_cert,
-  Optional[Stdlib::Absolutepath] $server_key,
-  Optional[Stdlib::Absolutepath] $server_cert_req,
   String[2,2] $country,
   String $state,
   String $city,
@@ -63,6 +60,9 @@ class certs::apache (
   String $expiration,
   Stdlib::Absolutepath $ca_key_password_file,
   String $group,
+  Optional[Stdlib::Absolutepath] $server_cert = undef,
+  Optional[Stdlib::Absolutepath] $server_key = undef,
+  Optional[Stdlib::Absolutepath] $server_cert_req = undef,
 ) inherits certs {
   $apache_cert_name = "${hostname}-apache"
   $apache_cert = "${pki_dir}/certs/katello-apache.crt"
@@ -78,9 +78,9 @@ class certs::apache (
       generate       => $generate,
       deploy         => false,
       regenerate     => $regenerate,
-      custom_pubkey  => $server_cert,
-      custom_privkey => $server_key,
-      custom_req     => $server_cert_req,
+      custom_pubkey  => pick($server_cert, $certs::server_cert),
+      custom_privkey => pick($server_key, $certs::server_key),
+      custom_req     => pick($server_cert_req, $certs::server_cert_req),
       build_dir      => $certs::ssl_build_dir,
     }
   } else {
