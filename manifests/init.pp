@@ -73,7 +73,7 @@ class certs (
   Boolean $generate = true,
   Boolean $regenerate = false,
   Boolean $deploy = true,
-  String $ca_common_name = $certs::params::ca_common_name,
+  Stdlib::Fqdn $ca_common_name = $certs::params::ca_common_name,
   String[2,2] $country = 'US',
   String $state = 'North Carolina',
   String $city = 'Raleigh',
