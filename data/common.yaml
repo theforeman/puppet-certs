@@ -1,0 +1,36 @@
+---
+certs::node_fqdn: "%{facts.networking.fqdn}"
+certs::cname: []
+certs::generate: true
+certs::regenerate: false
+certs::deploy: true
+certs::ca_common_name: "%{facts.networking.fqdn}"
+certs::country: 'US'
+certs::state: 'North Carolina'
+certs::city: 'Raleigh'
+certs::org: 'Katello'
+certs::org_unit: 'SomeOrgUnit'
+certs::expiration: '7300' # 20 years
+certs::ca_expiration: '36500' # 100 years
+certs::pki_dir: '/etc/pki/katello'
+certs::ssl_build_dir: '/root/ssl-build'
+certs::user: 'root'
+certs::group: 'root'
+certs::default_ca_name: 'katello-default-ca'
+certs::server_ca_name: 'katello-server-ca'
+
+certs::apache::hostname: '%{alias("certs::node_fqdn")}'
+certs::apache::cname: '%{alias("certs::cname")}'
+certs::apache::generate: '%{alias("certs::generate")}'
+certs::apache::regenerate: '%{alias("certs::regenerate")}'
+certs::apache::deploy: '%{alias("certs::deploy")}'
+certs::apache::pki_dir: '%{alias("certs::pki_dir")}'
+certs::apache::country: '%{alias("certs::country")}'
+certs::apache::state: '%{alias("certs::state")}'
+certs::apache::city: '%{alias("certs::city")}'
+certs::apache::org: '%{alias("certs::org")}'
+certs::apache::org_unit: '%{alias("certs::org_unit")}'
+certs::apache::expiration: '%{alias("certs::expiration")}'
+certs::apache::default_ca: '%{alias("certs::default_ca")}'
+certs::apache::ca_key_password_file: '%{alias("certs::ca_key_password_file")}'
+certs::apache::group: '%{alias("certs::group")}'

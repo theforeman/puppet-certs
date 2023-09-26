@@ -44,28 +44,25 @@
 #
 # $group::                The group who should own the certs
 #
-# $default_ca::           The internal CA
-#
 # $ca_key_password_file:: Location of the password file for the CA key
 class certs::apache (
-  Stdlib::Fqdn $hostname = $certs::node_fqdn,
-  Array[Stdlib::Fqdn] $cname = $certs::cname,
-  Boolean $generate = $certs::generate,
-  Boolean $regenerate = $certs::regenerate,
-  Boolean $deploy = $certs::deploy,
-  Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
-  Optional[Stdlib::Absolutepath] $server_cert = $certs::server_cert,
-  Optional[Stdlib::Absolutepath] $server_key = $certs::server_key,
-  Optional[Stdlib::Absolutepath] $server_cert_req = $certs::server_cert_req,
-  String[2,2] $country = $certs::country,
-  String $state = $certs::state,
-  String $city = $certs::city,
-  String $org = $certs::org,
-  String $org_unit = $certs::org_unit,
-  String $expiration = $certs::expiration,
-  Type[Ca] $default_ca = $certs::default_ca,
-  Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
-  String $group = $certs::group,
+  Stdlib::Fqdn $hostname,
+  Array[Stdlib::Fqdn] $cname,
+  Boolean $generate,
+  Boolean $regenerate,
+  Boolean $deploy,
+  Stdlib::Absolutepath $pki_dir,
+  String[2,2] $country,
+  String $state,
+  String $city,
+  String $org,
+  String $org_unit,
+  String $expiration,
+  Stdlib::Absolutepath $ca_key_password_file,
+  String $group,
+  Optional[Stdlib::Absolutepath] $server_cert = undef,
+  Optional[Stdlib::Absolutepath] $server_key = undef,
+  Optional[Stdlib::Absolutepath] $server_cert_req = undef,
 ) inherits certs {
   $apache_cert_name = "${hostname}-apache"
   $apache_cert = "${pki_dir}/certs/katello-apache.crt"
@@ -81,9 +78,9 @@ class certs::apache (
       generate       => $generate,
       deploy         => false,
       regenerate     => $regenerate,
-      custom_pubkey  => $server_cert,
-      custom_privkey => $server_key,
-      custom_req     => $server_cert_req,
+      custom_pubkey  => pick($server_cert, $certs::server_cert),
+      custom_privkey => pick($server_key, $certs::server_key),
+      custom_req     => pick($server_cert_req, $certs::server_cert_req),
       build_dir      => $certs::ssl_build_dir,
     }
   } else {
@@ -97,7 +94,7 @@ class certs::apache (
       org           => $org,
       org_unit      => $org_unit,
       expiration    => $expiration,
-      ca            => $default_ca,
+      ca            => $certs::default_ca,
       generate      => $generate,
       regenerate    => $regenerate,
       deploy        => false,

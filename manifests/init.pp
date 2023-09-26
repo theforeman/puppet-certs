@@ -68,31 +68,31 @@
 # $server_ca_name::       The name of the server CA (used for https)
 #
 class certs (
-  Stdlib::Fqdn $node_fqdn = $certs::params::node_fqdn,
-  Array[Stdlib::Fqdn] $cname = $certs::params::cname,
-  Boolean $generate = true,
-  Boolean $regenerate = false,
-  Boolean $deploy = true,
-  String $ca_common_name = $certs::params::ca_common_name,
-  String[2,2] $country = 'US',
-  String $state = 'North Carolina',
-  String $city = 'Raleigh',
-  String $org = 'Katello',
-  String $org_unit = 'SomeOrgUnit',
-  String $expiration = '7300', # 20 years
-  String $ca_expiration = '36500', # 100 years
+  Stdlib::Fqdn $node_fqdn,
+  Array[Stdlib::Fqdn] $cname,
+  Boolean $generate,
+  Boolean $regenerate,
+  Boolean $deploy,
+  String $ca_common_name,
+  String[2,2] $country,
+  String $state,
+  String $city,
+  String $org,
+  String $org_unit,
+  String $expiration,
+  String $ca_expiration,
+  Stdlib::Absolutepath $pki_dir,
+  Stdlib::Absolutepath $ssl_build_dir,
+  String $user,
+  String $group,
+  String $default_ca_name,
+  String $server_ca_name,
   Optional[Stdlib::Absolutepath] $server_cert = undef,
   Optional[Stdlib::Absolutepath] $server_key = undef,
   Optional[Stdlib::Absolutepath] $server_cert_req = undef,
   Optional[Stdlib::Absolutepath] $server_ca_cert = undef,
-  Stdlib::Absolutepath $pki_dir = $certs::params::pki_dir,
-  Stdlib::Absolutepath $ssl_build_dir = '/root/ssl-build',
-  String $user = 'root',
-  String $group = 'root',
-  String $default_ca_name = 'katello-default-ca',
-  String $server_ca_name = 'katello-server-ca',
   Optional[Stdlib::Absolutepath] $tar_file = undef,
-) inherits certs::params {
+) {
   if $server_cert {
     validate_file_exists($server_cert, $server_key, $server_ca_cert)
     if $server_cert_req {
