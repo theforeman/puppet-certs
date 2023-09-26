@@ -1,4 +1,52 @@
 # Certs configurations for Apache
+#
+# === Parameters:
+#
+# $hostname::             The fqdn of the host the generated certificates
+#                         should be for
+#
+# $cname::                The alternative names of the host the generated certificates
+#                         should be for
+#
+# $server_cert::          Path to the ssl certificate for https
+#                         if not specified, the default CA will generate one
+#
+# $server_key::           Path to the ssl key for https
+#                         if not specified, the default CA will generate one
+#
+# $server_cert_req::      Path to the ssl certificate request for https
+#                         if not specified, the default CA will generate one
+#
+# === Advanced parameters:
+#
+# $generate::             Should the generation of the certs be part of the
+#                         configuration
+#
+# $regenerate::           Force regeneration of the certificates (excluding
+#                         CA certificates)
+#
+# $deploy::               Deploy the certs on the configured system. False means
+#                         we want to apply it to a different system
+#
+# $country::              Country attribute for managed certificates
+#
+# $state::                State attribute for managed certificates
+#
+# $city::                 City attribute for managed certificates
+#
+# $org::                  Org attribute for managed certificates
+#
+# $org_unit::             Org unit attribute for managed certificates
+#
+# $expiration::           Expiration attribute for managed certificates
+#
+# $pki_dir::              The PKI directory under which to place certs
+#
+# $group::                The group who should own the certs
+#
+# $default_ca::           The internal CA
+#
+# $ca_key_password_file:: Location of the password file for the CA key
 class certs::apache (
   Stdlib::Fqdn $hostname = $certs::node_fqdn,
   Array[Stdlib::Fqdn] $cname = $certs::cname,
