@@ -11,7 +11,24 @@ module PuppetX
         end
 
         def exists?
-          File.exist?(store)
+          return false unless File.exist?(store)
+
+          begin
+            keytool(
+              '-list',
+              '-keystore', store,
+              '-storepass:file', resource[:password_file],
+            )
+          rescue Puppet::ExecutionFailure => e
+            if e.message.include?('java.security.UnrecoverableKeyException')
+              Puppet.debug("Invalid password for #{store}")
+              return false
+            else
+              Puppet.log_exception(e, "Failed to read keystore '#{store}'")
+            end
+          end
+
+          true
         end
 
         def store
@@ -24,6 +41,8 @@ module PuppetX
 
         def generate_keystore
           temp_alias = 'temporary-entry'
+
+          FileUtils.rm_f(store)
 
           begin
             keytool(
