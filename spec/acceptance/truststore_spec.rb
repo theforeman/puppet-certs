@@ -41,7 +41,7 @@ describe 'certs' do
       it { should be_grouped_into 'root' }
     end
 
-    describe command("keytool -list -keystore #{truststore_path} -storepass:file #{truststore_password_file}") do
+    describe command("keytool -list -keystore #{truststore_path} -storepass testpassword") do
       its(:exit_status) { should eq 0 }
       its(:stdout) { should match(/^Keystore type: PKCS12$/i) }
       its(:stdout) { should match(/^Your keystore contains 0 entries$/) }
@@ -86,6 +86,116 @@ describe 'certs' do
       its(:exit_status) { should eq 0 }
       its(:stdout) { should match(/^Owner: CN=#{host_inventory['fqdn']}$/) }
       its(:stdout) { should match(/^Issuer: CN=#{host_inventory['fqdn']}$/) }
+    end
+
+    describe 'changing password' do
+      describe 'apply puppet' do
+        let(:manifest) do
+          <<-PUPPET
+          $truststore_password_file = '/etc/pki/truststore_password-file'
+
+          package { 'java-11-openjdk-headless':
+            ensure => installed,
+          }
+
+          file { $truststore_password_file:
+            ensure    => file,
+            content   => 'other-password',
+            owner     => 'root',
+            group     => 'root',
+            mode      => '0440',
+            show_diff => false,
+          }
+
+          truststore { "/etc/pki/truststore":
+            ensure        => present,
+            password_file => $truststore_password_file,
+            owner         => 'root',
+            group         => 'root',
+            mode          => '0640',
+          }
+          PUPPET
+        end
+
+        it 'applies changes with no errors' do
+          apply_manifest_on(default, manifest, expect_changes: true)
+        end
+
+        it 'applies a second time without changes' do
+          apply_manifest_on(default, manifest, catch_changes: true)
+        end
+      end
+
+      describe command("keytool -list -keystore #{truststore_path} -storepass other-password") do
+        its(:exit_status) { should eq 0 }
+        its(:stdout) { should match(/^Keystore type: PKCS12$/i) }
+        its(:stdout) { should match(/^Your keystore contains 0 entries$/) }
+      end
+    end
+
+    describe 'noop' do
+      describe 'change password file' do
+        let(:manifest) do
+          <<-PUPPET
+          file { '/etc/pki/truststore_password-file':
+            ensure    => file,
+            content   => 'wrong-password',
+            owner     => 'root',
+            group     => 'root',
+            mode      => '0440',
+            show_diff => false,
+          }
+          PUPPET
+        end
+
+        it 'applies changes with no errors' do
+          apply_manifest_on(default, manifest, catch_failures: true)
+        end
+      end
+
+      describe 'run in noop mode with wrong password' do
+        let(:manifest) do
+          <<-PUPPET
+          $truststore_password_file = '/etc/pki/truststore_password-file'
+
+          package { 'java-11-openjdk-headless':
+            ensure => installed,
+          }
+
+          file { $truststore_password_file:
+            ensure    => file,
+            content   => 'other-password',
+            owner     => 'root',
+            group     => 'root',
+            mode      => '0440',
+            show_diff => false,
+          }
+
+          truststore { "/etc/pki/truststore":
+            ensure        => present,
+            password_file => $truststore_password_file,
+            owner         => 'root',
+            group         => 'root',
+            mode          => '0640',
+          }
+          PUPPET
+        end
+
+        it 'applies changes with no errors' do
+          apply_manifest_on(default, manifest, noop: true)
+        end
+      end
+
+      describe file(truststore_path) do
+        it { is_expected.to be_file }
+      end
+
+      # Should still be readable with the old password
+      describe command("keytool -list -keystore #{truststore_path} -storepass other-password") do
+        its(:exit_status) { should eq 0 }
+        its(:stdout) { should match(/^Keystore type: PKCS12$/i) }
+        its(:stdout) { should match(/^Your keystore contains 0 entries$/) }
+      end
     end
   end
 end
