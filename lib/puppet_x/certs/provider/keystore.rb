@@ -20,7 +20,7 @@ module PuppetX
               '-storepass:file', resource[:password_file],
             )
           rescue Puppet::ExecutionFailure => e
-            if e.message.include?('java.security.UnrecoverableKeyException')
+            if e.message.include?('java.security.UnrecoverableKeyException') || e.message.include?('keystore password was incorrect')
               Puppet.debug("Invalid password for #{store}")
               return false
             else
