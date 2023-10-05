@@ -1,5 +1,13 @@
 # Changelog
 
+## [16.1.0](https://github.com/theforeman/puppet-certs/tree/16.1.0) (2023-10-05)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.0.2...16.1.0)
+
+**Implemented enhancements:**
+
+- Support changing passwords on keystores & truststores [\#428](https://github.com/theforeman/puppet-certs/pull/430) ([ekohl](https://github.com/ekohl))
+
 ## [16.0.2](https://github.com/theforeman/puppet-certs/tree/16.0.2) (2023-06-19)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.0.1...16.0.2)
