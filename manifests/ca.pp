@@ -47,7 +47,7 @@ class certs::ca (
     generate      => $generate,
     deploy        => false,
     password_file => $ca_key_password_file,
-    build_dir     => $certs::ssl_build_dir,
+    build_dir     => $ssl_build_dir,
   }
   $default_ca = Ca[$default_ca_name]
 
@@ -57,15 +57,15 @@ class certs::ca (
       generate      => $generate,
       deploy        => false,
       custom_pubkey => $certs::server_ca_cert,
-      build_dir     => $certs::ssl_build_dir,
+      build_dir     => $ssl_build_dir,
     }
   } else {
     ca { $server_ca_name:
       ensure        => present,
       generate      => $generate,
       deploy        => false,
-      custom_pubkey => "${certs::ssl_build_dir}/${default_ca_name}.crt",
-      build_dir     => $certs::ssl_build_dir,
+      custom_pubkey => "${ssl_build_dir}/${default_ca_name}.crt",
+      build_dir     => $ssl_build_dir,
     }
   }
 
@@ -86,7 +86,7 @@ class certs::ca (
 
     file { $certs::katello_default_ca_cert:
       ensure => file,
-      source => "${certs::ssl_build_dir}/${default_ca_name}.crt",
+      source => "${ssl_build_dir}/${default_ca_name}.crt",
       owner  => 'root',
       group  => 'root',
       mode   => '0644',
@@ -94,7 +94,7 @@ class certs::ca (
 
     file { $katello_server_ca_cert:
       ensure => file,
-      source => "${certs::ssl_build_dir}/${server_ca_name}.crt",
+      source => "${ssl_build_dir}/${server_ca_name}.crt",
       owner  => $owner,
       group  => $group,
       mode   => '0644',
