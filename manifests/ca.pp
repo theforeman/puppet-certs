@@ -85,6 +85,8 @@ class certs::ca (
   }
 
   if $deploy {
+    include certs::config
+
     # Ensure CA key deployed to /etc/pki/katello/private no longer exists
     # The CA key is not used by anything from this directory and does not need to be deployed
     file { $ca_key:

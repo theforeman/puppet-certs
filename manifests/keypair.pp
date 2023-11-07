@@ -15,6 +15,8 @@ define certs::keypair (
   Boolean $key_decrypt = false,
   Optional[Stdlib::Absolutepath] $key_password_file = undef,
 ) {
+  include certs::config
+
   private_key { $key_file:
     ensure        => $key_ensure,
     source        => "${source_dir}/${title}.key",
