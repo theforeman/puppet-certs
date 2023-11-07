@@ -4,13 +4,6 @@ class certs::config (
   Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
   String $group = $certs::group,
 ) {
-  file { $certs::ssl_build_dir:
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0700',
-  }
-
   file { $pki_dir:
     ensure => directory,
     owner  => 'root',

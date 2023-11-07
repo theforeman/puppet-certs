@@ -27,6 +27,13 @@ class certs::ca (
     ensure => absent,
   }
 
+  file { $ssl_build_dir:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0700',
+  }
+
   file { $ca_key_password_file:
     ensure    => file,
     content   => $ca_key_password,
