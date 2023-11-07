@@ -20,7 +20,7 @@ module Puppet::Provider::KatelloSslTool
 
     def destroy
       files_to_deploy.each do |file|
-        File.delete(file) if File.exist?(file)
+        FileUtils.rm_f(file)
       end
 
       output = execute([:rpm, '-q', rpmfile_base_name], failonfail: false)
@@ -53,9 +53,7 @@ module Puppet::Provider::KatelloSslTool
     end
 
     def generate!
-      if File.exists?(update_file)
-        File.delete(update_file)
-      end
+      FileUtils.rm_f(update_file)
     end
 
     def generate?
@@ -189,7 +187,7 @@ module Puppet::Provider::KatelloSslTool
     end
 
     def destroy
-      File.delete(resource[:path]) if File.exist?(resource[:path])
+      FileUtils.rm_f(resource[:path])
     end
 
     protected
