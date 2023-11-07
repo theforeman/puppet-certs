@@ -59,7 +59,7 @@ module Puppet::Provider::KatelloSslTool
     def generate?
       return false unless resource[:generate]
       return true if resource[:regenerate]
-      return true if File.exists?(update_file)
+      return true if File.exist?(update_file)
       return files_to_generate.any? { |file| ! File.exist?(file) }
     end
 
@@ -79,7 +79,7 @@ module Puppet::Provider::KatelloSslTool
     end
 
     def deploy!
-      if File.exists?(rpmfile)
+      if File.exist?(rpmfile)
         if(system("rpm -q #{rpmfile_base_name} &>/dev/null"))
           rpm('-e', rpmfile_base_name)
         end
@@ -91,7 +91,7 @@ module Puppet::Provider::KatelloSslTool
     end
 
     def needs_deploy?
-      if File.exists?(rpmfile)
+      if File.exist?(rpmfile)
         # the installed version doesn't match the rpmfile
         !system("rpm --verify -p #{rpmfile} &>/dev/null")
       else
@@ -177,8 +177,8 @@ module Puppet::Provider::KatelloSslTool
     commands :openssl => 'openssl'
 
     def exists?
-      return false unless File.exists?(resource[:path])
-      return false unless File.exists?(source_path)
+      return false unless File.exist?(resource[:path])
+      return false unless File.exist?(source_path)
       expected_content_processed == current_content
     end
 
