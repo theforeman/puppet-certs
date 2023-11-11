@@ -1,5 +1,45 @@
 # Changelog
 
+## [17.0.0](https://github.com/theforeman/puppet-certs/tree/17.0.0) (2023-11-12)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.1.1...17.0.0)
+
+**Breaking changes:**
+
+- Drop Puppet 6 support [\#435](https://github.com/theforeman/puppet-certs/pull/435) ([ekohl](https://github.com/ekohl))
+- Remove default\_ca parameter [\#425](https://github.com/theforeman/puppet-certs/pull/425) ([ehelms](https://github.com/ehelms))
+- puppetlabs/stdlib: Require 9.x [\#411](https://github.com/theforeman/puppet-certs/pull/411) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Mark compatible with puppet-extlib 7.x [\#437](https://github.com/theforeman/puppet-certs/pull/437) ([ekohl](https://github.com/ekohl))
+- Document certs::apache parameters [\#423](https://github.com/theforeman/puppet-certs/pull/423) ([ekohl](https://github.com/ekohl))
+- Set required params and autorequire [\#422](https://github.com/theforeman/puppet-certs/pull/422) ([ekohl](https://github.com/ekohl))
+- Manage the build\_dir [\#419](https://github.com/theforeman/puppet-certs/pull/419) ([ehelms](https://github.com/ehelms))
+- Remove unused full\_path method [\#418](https://github.com/theforeman/puppet-certs/pull/418) ([ekohl](https://github.com/ekohl))
+- Deploy the CA password file to ssl build directory [\#416](https://github.com/theforeman/puppet-certs/pull/416) ([ehelms](https://github.com/ehelms))
+- Add Puppet 8 support [\#412](https://github.com/theforeman/puppet-certs/pull/412) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Fix some RuboCop flagged issues for Puppet 8 support [\#438](https://github.com/theforeman/puppet-certs/pull/438) ([ekohl](https://github.com/ekohl))
+
+## [16.1.1](https://github.com/theforeman/puppet-certs/tree/16.1.1) (2023-10-05)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.1.0...16.1.1)
+
+**Fixed bugs:**
+
+-  Handle more unknown password errors [\#433](https://github.com/theforeman/puppet-certs/pull/433) ([ekohl](https://github.com/ekohl))
+
+## [16.1.0](https://github.com/theforeman/puppet-certs/tree/16.1.0) (2023-10-05)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.0.2...16.1.0)
+
+**Implemented enhancements:**
+
+- Support changing passwords on keystores & truststores [\#430](https://github.com/theforeman/puppet-certs/pull/430) ([ekohl](https://github.com/ekohl))
+
 ## [16.0.2](https://github.com/theforeman/puppet-certs/tree/16.0.2) (2023-06-19)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.0.1...16.0.2)
