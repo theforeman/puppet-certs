@@ -41,6 +41,8 @@ class certs::qpid (
     $nss_db_dir = $certs::ssltools::nssdb::nss_db_dir
     $nss_db_password_file = $certs::ssltools::nssdb::nss_db_password_file
 
+    include certs::config
+
     $client_cert            = "${pki_dir}/certs/${qpid_cert_name}.crt"
     $client_key             = "${pki_dir}/private/${qpid_cert_name}.key"
 

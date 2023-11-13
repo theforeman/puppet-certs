@@ -116,11 +116,9 @@ class certs (
   }
 
   contain certs::install
-  contain certs::config
   contain certs::ca
 
   Class['certs::install'] ->
-  Class['certs::config'] ->
   Class['certs::ca']
 
   $default_ca = $certs::ca::default_ca
