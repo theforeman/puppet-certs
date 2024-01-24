@@ -22,6 +22,6 @@ define certs::tar_create (
   exec { "generate ${path}":
     cwd     => '/root',
     path    => ['/usr/bin', '/bin'],
-    command => "tar -czf ${path} ${ca_rpms} ${ca_certificates} ${foreman_proxy_certificate_rpms} ${foreman_proxy_certificates} ${foreman_proxy_keys}",
+    command => "tar -caf ${path} ${ca_rpms} ${ca_certificates} ${foreman_proxy_certificate_rpms} ${foreman_proxy_certificates} ${foreman_proxy_keys}",
   }
 }
