@@ -1,5 +1,14 @@
 # Changelog
 
+## [17.1.0](https://github.com/theforeman/puppet-certs/tree/17.1.0) (2024-02-19)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.0.0...17.1.0)
+
+**Implemented enhancements:**
+
+- Support EL9 [\#442](https://github.com/theforeman/puppet-certs/pull/442) ([ekohl](https://github.com/ekohl))
+- Use automatic compression based on file path for tar [\#440](https://github.com/theforeman/puppet-certs/pull/440) ([ekohl](https://github.com/ekohl))
+
 ## [17.0.0](https://github.com/theforeman/puppet-certs/tree/17.0.0) (2023-11-12)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.1.1...17.0.0)
