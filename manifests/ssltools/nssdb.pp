@@ -2,7 +2,7 @@
 class certs::ssltools::nssdb (
   Stdlib::Absolutepath $nss_db_dir = "${certs::pki_dir}/nssdb",
   Stdlib::Absolutepath $nss_db_password_file = "${certs::pki_dir}/nss_db_password-file",
-  String[10] $nss_db_password = extlib::cache_data('foreman_cache_data', 'certs-nss-db-password', extlib::random_password(32)),
+  String[10] $nss_db_password = $certs::params::nss_db_password,
   String[1] $group = 'qpidd',
 ) {
   stdlib::ensure_packages(['nss-tools'])
