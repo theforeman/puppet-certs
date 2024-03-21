@@ -38,8 +38,6 @@ module PuppetX
 
         newparam(:regenerate)
 
-        newparam(:deploy)
-
         newparam(:password_file)
 
         newparam(:build_dir) do
