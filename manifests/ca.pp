@@ -12,10 +12,8 @@ class certs::ca (
   String $ca_expiration = $certs::ca_expiration,
   Boolean $generate = $certs::generate,
   Boolean $deploy = $certs::deploy,
-  Optional[Stdlib::Absolutepath] $server_cert = $certs::server_cert,
-  Optional[Stdlib::Absolutepath] $ssl_build_dir = $certs::ssl_build_dir,
-  String $group = $certs::group,
   String $owner = $certs::user,
+  String $group = $certs::group,
   Stdlib::Absolutepath $katello_server_ca_cert = $certs::katello_server_ca_cert,
   Stdlib::Absolutepath $ca_key = $certs::ca_key,
   Stdlib::Absolutepath $ca_cert = $certs::ca_cert,
@@ -23,6 +21,8 @@ class certs::ca (
   String $ca_key_password = $certs::ca_key_password,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
 ) {
+  $server_ca_path = "${certs::ssl_build_dir}/${server_ca_name}.crt"
+
   file { "${certs::pki_dir}/private/${default_ca_name}.pwd":
     ensure => absent,
   }
@@ -51,29 +51,29 @@ class certs::ca (
   }
   $default_ca = Ca[$default_ca_name]
 
-  if $server_cert {
-    ca { $server_ca_name:
-      ensure        => present,
-      generate      => $generate,
-      deploy        => false,
-      custom_pubkey => $certs::server_ca_cert,
-      build_dir     => $certs::ssl_build_dir,
+  if $certs::server_ca_cert {
+    file { $server_ca_path:
+      ensure => file,
+      source => $certs::server_ca_cert,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
     }
   } else {
-    ca { $server_ca_name:
-      ensure        => present,
-      generate      => $generate,
-      deploy        => false,
-      custom_pubkey => "${certs::ssl_build_dir}/${default_ca_name}.crt",
-      build_dir     => $certs::ssl_build_dir,
+    file { $server_ca_path:
+      ensure => file,
+      source => "${certs::ssl_build_dir}/${default_ca_name}.crt",
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
     }
   }
 
   if $generate {
-    file { "${ssl_build_dir}/KATELLO-TRUSTED-SSL-CERT":
+    file { "${certs::ssl_build_dir}/KATELLO-TRUSTED-SSL-CERT":
       ensure  => link,
-      target  => "${ssl_build_dir}/${server_ca_name}.crt",
-      require => Ca[$server_ca_name],
+      target  => $server_ca_path,
+      require => File[$server_ca_path],
     }
   }
 
@@ -94,7 +94,7 @@ class certs::ca (
 
     file { $katello_server_ca_cert:
       ensure => file,
-      source => "${certs::ssl_build_dir}/${server_ca_name}.crt",
+      source => $server_ca_path,
       owner  => $owner,
       group  => $group,
       mode   => '0644',

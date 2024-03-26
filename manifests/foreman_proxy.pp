@@ -37,19 +37,25 @@ class certs::foreman_proxy (
   $foreman_proxy_client_cert_name = "${hostname}-foreman-proxy-client"
   $foreman_proxy_ssl_client_bundle = "${pki_dir}/private/${foreman_proxy_client_cert_name}-bundle.pem"
 
+  $proxy_cert_path = "${certs::ssl_build_dir}/${hostname}/${proxy_cert_name}"
+
   if $server_cert {
-    cert { $proxy_cert_name:
-      ensure         => present,
-      hostname       => $hostname,
-      cname          => $cname,
-      generate       => $generate,
-      regenerate     => $regenerate,
-      deploy         => false,
-      custom_pubkey  => $server_cert,
-      custom_privkey => $server_key,
-      custom_req     => $server_cert_req,
-      build_dir      => $certs::ssl_build_dir,
+    file { "${proxy_cert_path}.crt":
+      ensure => file,
+      source => $server_cert,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0440',
     }
+    file { "${proxy_cert_path}.key":
+      ensure => file,
+      source => $server_key,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0440',
+    }
+
+    $require_cert = File["${proxy_cert_path}.crt"]
   } else {
     # cert for ssl of foreman-proxy
     cert { $proxy_cert_name:
@@ -69,6 +75,8 @@ class certs::foreman_proxy (
       password_file => $ca_key_password_file,
       build_dir     => $certs::ssl_build_dir,
     }
+
+    $require_cert = Cert[$proxy_cert_name]
   }
 
   # cert for authentication of foreman_proxy against foreman
@@ -101,7 +109,7 @@ class certs::foreman_proxy (
       cert_owner => $owner,
       cert_group => $group,
       cert_mode  => $public_key_mode,
-      require    => Cert[$proxy_cert_name],
+      require    => $require_cert,
     }
 
     file { $proxy_ca_cert:
