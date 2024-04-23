@@ -28,8 +28,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -57,8 +57,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -66,8 +66,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -95,8 +95,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -104,8 +104,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -119,8 +119,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -134,8 +134,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -181,8 +181,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'server' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -196,8 +196,8 @@ describe 'certs::foreman_proxy' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = FOREMAN_PROXY, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 

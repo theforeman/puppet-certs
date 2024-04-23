@@ -24,8 +24,8 @@ describe 'certs::foreman' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -52,8 +52,8 @@ describe 'certs::foreman' do
     describe x509_certificate('/etc/pki/katello/puppet/puppet_client_ca.crt') do
       it { should be_certificate }
       it { should be_valid }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -68,8 +68,8 @@ describe 'certs::foreman' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -103,8 +103,8 @@ describe 'certs::foreman' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
