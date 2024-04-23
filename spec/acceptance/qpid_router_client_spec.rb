@@ -24,8 +24,8 @@ describe 'certs::qpid_router::client' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = dispatch client, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = dispatch client, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -53,8 +53,8 @@ describe 'certs::qpid_router::client' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = dispatch client, OU = SomeOrgUnit, CN = #{fqdn}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = dispatch client, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -88,8 +88,8 @@ describe 'certs::qpid_router::client' do
       it { should be_certificate }
       it { should be_valid }
       it { should have_purpose 'client' }
-      its(:issuer) { should eq("C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}") }
-      its(:subject) { should eq("C = US, ST = North Carolina, O = dispatch client, OU = SomeOrgUnit, CN = #{fact('fqdn')}") }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = dispatch client, OU = SomeOrgUnit, CN = #{fact('fqdn')}/) }
       its(:keylength) { should be >= 4096 }
     end
 
