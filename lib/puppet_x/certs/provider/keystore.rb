@@ -18,6 +18,7 @@ module PuppetX
               '-list',
               '-keystore', store,
               '-storepass:file', resource[:password_file],
+              '-J-Dcom.redhat.fips=false',
             )
           rescue Puppet::ExecutionFailure => e
             if e.message.include?('java.security.UnrecoverableKeyException') || e.message.include?('keystore password was incorrect')
