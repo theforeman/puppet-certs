@@ -1,5 +1,13 @@
 # Changelog
 
+## [17.0.1](https://github.com/theforeman/puppet-certs/tree/17.0.1) (2024-04-25)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.0.0...17.0.1)
+
+**Fixed bugs:**
+
+- Fixes [\#37384](https://projects.theforeman.org/issues/37384) - properly pass fips=false when checking keystore [\#444](https://github.com/theforeman/puppet-certs/pull/444) ([evgeni](https://github.com/evgeni))
+
 ## [17.0.0](https://github.com/theforeman/puppet-certs/tree/17.0.0) (2023-11-12)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.1.1...17.0.0)
