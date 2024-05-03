@@ -162,6 +162,43 @@ describe 'certs::foreman_proxy' do
     end
   end
 
+  context 'with custom certificates fresh' do
+    before(:context) do
+      ['crt', 'key'].each do |ext|
+        source_path = "fixtures/example.partial.solutions.#{ext}"
+        dest_path = "/server.#{ext}"
+        scp_to(hosts, source_path, dest_path)
+      end
+
+      on hosts, 'rm -rf /root/ssl-build'
+    end
+
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+        class { '::certs::foreman_proxy':
+          server_cert => '/server.crt',
+          server_key  => '/server.key',
+        }
+        PUPPET
+      end
+    end
+
+    describe x509_certificate('/etc/foreman-proxy/ssl_cert.pem') do
+      it { should be_certificate }
+      # Doesn't have to be valid - can be expired since it's a static resource
+      it { should have_purpose 'server' }
+      its(:issuer) { should match_without_whitespace(/CN = Fake LE Intermediate X1/) }
+      its(:subject) { should match_without_whitespace(/CN = example.partial.solutions/) }
+      its(:keylength) { should be >= 2048 }
+    end
+
+    describe x509_private_key('/etc/foreman-proxy/ssl_key.pem') do
+      it { should_not be_encrypted }
+      it { should have_matching_certificate('/etc/foreman-proxy/ssl_cert.pem') }
+    end
+  end
+
   context 'with deploy false' do
     before(:context) do
       on default, 'rm -rf /root/ssl-build /etc/foreman-proxy'

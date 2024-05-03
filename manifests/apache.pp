@@ -72,6 +72,16 @@ class certs::apache (
   $apache_cert_path = "${certs::ssl_build_dir}/${hostname}/${apache_cert_name}"
 
   if $server_cert {
+    ensure_resource(
+      'file',
+      "${certs::ssl_build_dir}/${hostname}",
+      {
+        'ensure' => directory,
+        'owner'  => 'root',
+        'group'  => 'root',
+        'mode'   => '0750',
+      }
+    )
     file { "${apache_cert_path}.crt":
       ensure => file,
       source => $server_cert,
