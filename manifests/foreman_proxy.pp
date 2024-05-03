@@ -40,6 +40,16 @@ class certs::foreman_proxy (
   $proxy_cert_path = "${certs::ssl_build_dir}/${hostname}/${proxy_cert_name}"
 
   if $server_cert {
+    ensure_resource(
+      'file',
+      "${certs::ssl_build_dir}/${hostname}",
+      {
+        'ensure' => directory,
+        'owner'  => 'root',
+        'group'  => 'root',
+        'mode'   => '0750',
+      }
+    )
     file { "${proxy_cert_path}.crt":
       ensure => file,
       source => $server_cert,
