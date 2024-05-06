@@ -23,10 +23,6 @@ class certs::ca (
 ) {
   $server_ca_path = "${certs::ssl_build_dir}/${server_ca_name}.crt"
 
-  file { "${certs::pki_dir}/private/${default_ca_name}.pwd":
-    ensure => absent,
-  }
-
   file { $ca_key_password_file:
     ensure    => file,
     content   => $ca_key_password,
@@ -76,12 +72,6 @@ class certs::ca (
   }
 
   if $deploy {
-    # Ensure CA key deployed to /etc/pki/katello/private no longer exists
-    # The CA key is not used by anything from this directory and does not need to be deployed
-    file { $ca_key:
-      ensure => absent,
-    }
-
     file { $certs::katello_default_ca_cert:
       ensure => file,
       source => "${certs::ssl_build_dir}/${default_ca_name}.crt",
