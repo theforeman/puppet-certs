@@ -79,7 +79,7 @@ class certs (
   String $city = 'Raleigh',
   String $org = 'Katello',
   String $org_unit = 'SomeOrgUnit',
-  String $expiration = '7300', # 20 years
+  Variant[String, Integer] $expiration = 7300, # 20 years
   String $ca_expiration = '36500', # 100 years
   Optional[Stdlib::Absolutepath] $server_cert = undef,
   Optional[Stdlib::Absolutepath] $server_key = undef,
@@ -122,6 +122,4 @@ class certs (
   Class['certs::install'] ->
   Class['certs::config'] ->
   Class['certs::ca']
-
-  $default_ca = Ca[$default_ca_name]
 }

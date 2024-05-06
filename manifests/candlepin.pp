@@ -17,7 +17,7 @@ class certs::candlepin (
   String $city = $certs::city,
   String $org = $certs::org,
   String $org_unit = $certs::org_unit,
-  String $expiration = $certs::expiration,
+  Variant[String, Integer] $expiration = $certs::expiration,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
   String $user = 'root',
   String $group = 'tomcat',
@@ -25,26 +25,41 @@ class certs::candlepin (
 ) inherits certs {
   include certs::foreman
 
-  $java_client_cert_name = 'java-client'
   $artemis_alias = 'artemis-client'
-  $artemis_client_dn = $certs::foreman::client_dn
   $tomcat_cert_name = "${hostname}-tomcat"
+  $tomcat_cert_path = "${certs::ssl_build_dir}/${hostname}/${tomcat_cert_name}"
 
-  cert { $tomcat_cert_name:
-    ensure        => present,
-    hostname      => $hostname,
-    cname         => $cname,
-    country       => $country,
-    state         => $state,
-    city          => $city,
-    org           => $org,
-    org_unit      => $org_unit,
-    expiration    => $expiration,
-    ca            => $certs::default_ca,
-    generate      => $generate,
-    regenerate    => $regenerate,
-    password_file => $ca_key_password_file,
-    build_dir     => $certs::ssl_build_dir,
+  if $generate {
+    ensure_resource(
+      'file',
+      "${certs::ssl_build_dir}/${hostname}",
+      {
+        'ensure' => directory,
+        'owner'  => 'root',
+        'group'  => 'root',
+        'mode'   => '0750',
+      }
+    )
+
+    openssl::certificate::x509 { $tomcat_cert_name:
+      ensure         => present,
+      commonname     => $hostname,
+      country        => $country,
+      state          => $state,
+      locality       => $city,
+      organization   => $org,
+      unit           => $org_unit,
+      altnames       => $cname,
+      extkeyusage    => ['serverAuth'],
+      days           => $expiration,
+      base_dir       => "${certs::ssl_build_dir}/${hostname}",
+      key_size       => 4096,
+      force          => true,
+      encrypted      => false,
+      ca             => "${certs::ssl_build_dir}/${certs::default_ca_name}.crt",
+      cakey          => "${certs::ssl_build_dir}/${certs::default_ca_name}.key",
+      cakey_password => $certs::ca_key_password,
+    }
   }
 
   $keystore_password = extlib::cache_data('foreman_cache_data', $keystore_password_file, extlib::random_password(32))
@@ -66,7 +81,7 @@ class certs::candlepin (
       cert_owner        => $user,
       cert_group        => $group,
       cert_mode         => '0440',
-      require           => $certs::default_ca,
+      require           => X509_cert["${tomcat_cert_path}.crt"],
       key_password_file => $ca_key_password_file,
       key_decrypt       => true,
     }

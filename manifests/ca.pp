@@ -30,19 +30,35 @@ class certs::ca (
     group     => 'root',
     mode      => '0400',
     show_diff => false,
-  } ~>
-  ca { $default_ca_name:
-    ensure        => present,
-    common_name   => $ca_common_name,
-    country       => $country,
-    state         => $state,
-    city          => $city,
-    org           => $org,
-    org_unit      => $org_unit,
-    expiration    => $ca_expiration,
-    generate      => $generate,
-    password_file => $ca_key_password_file,
-    build_dir     => $certs::ssl_build_dir,
+  }
+
+  openssl::config { "${certs::ssl_build_dir}/ca.cnf":
+    ensure            => 'present',
+    commonname        => $certs::node_fqdn,
+    country           => $country,
+    state             => $state,
+    locality          => $city,
+    organization      => $org,
+    unit              => $org_unit,
+    default_keyfile   => "${default_ca_name}.key",
+    basicconstraints  => ['CA:true'],
+    keyusages         => ['digitalSignature', 'keyEncipherment', 'keyCertSign', 'cRLSign'],
+    extendedkeyusages => ['serverAuth', 'clientAuth'],
+  }
+
+  ssl_pkey { "${certs::ssl_build_dir}/${default_ca_name}.key":
+    ensure   => 'present',
+    password => $ca_key_password,
+    size     => '4096',
+  }
+
+  x509_cert { "${certs::ssl_build_dir}/${default_ca_name}.crt":
+    ensure      => 'present',
+    private_key => "${certs::ssl_build_dir}/${default_ca_name}.key",
+    days        => $ca_expiration,
+    template    => "${certs::ssl_build_dir}/ca.cnf",
+    password    => $ca_key_password,
+    require     => File["${certs::ssl_build_dir}/ca.cnf"],
   }
 
   if $certs::server_ca_cert {
@@ -55,37 +71,32 @@ class certs::ca (
     }
   } else {
     file { $server_ca_path:
-      ensure => file,
-      source => "${certs::ssl_build_dir}/${default_ca_name}.crt",
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0644',
-    }
-  }
-
-  if $generate {
-    file { "${certs::ssl_build_dir}/KATELLO-TRUSTED-SSL-CERT":
-      ensure  => link,
-      target  => $server_ca_path,
-      require => File[$server_ca_path],
+      ensure  => file,
+      source  => "${certs::ssl_build_dir}/${default_ca_name}.crt",
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      require => X509_cert["${certs::ssl_build_dir}/${default_ca_name}.crt"],
     }
   }
 
   if $deploy {
     file { $certs::katello_default_ca_cert:
-      ensure => file,
-      source => "${certs::ssl_build_dir}/${default_ca_name}.crt",
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0644',
+      ensure  => file,
+      source  => "${certs::ssl_build_dir}/${default_ca_name}.crt",
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      require => X509_cert["${certs::ssl_build_dir}/${default_ca_name}.crt"],
     }
 
     file { $katello_server_ca_cert:
-      ensure => file,
-      source => $server_ca_path,
-      owner  => $owner,
-      group  => $group,
-      mode   => '0644',
+      ensure  => file,
+      source  => $server_ca_path,
+      owner   => $owner,
+      group   => $group,
+      mode    => '0644',
+      require => File[$server_ca_path],
     }
   }
 }

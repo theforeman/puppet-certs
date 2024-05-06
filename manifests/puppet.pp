@@ -11,7 +11,7 @@ class certs::puppet (
   String[2,2] $country = $certs::country,
   String $state = $certs::state,
   String $city = $certs::city,
-  String $expiration = $certs::expiration,
+  Variant[String, Integer] $expiration = $certs::expiration,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
   Stdlib::Absolutepath $server_ca = $certs::katello_server_ca_cert,
   Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
@@ -19,23 +19,39 @@ class certs::puppet (
   String $group = 'puppet',
 ) inherits certs {
   $puppet_client_cert_name = "${hostname}-puppet-client"
+  $puppet_client_cert_path = "${certs::ssl_build_dir}/${hostname}/${puppet_client_cert_name}"
 
-  # cert for authentication of puppetmaster against foreman
-  cert { $puppet_client_cert_name:
-    hostname      => $hostname,
-    cname         => $cname,
-    purpose       => 'client',
-    country       => $country,
-    state         => $state,
-    city          => $city,
-    org           => 'FOREMAN',
-    org_unit      => 'PUPPET',
-    expiration    => $expiration,
-    ca            => $certs::default_ca,
-    generate      => $generate,
-    regenerate    => $regenerate,
-    password_file => $ca_key_password_file,
-    build_dir     => $certs::ssl_build_dir,
+  if $generate {
+    ensure_resource(
+      'file',
+      "${certs::ssl_build_dir}/${hostname}",
+      {
+        'ensure' => directory,
+        'owner'  => 'root',
+        'group'  => 'root',
+        'mode'   => '0750',
+      }
+    )
+
+    openssl::certificate::x509 { $puppet_client_cert_name:
+      ensure         => present,
+      commonname     => $hostname,
+      country        => $country,
+      state          => $state,
+      locality       => $city,
+      organization   => 'FOREMAN',
+      unit           => 'PUPPET',
+      altnames       => $cname,
+      extkeyusage    => ['clientAuth'],
+      days           => $expiration,
+      base_dir       => "${certs::ssl_build_dir}/${hostname}",
+      key_size       => 4096,
+      force          => true,
+      encrypted      => false,
+      ca             => "${certs::ssl_build_dir}/${certs::default_ca_name}.crt",
+      cakey          => "${certs::ssl_build_dir}/${certs::default_ca_name}.key",
+      cakey_password => $certs::ca_key_password,
+    }
   }
 
   if $deploy {
@@ -56,7 +72,7 @@ class certs::puppet (
       cert_owner => $owner,
       cert_group => $group,
       cert_mode  => '0440',
-      require    => Cert[$puppet_client_cert_name],
+      require    => X509_cert["${puppet_client_cert_path}.crt"],
     }
 
     file { $ssl_ca_cert:
