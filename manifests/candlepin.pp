@@ -28,24 +28,6 @@ class certs::candlepin (
   $java_client_cert_name = 'java-client'
   $artemis_alias = 'artemis-client'
   $artemis_client_dn = $certs::foreman::client_dn
-
-  cert { $java_client_cert_name:
-    ensure        => absent,
-    hostname      => $hostname,
-    cname         => $cname,
-    country       => $country,
-    state         => $state,
-    city          => $city,
-    org           => 'candlepin',
-    org_unit      => $org_unit,
-    expiration    => $expiration,
-    ca            => $certs::default_ca,
-    generate      => $generate,
-    regenerate    => $regenerate,
-    password_file => $ca_key_password_file,
-    build_dir     => $certs::ssl_build_dir,
-  }
-
   $tomcat_cert_name = "${hostname}-tomcat"
 
   cert { $tomcat_cert_name:
@@ -87,22 +69,6 @@ class certs::candlepin (
       require           => $certs::default_ca,
       key_password_file => $ca_key_password_file,
       key_decrypt       => true,
-    }
-
-    file { "${pki_dir}/private/katello-tomcat.key":
-      ensure  => absent,
-    }
-
-    file { "${pki_dir}/certs/katello-tomcat.crt":
-      ensure  => absent,
-    }
-
-    file { "${pki_dir}/private/${java_client_cert_name}.key":
-      ensure  => absent,
-    }
-
-    file { "${pki_dir}/certs/${java_client_cert_name}.crt":
-      ensure  => absent,
     }
 
     file { $keystore_password_path:
