@@ -1,5 +1,31 @@
 # Changelog
 
+## [18.0.0](https://github.com/theforeman/puppet-certs/tree/18.0.0) (2024-05-15)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.1.1...18.0.0)
+
+**Breaking changes:**
+
+- Remove deploy via provider [\#426](https://github.com/theforeman/puppet-certs/pull/426) ([ehelms](https://github.com/ehelms))
+- Drop RPMs from being included in tarball [\#421](https://github.com/theforeman/puppet-certs/pull/421) ([ehelms](https://github.com/ehelms))
+- Remove all qpid related certificate handling [\#414](https://github.com/theforeman/puppet-certs/pull/414) ([ehelms](https://github.com/ehelms))
+
+**Fixed bugs:**
+
+- Ensure hostname directory exists when copying server cert [\#450](https://github.com/theforeman/puppet-certs/pull/450) ([ehelms](https://github.com/ehelms))
+
+## [17.1.1](https://github.com/theforeman/puppet-certs/tree/17.1.1) (2024-04-25)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.1.0...17.1.1)
+
+**Fixed bugs:**
+
+- Fixes [\#37384](https://projects.theforeman.org/issues/37384) - properly pass fips=false when checking keystore [\#444](https://github.com/theforeman/puppet-certs/pull/444) ([evgeni](https://github.com/evgeni))
+
+**Merged pull requests:**
+
+- Fix tests on EL9 [\#443](https://github.com/theforeman/puppet-certs/pull/443) ([ehelms](https://github.com/ehelms))
+
 ## [17.1.0](https://github.com/theforeman/puppet-certs/tree/17.1.0) (2024-02-19)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.0.0...17.1.0)
@@ -22,6 +48,7 @@
 **Implemented enhancements:**
 
 - Mark compatible with puppet-extlib 7.x [\#437](https://github.com/theforeman/puppet-certs/pull/437) ([ekohl](https://github.com/ekohl))
+- Support changing passwords on keystores & truststores [\#428](https://github.com/theforeman/puppet-certs/pull/428) ([ekohl](https://github.com/ekohl))
 - Document certs::apache parameters [\#423](https://github.com/theforeman/puppet-certs/pull/423) ([ekohl](https://github.com/ekohl))
 - Set required params and autorequire [\#422](https://github.com/theforeman/puppet-certs/pull/422) ([ekohl](https://github.com/ekohl))
 - Manage the build\_dir [\#419](https://github.com/theforeman/puppet-certs/pull/419) ([ehelms](https://github.com/ehelms))
@@ -32,22 +59,15 @@
 **Fixed bugs:**
 
 - Fix some RuboCop flagged issues for Puppet 8 support [\#438](https://github.com/theforeman/puppet-certs/pull/438) ([ekohl](https://github.com/ekohl))
+- Handle more unknown password errors [\#432](https://github.com/theforeman/puppet-certs/pull/432) ([ekohl](https://github.com/ekohl))
 
 ## [16.1.1](https://github.com/theforeman/puppet-certs/tree/16.1.1) (2023-10-05)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.1.0...16.1.1)
 
-**Fixed bugs:**
-
--  Handle more unknown password errors [\#433](https://github.com/theforeman/puppet-certs/pull/433) ([ekohl](https://github.com/ekohl))
-
 ## [16.1.0](https://github.com/theforeman/puppet-certs/tree/16.1.0) (2023-10-05)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.0.2...16.1.0)
-
-**Implemented enhancements:**
-
-- Support changing passwords on keystores & truststores [\#430](https://github.com/theforeman/puppet-certs/pull/430) ([ekohl](https://github.com/ekohl))
 
 ## [16.0.2](https://github.com/theforeman/puppet-certs/tree/16.0.2) (2023-06-19)
 
