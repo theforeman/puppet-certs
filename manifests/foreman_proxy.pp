@@ -25,7 +25,7 @@ class certs::foreman_proxy (
   String[2,2] $country = $certs::country,
   String $state = $certs::state,
   String $city = $certs::city,
-  String $expiration = $certs::expiration,
+  Variant[String, Integer] $expiration = $certs::expiration,
   Stdlib::Absolutepath $default_ca_cert = $certs::katello_default_ca_cert,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
   String $group = 'foreman-proxy',
@@ -38,8 +38,9 @@ class certs::foreman_proxy (
   $foreman_proxy_ssl_client_bundle = "${pki_dir}/private/${foreman_proxy_client_cert_name}-bundle.pem"
 
   $proxy_cert_path = "${certs::ssl_build_dir}/${hostname}/${proxy_cert_name}"
+  $foreman_proxy_client_cert_path = "${certs::ssl_build_dir}/${hostname}/${foreman_proxy_client_cert_name}"
 
-  if $server_cert {
+  if $generate {
     ensure_resource(
       'file',
       "${certs::ssl_build_dir}/${hostname}",
@@ -50,60 +51,69 @@ class certs::foreman_proxy (
         'mode'   => '0750',
       }
     )
-    file { "${proxy_cert_path}.crt":
-      ensure => file,
-      source => $server_cert,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0440',
-    }
-    file { "${proxy_cert_path}.key":
-      ensure => file,
-      source => $server_key,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0440',
+
+    if $server_cert {
+      file { "${proxy_cert_path}.crt":
+        ensure => file,
+        source => $server_cert,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0440',
+      }
+      file { "${proxy_cert_path}.key":
+        ensure => file,
+        source => $server_key,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0440',
+      }
+
+      $require_cert = File["${proxy_cert_path}.crt"]
+    } else {
+      # cert for ssl of foreman-proxy
+      openssl::certificate::x509 { $proxy_cert_name:
+        ensure         => present,
+        commonname     => $hostname,
+        country        => $country,
+        state          => $state,
+        locality       => $city,
+        organization   => 'FOREMAN',
+        unit           => 'SMART_PROXY',
+        altnames       => $cname,
+        extkeyusage    => ['serverAuth'],
+        days           => $expiration,
+        base_dir       => "${certs::ssl_build_dir}/${hostname}",
+        key_size       => 4096,
+        force          => true,
+        encrypted      => false,
+        ca             => "${certs::ssl_build_dir}/${certs::default_ca_name}.crt",
+        cakey          => "${certs::ssl_build_dir}/${certs::default_ca_name}.key",
+        cakey_password => $certs::ca_key_password,
+      }
+
+      $require_cert = File["${proxy_cert_path}.crt"]
     }
 
-    $require_cert = File["${proxy_cert_path}.crt"]
-  } else {
-    # cert for ssl of foreman-proxy
-    cert { $proxy_cert_name:
-      hostname      => $hostname,
-      cname         => $cname,
-      purpose       => 'server',
-      country       => $country,
-      state         => $state,
-      city          => $city,
-      org           => 'FOREMAN',
-      org_unit      => 'SMART_PROXY',
-      expiration    => $expiration,
-      ca            => $certs::default_ca,
-      generate      => $generate,
-      regenerate    => $regenerate,
-      password_file => $ca_key_password_file,
-      build_dir     => $certs::ssl_build_dir,
+    # cert for authentication of foreman_proxy against foreman
+    openssl::certificate::x509 { $foreman_proxy_client_cert_name:
+      ensure         => present,
+      commonname     => $hostname,
+      country        => $country,
+      state          => $state,
+      locality       => $city,
+      organization   => 'FOREMAN',
+      unit           => 'FOREMAN_PROXY',
+      altnames       => $cname,
+      extkeyusage    => ['clientAuth'],
+      days           => $expiration,
+      base_dir       => "${certs::ssl_build_dir}/${hostname}",
+      key_size       => 4096,
+      force          => true,
+      encrypted      => false,
+      ca             => "${certs::ssl_build_dir}/${certs::default_ca_name}.crt",
+      cakey          => "${certs::ssl_build_dir}/${certs::default_ca_name}.key",
+      cakey_password => $certs::ca_key_password,
     }
-
-    $require_cert = Cert[$proxy_cert_name]
-  }
-
-  # cert for authentication of foreman_proxy against foreman
-  cert { $foreman_proxy_client_cert_name:
-    hostname      => $hostname,
-    cname         => $cname,
-    purpose       => 'client',
-    country       => $country,
-    state         => $state,
-    city          => $city,
-    org           => 'FOREMAN',
-    org_unit      => 'FOREMAN_PROXY',
-    expiration    => $expiration,
-    ca            => $certs::default_ca,
-    generate      => $generate,
-    regenerate    => $regenerate,
-    password_file => $ca_key_password_file,
-    build_dir     => $certs::ssl_build_dir,
   }
 
   if $deploy {
@@ -139,7 +149,7 @@ class certs::foreman_proxy (
       cert_owner => $owner,
       cert_group => $group,
       cert_mode  => $public_key_mode,
-      require    => Cert[$foreman_proxy_client_cert_name],
+      require    => X509_cert["${foreman_proxy_client_cert_path}.crt"],
     }
 
     file { $foreman_ssl_ca_cert:
@@ -159,7 +169,7 @@ class certs::foreman_proxy (
       owner        => 'root',
       group        => $group,
       mode         => $public_key_mode,
-      require      => Cert[$foreman_proxy_client_cert_name],
+      require      => X509_cert["${foreman_proxy_client_cert_path}.crt"],
     }
   }
 }

@@ -51,7 +51,7 @@ describe 'certs' do
       it { should be_valid }
       it { should have_purpose 'server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
-      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -78,7 +78,7 @@ describe 'certs' do
       it { should be_valid }
       it { should have_purpose 'client' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
-      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = PUPPET, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = FOREMAN, OU = PUPPET, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 
@@ -174,7 +174,7 @@ describe 'certs' do
 
     describe command("keytool -list -v -keystore /etc/candlepin/certs/keystore -alias tomcat -storepass $(cat #{keystore_password_file})") do
       its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/^Owner: CN=#{fqdn}, OU=SomeOrgUnit, O=Katello, ST=North Carolina, C=US$/) }
+      its(:stdout) { should match(/^Owner: CN=#{fqdn}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
       its(:stdout) { should match(/^Issuer: CN=#{fqdn}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
     end
 
@@ -209,13 +209,13 @@ describe 'certs' do
       it { should be_valid }
       it { should have_purpose 'server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
-      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = localhost/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = localhost/) }
       its(:keylength) { should be >= 4096 }
     end
 
     describe command("keytool -list -v -keystore /etc/candlepin/certs/keystore -alias tomcat -storepass $(cat #{keystore_password_file})") do
       its(:exit_status) { should eq 0 }
-      its(:stdout) { should match(/^Owner: CN=localhost, OU=SomeOrgUnit, O=Katello, ST=North Carolina, C=US$/) }
+      its(:stdout) { should match(/^Owner: CN=localhost, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
       its(:stdout) { should match(/^Issuer: CN=#{fqdn}, OU=SomeOrgUnit, O=Katello, L=Raleigh, ST=North Carolina, C=US$/) }
     end
   end
@@ -323,7 +323,7 @@ describe 'certs' do
       it { should be_valid }
       it { should have_purpose 'server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
-      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
     end
 

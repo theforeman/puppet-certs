@@ -59,7 +59,7 @@ class certs::apache (
   String $city = $certs::city,
   String $org = $certs::org,
   String $org_unit = $certs::org_unit,
-  String $expiration = $certs::expiration,
+  Variant[Integer, String] $expiration = $certs::expiration,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
   String $group = $certs::group,
 ) inherits certs {
@@ -71,7 +71,7 @@ class certs::apache (
 
   $apache_cert_path = "${certs::ssl_build_dir}/${hostname}/${apache_cert_name}"
 
-  if $server_cert {
+  if $generate {
     ensure_resource(
       'file',
       "${certs::ssl_build_dir}/${hostname}",
@@ -82,41 +82,47 @@ class certs::apache (
         'mode'   => '0750',
       }
     )
-    file { "${apache_cert_path}.crt":
-      ensure => file,
-      source => $server_cert,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0440',
-    }
-    file { "${apache_cert_path}.key":
-      ensure => file,
-      source => $server_key,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0440',
-    }
 
-    $require_cert = File["${apache_cert_path}.crt"]
-  } else {
-    cert { $apache_cert_name:
-      ensure        => present,
-      hostname      => $hostname,
-      cname         => $cname,
-      country       => $country,
-      state         => $state,
-      city          => $city,
-      org           => $org,
-      org_unit      => $org_unit,
-      expiration    => $expiration,
-      ca            => $certs::default_ca,
-      generate      => $generate,
-      regenerate    => $regenerate,
-      password_file => $ca_key_password_file,
-      build_dir     => $certs::ssl_build_dir,
-    }
+    if $server_cert {
+      file { "${apache_cert_path}.crt":
+        ensure => file,
+        source => $server_cert,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0440',
+      }
+      file { "${apache_cert_path}.key":
+        ensure => file,
+        source => $server_key,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0440',
+      }
 
-    $require_cert = Cert[$apache_cert_name]
+      $require_cert = File["${apache_cert_path}.crt"]
+    } else {
+      openssl::certificate::x509 { $apache_cert_name:
+        ensure         => present,
+        commonname     => $hostname,
+        country        => $country,
+        state          => $state,
+        locality       => $city,
+        organization   => $org,
+        unit           => $org_unit,
+        altnames       => $cname,
+        extkeyusage    => ['serverAuth', 'clientAuth'],
+        days           => $expiration,
+        base_dir       => "${certs::ssl_build_dir}/${hostname}",
+        key_size       => 4096,
+        force          => true,
+        encrypted      => false,
+        ca             => "${certs::ssl_build_dir}/${certs::default_ca_name}.crt",
+        cakey          => "${certs::ssl_build_dir}/${certs::default_ca_name}.key",
+        cakey_password => $certs::ca_key_password,
+      }
+
+      $require_cert = X509_cert["${apache_cert_path}.crt"]
+    }
   }
 
   if $deploy {
