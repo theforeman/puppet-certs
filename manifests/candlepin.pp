@@ -49,8 +49,8 @@ class certs::candlepin (
 
   $keystore_password = extlib::cache_data('foreman_cache_data', $keystore_password_file, extlib::random_password(32))
   $truststore_password = extlib::cache_data('foreman_cache_data', $truststore_password_file, extlib::random_password(32))
-  $keystore_password_path = "${pki_dir}/${keystore_password_file}"
-  $truststore_password_path = "${pki_dir}/${truststore_password_file}"
+  $keystore_password_path = "${certs::candlepin_certs_dir}/${keystore_password_file}"
+  $truststore_password_path = "${certs::candlepin_certs_dir}/${truststore_password_file}"
   $client_key = $certs::foreman::client_key
   $client_cert = $certs::foreman::client_cert
   $alias = 'candlepin-ca'
@@ -123,6 +123,14 @@ class certs::candlepin (
       ensure        => present,
       password_file => $truststore_password_path,
       certificate   => $client_cert,
+    }
+
+    file { "${pki_dir}/${keystore_password_file}":
+      ensure => absent,
+    }
+
+    file { "${pki_dir}/${truststore_password_file}":
+      ensure => absent,
     }
   }
 }
