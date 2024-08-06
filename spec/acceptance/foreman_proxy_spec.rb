@@ -272,4 +272,57 @@ describe 'certs::foreman_proxy' do
       it { should_not exist }
     end
   end
+
+  context 'with include_client_bundle absent' do
+    before(:context) do
+      on default, 'rm -rf /root/ssl-build /etc/foreman-proxy /etc/pki/katello'
+    end
+
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+          file { '/etc/foreman-proxy':
+            ensure => directory,
+          }
+
+          group { 'foreman-proxy':
+            ensure => present,
+            system => true,
+          }
+
+          class { 'certs::foreman_proxy':
+            client_bundle_ensure => 'absent',
+          }
+        PUPPET
+      end
+    end
+
+    describe file('/etc/foreman-proxy/ssl_cert.pem') do
+      it { should exist }
+    end
+
+    describe file('/etc/foreman-proxy/ssl_key.pem') do
+      it { should exist }
+    end
+
+    describe file('/etc/foreman-proxy/ssl_ca.pem') do
+      it { should exist }
+    end
+
+    describe file('/etc/foreman-proxy/foreman_ssl_cert.pem') do
+      it { should exist }
+    end
+
+    describe file('/etc/foreman-proxy/foreman_ssl_key.pem') do
+      it { should exist }
+    end
+
+    describe file('/etc/foreman-proxy/foreman_ssl_ca.pem') do
+      it { should exist }
+    end
+
+    describe file("/etc/pki/katello/private/#{fqdn}/#{fqdn}-foreman-proxy-client-bundle.pem") do
+      it { should_not exist }
+    end
+  end
 end
