@@ -3,8 +3,8 @@ require 'spec_helper_acceptance'
 describe 'certs' do
   fqdn = fact('fqdn')
 
-  keystore_password_file = '/etc/pki/katello/keystore_password-file'
-  truststore_password_file = '/etc/pki/katello/truststore_password-file'
+  keystore_password_file = '/etc/candlepin/certs/keystore_password-file'
+  truststore_password_file = '/etc/candlepin/certs/truststore_password-file'
 
   before(:all) do
     on default, 'rm -rf /root/ssl-build'
@@ -66,6 +66,14 @@ describe 'certs' do
     end
 
     describe file('/etc/pki/katello/private/katello-tomcat.key') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/pki/katello/keystore_password-file') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/pki/katello/truststore_password-file') do
       it { should_not exist }
     end
 
