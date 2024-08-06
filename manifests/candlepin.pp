@@ -8,8 +8,10 @@ class certs::candlepin (
   Stdlib::Absolutepath $ca_cert = $certs::candlepin_ca_cert,
   Stdlib::Absolutepath $ca_key = $certs::candlepin_ca_key,
   Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
+  Optional[String] $keystore_password = undef,
   Stdlib::Absolutepath $keystore = $certs::candlepin_keystore,
   String $keystore_password_file = 'keystore_password-file',
+  Optional[String] $truststore_password = undef,
   Stdlib::Absolutepath $truststore = $certs::candlepin_truststore,
   String $truststore_password_file = 'truststore_password-file',
   String[2,2] $country = $certs::country,
@@ -47,8 +49,20 @@ class certs::candlepin (
     build_dir     => $certs::ssl_build_dir,
   }
 
-  $keystore_password = extlib::cache_data('foreman_cache_data', $keystore_password_file, extlib::random_password(32))
-  $truststore_password = extlib::cache_data('foreman_cache_data', $truststore_password_file, extlib::random_password(32))
+  # Generate and cache the password on the master once
+  # In multi-puppetmaster setups, the user should specify their own
+  if $keystore_password {
+    $final_keystore_password = $keystore_password
+  } else {
+    $final_keystore_password = extlib::cache_data('foreman_cache_data', $keystore_password_file, extlib::random_password(32))
+  }
+
+  if $truststore_password {
+    $final_truststore_password = $truststore_password
+  } else {
+    $final_truststore_password = extlib::cache_data('foreman_cache_data', $truststore_password_file, extlib::random_password(32))
+  }
+
   $keystore_password_path = "${pki_dir}/${keystore_password_file}"
   $truststore_password_path = "${pki_dir}/${truststore_password_file}"
   $client_key = $certs::foreman::client_key
@@ -73,7 +87,7 @@ class certs::candlepin (
 
     file { $keystore_password_path:
       ensure    => file,
-      content   => $keystore_password,
+      content   => $final_keystore_password,
       owner     => 'root',
       group     => $group,
       mode      => '0440',
@@ -98,7 +112,7 @@ class certs::candlepin (
 
     file { $truststore_password_path:
       ensure    => file,
-      content   => $truststore_password,
+      content   => $final_truststore_password,
       owner     => 'root',
       group     => $group,
       mode      => '0440',
