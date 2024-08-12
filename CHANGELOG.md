@@ -1,5 +1,18 @@
 # Changelog
 
+## [18.0.0](https://github.com/theforeman/puppet-certs/tree/18.0.0) (2024-08-12)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/18.0.0...18.0.0)
+
+**Breaking changes:**
+
+- Move keystore and trustore password files [\#457](https://github.com/theforeman/puppet-certs/pull/457) ([ehelms](https://github.com/ehelms))
+- Drop absent file declarations [\#451](https://github.com/theforeman/puppet-certs/pull/451) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- Add AlmaLinux 8 & 9 support [\#454](https://github.com/theforeman/puppet-certs/pull/454) ([archanaserver](https://github.com/archanaserver))
+
 ## [18.0.0](https://github.com/theforeman/puppet-certs/tree/18.0.0) (2024-05-15)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.1.1...18.0.0)
@@ -13,18 +26,19 @@
 **Fixed bugs:**
 
 - Ensure hostname directory exists when copying server cert [\#450](https://github.com/theforeman/puppet-certs/pull/450) ([ehelms](https://github.com/ehelms))
-
-## [17.1.1](https://github.com/theforeman/puppet-certs/tree/17.1.1) (2024-04-25)
-
-[Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.1.0...17.1.1)
-
-**Fixed bugs:**
-
 - Fixes [\#37384](https://projects.theforeman.org/issues/37384) - properly pass fips=false when checking keystore [\#444](https://github.com/theforeman/puppet-certs/pull/444) ([evgeni](https://github.com/evgeni))
 
 **Merged pull requests:**
 
 - Fix tests on EL9 [\#443](https://github.com/theforeman/puppet-certs/pull/443) ([ehelms](https://github.com/ehelms))
+
+## [17.1.1](https://github.com/theforeman/puppet-certs/tree/17.1.1) (2024-04-25)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.0.1...17.1.1)
+
+## [17.0.1](https://github.com/theforeman/puppet-certs/tree/17.0.1) (2024-04-25)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.1.0...17.0.1)
 
 ## [17.1.0](https://github.com/theforeman/puppet-certs/tree/17.1.0) (2024-02-19)
 
