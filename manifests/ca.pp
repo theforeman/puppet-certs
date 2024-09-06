@@ -55,11 +55,12 @@ class certs::ca (
     }
   } else {
     file { $server_ca_path:
-      ensure => file,
-      source => "${certs::ssl_build_dir}/${default_ca_name}.crt",
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0644',
+      ensure  => file,
+      source  => "${certs::ssl_build_dir}/${default_ca_name}.crt",
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      replace => false,
     }
   }
 
