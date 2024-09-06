@@ -32,6 +32,7 @@ class certs::foreman_proxy (
   String $owner = 'root',
   Stdlib::Filemode $private_key_mode = '0440',
   Stdlib::Filemode $public_key_mode = '0444',
+  Enum['present', 'absent'] $client_bundle_ensure = 'present',
 ) inherits certs {
   $proxy_cert_name = "${hostname}-foreman-proxy"
   $foreman_proxy_client_cert_name = "${hostname}-foreman-proxy-client"
@@ -152,7 +153,7 @@ class certs::foreman_proxy (
     }
 
     cert_key_bundle { $foreman_proxy_ssl_client_bundle:
-      ensure       => present,
+      ensure       => $client_bundle_ensure,
       certificate  => "${certs::ssl_build_dir}/${hostname}/${foreman_proxy_client_cert_name}.crt",
       private_key  => "${certs::ssl_build_dir}/${hostname}/${foreman_proxy_client_cert_name}.key",
       force_pkcs_1 => true,
