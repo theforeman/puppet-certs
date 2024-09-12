@@ -24,29 +24,29 @@ class certs::ca (
   $default_ca_path = "${certs::ssl_build_dir}/${default_ca_name}.crt"
   $server_ca_path = "${certs::ssl_build_dir}/${server_ca_name}.crt"
 
-  file { $ca_key_password_file:
-    ensure    => file,
-    content   => $ca_key_password,
-    owner     => 'root',
-    group     => 'root',
-    mode      => '0400',
-    show_diff => false,
-  } ~>
-  ca { $default_ca_name:
-    ensure        => present,
-    common_name   => $ca_common_name,
-    country       => $country,
-    state         => $state,
-    city          => $city,
-    org           => $org,
-    org_unit      => $org_unit,
-    expiration    => $ca_expiration,
-    generate      => $generate,
-    password_file => $ca_key_password_file,
-    build_dir     => $certs::ssl_build_dir,
-  }
-
   if $generate {
+    file { $ca_key_password_file:
+      ensure    => file,
+      content   => $ca_key_password,
+      owner     => 'root',
+      group     => 'root',
+      mode      => '0400',
+      show_diff => false,
+    } ~>
+    ca { $default_ca_name:
+      ensure        => present,
+      common_name   => $ca_common_name,
+      country       => $country,
+      state         => $state,
+      city          => $city,
+      org           => $org,
+      org_unit      => $org_unit,
+      expiration    => $ca_expiration,
+      generate      => $generate,
+      password_file => $ca_key_password_file,
+      build_dir     => $certs::ssl_build_dir,
+    }
+
     file { $server_ca_path:
       ensure => file,
       source => pick($certs::server_ca_cert, $default_ca_path),
@@ -60,6 +60,10 @@ class certs::ca (
       target  => $server_ca_path,
       require => File[$server_ca_path],
     }
+
+    $default_ca = Ca[$default_ca_name]
+  } else {
+    $default_ca = undef
   }
 
   if $deploy {
