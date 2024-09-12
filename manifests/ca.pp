@@ -47,22 +47,12 @@ class certs::ca (
   }
 
   if $generate {
-    if $certs::server_ca_cert {
-      file { $server_ca_path:
-        ensure => file,
-        source => $certs::server_ca_cert,
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0644',
-      }
-    } else {
-      file { $server_ca_path:
-        ensure => file,
-        source => $default_ca_path,
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0644',
-      }
+    file { $server_ca_path:
+      ensure => file,
+      source => pick($certs::server_ca_cert, $default_ca_path),
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
     }
 
     file { "${certs::ssl_build_dir}/KATELLO-TRUSTED-SSL-CERT":
