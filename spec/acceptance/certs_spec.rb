@@ -126,12 +126,6 @@ describe 'certs' do
   end
 
   context 'with server CA cert' do
-    before(:context) do
-      source_path = "fixtures/example.partial.solutions-chain.pem"
-      dest_path = "/server-ca.crt"
-      scp_to(hosts, source_path, dest_path)
-    end
-
     it_behaves_like 'an idempotent resource' do
       let(:manifest) do
         <<-PUPPET
@@ -153,14 +147,6 @@ describe 'certs' do
   end
 
   context 'with tar file' do
-    before(:context) do
-      ['crt', 'key'].each do |ext|
-        source_path = "fixtures/example.partial.solutions.#{ext}"
-        dest_path = "/server.#{ext}"
-        scp_to(hosts, source_path, dest_path)
-      end
-    end
-
     context 'with default ca' do
       before(:context) do
         manifest = <<~PUPPET
