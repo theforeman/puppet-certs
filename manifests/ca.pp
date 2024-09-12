@@ -21,6 +21,7 @@ class certs::ca (
   String $ca_key_password = $certs::ca_key_password,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
 ) {
+  $default_ca_path = "${certs::ssl_build_dir}/${default_ca_name}.crt"
   $server_ca_path = "${certs::ssl_build_dir}/${server_ca_name}.crt"
 
   file { $ca_key_password_file:
@@ -57,7 +58,7 @@ class certs::ca (
     } else {
       file { $server_ca_path:
         ensure => file,
-        source => "${certs::ssl_build_dir}/${default_ca_name}.crt",
+        source => $default_ca_path,
         owner  => 'root',
         group  => 'root',
         mode   => '0644',
@@ -74,7 +75,7 @@ class certs::ca (
   if $deploy {
     file { $certs::katello_default_ca_cert:
       ensure => file,
-      source => "${certs::ssl_build_dir}/${default_ca_name}.crt",
+      source => $default_ca_path,
       owner  => 'root',
       group  => 'root',
       mode   => '0644',
