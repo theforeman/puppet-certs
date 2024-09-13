@@ -45,25 +45,25 @@ class certs::ca (
     build_dir     => $certs::ssl_build_dir,
   }
 
-  if $certs::server_ca_cert {
-    file { $server_ca_path:
-      ensure => file,
-      source => $certs::server_ca_cert,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0644',
-    }
-  } else {
-    file { $server_ca_path:
-      ensure => file,
-      source => "${certs::ssl_build_dir}/${default_ca_name}.crt",
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0644',
-    }
-  }
-
   if $generate {
+    if $certs::server_ca_cert {
+      file { $server_ca_path:
+        ensure => file,
+        source => $certs::server_ca_cert,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
+    } else {
+      file { $server_ca_path:
+        ensure => file,
+        source => "${certs::ssl_build_dir}/${default_ca_name}.crt",
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
+    }
+
     file { "${certs::ssl_build_dir}/KATELLO-TRUSTED-SSL-CERT":
       ensure  => link,
       target  => $server_ca_path,
