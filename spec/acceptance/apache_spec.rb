@@ -52,12 +52,6 @@ describe 'certs::apache' do
 
   context 'with server cert' do
     before(:context) do
-      ['crt', 'key'].each do |ext|
-        source_path = "fixtures/example.partial.solutions.#{ext}"
-        dest_path = "/server.#{ext}"
-        scp_to(hosts, source_path, dest_path)
-      end
-
       # Force regen
       on hosts, "if [ -e /root/ssl-build/#{fact('fqdn')} ] ; then touch /root/ssl-build/#{fact('fqdn')}/#{fact('fqdn')}-apache.update ; fi"
     end
@@ -134,12 +128,6 @@ describe 'certs::apache' do
 
   context 'with custom certificates fresh' do
     before(:context) do
-      ['crt', 'key'].each do |ext|
-        source_path = "fixtures/example.partial.solutions.#{ext}"
-        dest_path = "/server.#{ext}"
-        scp_to(hosts, source_path, dest_path)
-      end
-
       on hosts, 'rm -rf /root/ssl-build'
     end
 

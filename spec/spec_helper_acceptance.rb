@@ -12,6 +12,10 @@ configure_beaker(modules: :fixtures) do |host|
     # refresh check if cache needs refresh on next yum command
     on host, 'yum clean expire-cache'
   end
+
+  scp_to(host, 'fixtures/example.partial.solutions.crt', '/server.crt')
+  scp_to(host, 'fixtures/example.partial.solutions.key', '/server.key')
+  scp_to(host, 'fixtures/example.partial.solutions-chain.pem', '/server-ca.crt')
 end
 
 Dir["./spec/support/acceptance/**/*.rb"].sort.each { |f| require f }
