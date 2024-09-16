@@ -65,9 +65,7 @@ class certs::ca (
     }
 
     file { "${certs::ssl_build_dir}/KATELLO-TRUSTED-SSL-CERT":
-      ensure  => link,
-      target  => $server_ca_path,
-      require => File[$server_ca_path],
+      ensure  => absent,
     }
   }
 
