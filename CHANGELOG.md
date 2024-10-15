@@ -1,5 +1,13 @@
 # Changelog
 
+## [18.0.1](https://github.com/theforeman/puppet-certs/tree/18.0.1) (2024-10-15)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/18.0.0...18.0.1)
+
+**Fixed bugs:**
+
+- Fixes [\#37817](https://projects.theforeman.org/issues/37817): Only copy server CA in build root if generate is true [\#466](https://github.com/theforeman/puppet-certs/pull/466) ([ekohl](https://github.com/ekohl))
+
 ## [18.0.0](https://github.com/theforeman/puppet-certs/tree/18.0.0) (2024-05-15)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.1.1...18.0.0)
