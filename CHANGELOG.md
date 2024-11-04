@@ -1,5 +1,13 @@
 # Changelog
 
+## [19.1.0](https://github.com/theforeman/puppet-certs/tree/19.1.0) (2024-11-04)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/19.0.1...19.1.0)
+
+**Implemented enhancements:**
+
+- Merge if/else branch into a single resource declaration & introduce $default\_ca\_path [\#467](https://github.com/theforeman/puppet-certs/pull/467) ([ekohl](https://github.com/ekohl))
+
 ## [19.0.1](https://github.com/theforeman/puppet-certs/tree/19.0.1) (2024-09-13)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/19.0.0...19.0.1)
