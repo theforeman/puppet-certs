@@ -53,7 +53,8 @@ module PuppetX
               '-storepass:file', resource[:password_file],
               '-alias', temp_alias,
               '-dname', "CN=#{temp_alias}",
-              '-J-Dcom.redhat.fips=false'
+              '-J-Dcom.redhat.fips=false',
+              '-keyalg', 'RSA'
             )
           rescue Puppet::ExecutionFailure => e
             Puppet.err("Failed to generate new #{type} with temporary entry: #{e}")

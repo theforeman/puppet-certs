@@ -7,7 +7,7 @@ describe 'certs' do
         <<-PUPPET
         $keystore_password_file = '/etc/pki/keystore_password-file'
 
-        package { 'java-11-openjdk-headless':
+        package { 'java-17-openjdk-headless':
           ensure => installed,
         }
 

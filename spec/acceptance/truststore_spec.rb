@@ -10,7 +10,7 @@ describe 'certs' do
         <<-PUPPET
         $truststore_password_file = '/etc/pki/truststore_password-file'
 
-        package { 'java-11-openjdk-headless':
+        package { 'java-17-openjdk-headless':
           ensure => installed,
         }
 
@@ -94,7 +94,7 @@ describe 'certs' do
           <<-PUPPET
           $truststore_password_file = '/etc/pki/truststore_password-file'
 
-          package { 'java-11-openjdk-headless':
+          package { 'java-17-openjdk-headless':
             ensure => installed,
           }
 
@@ -158,7 +158,7 @@ describe 'certs' do
           <<-PUPPET
           $truststore_password_file = '/etc/pki/truststore_password-file'
 
-          package { 'java-11-openjdk-headless':
+          package { 'java-17-openjdk-headless':
             ensure => installed,
           }
 
