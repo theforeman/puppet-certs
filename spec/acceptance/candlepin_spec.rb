@@ -37,7 +37,7 @@ describe 'certs' do
           }
         }
 
-        package { 'java-11-openjdk-headless':
+        package { 'java-17-openjdk-headless':
           ensure => installed,
         }
 
@@ -234,7 +234,7 @@ describe 'certs' do
         }
       }
 
-      package { 'java-11-openjdk-headless':
+      package { 'java-17-openjdk-headless':
         ensure => installed,
       }
 
@@ -275,7 +275,7 @@ describe 'certs' do
           path    => ['/bin', '/usr/bin'],
         }
       }
-      package { 'java-11-openjdk-headless':
+      package { 'java-17-openjdk-headless':
         ensure => installed,
       }
       include certs::candlepin
