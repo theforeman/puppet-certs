@@ -1,5 +1,13 @@
 # Changelog
 
+## [18.0.2](https://github.com/theforeman/puppet-certs/tree/18.0.2) (2024-11-20)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/18.0.1...18.0.2)
+
+**Fixed bugs:**
+
+- Fixes [\#38010](https://projects.theforeman.org/issues/38010) - Include keyalg in keytool for OpenJDK 17 [\#472](https://github.com/theforeman/puppet-certs/pull/472) ([ehelms](https://github.com/ehelms))
+
 ## [18.0.1](https://github.com/theforeman/puppet-certs/tree/18.0.1) (2024-10-15)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/18.0.0...18.0.1)
