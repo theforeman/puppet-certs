@@ -16,10 +16,6 @@ describe 'certs::iop_advisor_engine' do
         ensure => present,
         system => true,
       }
-
-      file { '/etc/iop-advisor-engine':
-        ensure => directory,
-      }
     MANIFEST
     apply_manifest(manifest, catch_failures: true)
   end
