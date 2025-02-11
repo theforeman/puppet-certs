@@ -1,5 +1,19 @@
 # Changelog
 
+## [20.0.0](https://github.com/theforeman/puppet-certs/tree/20.0.0) (2025-02-11)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/18.0.2...20.0.0)
+
+**Breaking changes:**
+
+- Drop EL8 support -- Foreman/Katello do not support EL8 anymore [\#475](https://github.com/theforeman/puppet-certs/pull/475) ([ehelms](https://github.com/ehelms))
+- Ensure KATELLO-TRUSTED-SSL-CERT is absent [\#464](https://github.com/theforeman/puppet-certs/pull/464) ([ekohl](https://github.com/ekohl))
+- Drop unused privkey, pubkey and key\_bundle types & providers [\#462](https://github.com/theforeman/puppet-certs/pull/462) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Add class to handle creation of certs for advisor service on localhost [\#474](https://github.com/theforeman/puppet-certs/pull/474) ([ehelms](https://github.com/ehelms))
+
 ## [19.1.1](https://github.com/theforeman/puppet-certs/tree/19.1.1) (2024-11-12)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/19.1.0...19.1.1)
