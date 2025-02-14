@@ -24,6 +24,9 @@ module PuppetX
             if e.message.include?('java.security.UnrecoverableKeyException') || e.message.include?('keystore password was incorrect')
               Puppet.debug("Invalid password for #{store}")
               return false
+            elsif e.message.include?('Keystore file exists, but is empty')
+              Puppet.debug(e)
+              return false
             else
               Puppet.log_exception(e, "Failed to read keystore '#{store}'")
             end
@@ -43,7 +46,7 @@ module PuppetX
         def generate_keystore
           temp_alias = 'temporary-entry'
 
-          FileUtils.rm_f(store)
+          delete_keystore
 
           begin
             keytool(
@@ -76,7 +79,7 @@ module PuppetX
         end
 
         def delete_keystore
-          File.rm(store)
+          FileUtils.rm_f(store)
         end
       end
     end

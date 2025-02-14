@@ -153,5 +153,56 @@ describe 'certs' do
         its(:stdout) { should match(/^Your keystore contains 0 entries$/) }
       end
     end
+
+    context 'empty keystore' do
+      before(:context) do
+        on default, 'rm -rf /etc/pki/keystore'
+        on default, 'touch /etc/pki/keystore'
+      end
+
+      let(:manifest) do
+        <<-PUPPET
+        $keystore_password_file = '/etc/pki/keystore_password-file'
+
+        package { 'java-17-openjdk-headless':
+          ensure => installed,
+        }
+
+        file { $keystore_password_file:
+          ensure    => file,
+          content   => 'testpassword',
+          owner     => 'root',
+          group     => 'root',
+          mode      => '0440',
+          show_diff => false,
+        }
+
+        keystore { "/etc/pki/keystore":
+          ensure        => present,
+          password_file => $keystore_password_file,
+          owner         => 'root',
+          group         => 'root',
+          mode          => '0640',
+        }
+        PUPPET
+      end
+
+      it 'applies changes with no errors' do
+        apply_manifest_on(default, manifest, expect_changes: true)
+      end
+
+      describe file('/etc/pki/keystore') do
+        it { should be_file }
+        it { should be_mode 640 }
+        it { should be_owned_by 'root' }
+        it { should be_grouped_into 'root' }
+      end
+
+      describe command("keytool -list -keystore /etc/pki/keystore -storepass:file /etc/pki/keystore_password-file") do
+        its(:exit_status) { should eq 0 }
+        its(:stdout) { should match(/^Keystore type: PKCS12$/i) }
+        its(:stdout) { should match(/^Your keystore contains 0 entries$/) }
+      end
+    end
   end
 end
