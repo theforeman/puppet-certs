@@ -1,5 +1,13 @@
 # Changelog
 
+## [20.0.1](https://github.com/theforeman/puppet-certs/tree/20.0.1) (2025-02-14)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/20.0.0...20.0.1)
+
+**Fixed bugs:**
+
+- Regenerate keystore if the keystore is empty [\#477](https://github.com/theforeman/puppet-certs/pull/477) ([ehelms](https://github.com/ehelms))
+
 ## [20.0.0](https://github.com/theforeman/puppet-certs/tree/20.0.0) (2025-02-11)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/18.0.2...20.0.0)
