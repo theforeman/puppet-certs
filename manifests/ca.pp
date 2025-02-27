@@ -15,7 +15,6 @@ class certs::ca (
   String $owner = $certs::user,
   String $group = $certs::group,
   Stdlib::Absolutepath $katello_server_ca_cert = $certs::katello_server_ca_cert,
-  Stdlib::Absolutepath $ca_key = $certs::ca_key,
   Stdlib::Absolutepath $ca_cert = $certs::ca_cert,
   Stdlib::Absolutepath $ca_cert_stripped = $certs::ca_cert_stripped,
   String $ca_key_password = $certs::ca_key_password,
