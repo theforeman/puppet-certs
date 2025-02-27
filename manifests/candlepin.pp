@@ -124,13 +124,5 @@ class certs::candlepin (
       password_file => $truststore_password_path,
       certificate   => $client_cert,
     }
-
-    file { "${pki_dir}/${keystore_password_file}":
-      ensure => absent,
-    }
-
-    file { "${pki_dir}/${truststore_password_file}":
-      ensure => absent,
-    }
   }
 }
