@@ -159,7 +159,7 @@ describe 'certs' do
 
     describe ca_bundle('/root/ssl-build/ca-bundle.crt') do
       it { should exist }
-      its(:size) { should equal 1 }
+      its(:size) { should equal 2 }
       it { should have_cert('/root/ssl-build/katello-default-ca.crt') }
       it { should have_cert('/root/ssl-build/katello-server-ca.crt') }
     end
