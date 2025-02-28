@@ -3,6 +3,7 @@
 class certs::config (
   Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
   String $group = $certs::group,
+  Boolean $deploy = $certs::deploy,
 ) {
   file { $certs::ssl_build_dir:
     ensure => directory,
@@ -11,24 +12,26 @@ class certs::config (
     mode   => '0700',
   }
 
-  file { $pki_dir:
-    ensure => directory,
-    owner  => 'root',
-    group  => $group,
-    mode   => '0755',
-  }
+  if $deploy {
+    file { $pki_dir:
+      ensure => directory,
+      owner  => 'root',
+      group  => $group,
+      mode   => '0755',
+    }
 
-  file { "${pki_dir}/certs":
-    ensure => directory,
-    owner  => 'root',
-    group  => $group,
-    mode   => '0755',
-  }
+    file { "${pki_dir}/certs":
+      ensure => directory,
+      owner  => 'root',
+      group  => $group,
+      mode   => '0755',
+    }
 
-  file { "${pki_dir}/private":
-    ensure => directory,
-    owner  => 'root',
-    group  => $group,
-    mode   => '0750',
+    file { "${pki_dir}/private":
+      ensure => directory,
+      owner  => 'root',
+      group  => $group,
+      mode   => '0750',
+    }
   }
 }
