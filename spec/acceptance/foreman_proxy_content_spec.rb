@@ -9,6 +9,7 @@ describe 'certs::foreman_proxy_content' do
     [
       'ssl-build/katello-default-ca.crt',
       'ssl-build/katello-server-ca.crt',
+      'ssl-build/ca-bundle.crt',
       'ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-apache.crt',
       'ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-foreman-proxy-client.crt',
       'ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-foreman-proxy.crt',

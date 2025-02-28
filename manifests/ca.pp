@@ -70,10 +70,6 @@ class certs::ca (
         order  => '02',
       }
     }
-
-    file { "${certs::ssl_build_dir}/KATELLO-TRUSTED-SSL-CERT":
-      ensure  => absent,
-    }
   }
 
   if $deploy {
