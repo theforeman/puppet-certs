@@ -183,6 +183,7 @@ describe 'certs' do
       describe 'deploy certificates' do
         manifest = <<-PUPPET
           class { 'certs':
+            generate => false,
             tar_file => '/root/foreman-proxy.example.com.tar.gz',
           }
         PUPPET
@@ -201,6 +202,10 @@ describe 'certs' do
         its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}/) }
         its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}/) }
         its(:keylength) { should be >= 4096 }
+      end
+
+      describe file('/root/ssl-build/katello-default-ca.pwd') do
+        it { should_not exist }
       end
     end
 
@@ -259,6 +264,10 @@ describe 'certs' do
         its(:issuer) { should match_without_whitespace(/CN = Fake LE Root X1/) }
         its(:subject) { should match_without_whitespace(/CN = Fake LE Intermediate X1/) }
         its(:keylength) { should be >= 2048 }
+      end
+
+      describe file('/root/ssl-build/katello-default-ca.pwd') do
+        it { should_not exist }
       end
     end
   end
