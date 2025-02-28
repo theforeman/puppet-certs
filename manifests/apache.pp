@@ -120,6 +120,8 @@ class certs::apache (
   }
 
   if $deploy {
+    include certs::config::deploy
+
     certs::keypair { $apache_cert_name:
       source_dir => "${certs::ssl_build_dir}/${hostname}",
       key_file   => $apache_key,

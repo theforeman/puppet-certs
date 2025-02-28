@@ -1,16 +1,9 @@
-# @summary Basic directory structure
+# @summary Directory structure for certificates deployed into the pki_dir
 # @api private
-class certs::config (
+class certs::config::deploy (
   Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
   String $group = $certs::group,
 ) {
-  file { $certs::ssl_build_dir:
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0700',
-  }
-
   file { $pki_dir:
     ensure => directory,
     owner  => 'root',
