@@ -32,6 +32,12 @@ describe 'certs' do
       its(:keylength) { should be >= 4096 }
     end
 
+    describe ca_bundle('/root/ssl-build/ca-bundle.crt') do
+      it { should exist }
+      its(:size) { should equal 1 }
+      it { should have_cert('/root/ssl-build/katello-default-ca.crt') }
+    end
+
     describe x509_private_key('/root/ssl-build/katello-default-ca.key') do
       it { should be_encrypted }
     end
@@ -149,6 +155,13 @@ describe 'certs' do
       its(:issuer) { should match_without_whitespace(/CN = Fake LE Root X1/) }
       its(:subject) { should match_without_whitespace(/CN = Fake LE Intermediate X1/) }
       its(:keylength) { should be >= 2048 }
+    end
+
+    describe ca_bundle('/root/ssl-build/ca-bundle.crt') do
+      it { should exist }
+      its(:size) { should equal 1 }
+      it { should have_cert('/root/ssl-build/katello-default-ca.crt') }
+      it { should have_cert('/root/ssl-build/katello-server-ca.crt') }
     end
   end
 end
