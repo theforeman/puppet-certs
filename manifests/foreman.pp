@@ -8,6 +8,7 @@ class certs::foreman (
   Stdlib::Absolutepath $client_cert = '/etc/foreman/client_cert.pem',
   Stdlib::Absolutepath $client_key = '/etc/foreman/client_key.pem',
   Stdlib::Absolutepath $ssl_ca_cert = '/etc/foreman/proxy_ca.pem',
+  Stdlib::Absolutepath $default_ca_cert = '/etc/foreman/default_ca.pem',
   String[2,2] $country = $certs::country,
   String $state = $certs::state,
   String $city = $certs::city,
@@ -16,6 +17,7 @@ class certs::foreman (
   String $expiration = $certs::expiration,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
   Stdlib::Absolutepath $server_ca = $certs::katello_server_ca_cert,
+  Stdlib::Absolutepath $default_ca = $certs::katello_default_ca_cert,
   String $owner = 'root',
   String $group = 'foreman',
 ) inherits certs {
@@ -61,6 +63,15 @@ class certs::foreman (
       group   => $group,
       mode    => '0440',
       require => File[$server_ca],
+    }
+
+    file { $default_ca_cert:
+      ensure  => file,
+      source  => $default_ca,
+      owner   => 'root',
+      group   => $group,
+      mode    => '0440',
+      require => File[$default_ca],
     }
   }
 }

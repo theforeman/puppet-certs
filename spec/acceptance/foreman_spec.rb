@@ -66,6 +66,21 @@ describe 'certs::foreman' do
       it { should be_grouped_into 'foreman' }
     end
 
+    describe x509_certificate('/etc/foreman/default_ca.pem') do
+      it { should be_certificate }
+      it { should be_valid }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:keylength) { should be >= 4096 }
+    end
+
+    describe file('/etc/foreman/default_ca.pem') do
+      it { should be_file }
+      it { should be_mode 440 }
+      it { should be_owned_by 'root' }
+      it { should be_grouped_into 'foreman' }
+    end
+
     describe x509_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-foreman-client.crt") do
       it { should be_certificate }
       it { should be_valid }
