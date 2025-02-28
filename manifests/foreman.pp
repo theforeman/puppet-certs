@@ -56,11 +56,11 @@ class certs::foreman (
 
     file { $ssl_ca_cert:
       ensure  => file,
-      source  => $server_ca,
+      source  => $certs::ca::ca_bundle_path,
       owner   => 'root',
       group   => $group,
       mode    => '0440',
-      require => File[$server_ca],
+      require => Concat[$certs::ca::ca_bundle_path],
     }
   }
 }
