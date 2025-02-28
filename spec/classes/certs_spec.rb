@@ -8,7 +8,7 @@ describe 'certs' do
       end
 
       it { should contain_class('certs::install') }
-      it { should contain_class('certs::config') }
+      it { should contain_class('certs::config::generate') }
     end
   end
 end

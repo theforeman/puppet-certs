@@ -60,6 +60,8 @@ class certs::ca (
   }
 
   if $deploy {
+    include certs::config::deploy
+
     file { $certs::katello_default_ca_cert:
       ensure => file,
       source => $default_ca_path,

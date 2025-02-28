@@ -39,6 +39,8 @@ class certs::puppet (
   }
 
   if $deploy {
+    include certs::config::deploy
+
     file { "${pki_dir}/puppet":
       ensure => directory,
       owner  => $owner,
