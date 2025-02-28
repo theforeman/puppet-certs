@@ -22,6 +22,7 @@ class certs::ca (
 ) {
   $default_ca_path = "${certs::ssl_build_dir}/${default_ca_name}.crt"
   $server_ca_path = "${certs::ssl_build_dir}/${server_ca_name}.crt"
+  $ca_bundle_path = "${certs::ssl_build_dir}/ca-bundle.crt"
 
   file { $ca_key_password_file:
     ensure    => file,
@@ -52,6 +53,28 @@ class certs::ca (
       owner  => 'root',
       group  => 'root',
       mode   => '0644',
+    }
+
+    concat { $ca_bundle_path:
+      ensure => present,
+    }
+
+    concat::fragment { 'default-ca':
+      target => $ca_bundle_path,
+      source => $default_ca_path,
+      order  => '01',
+    }
+
+    if $certs::server_ca_cert {
+      concat::fragment { 'server-ca':
+        target => $ca_bundle_path,
+        source => $server_ca_path,
+        order  => '02',
+      }
+    }
+
+    file { "${certs::ssl_build_dir}/KATELLO-TRUSTED-SSL-CERT":
+      ensure  => absent,
     }
   }
 
