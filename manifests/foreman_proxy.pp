@@ -107,6 +107,8 @@ class certs::foreman_proxy (
   }
 
   if $deploy {
+    include certs::config::deploy
+
     certs::keypair { $proxy_cert_name:
       source_dir => "${certs::ssl_build_dir}/${hostname}",
       key_file   => $proxy_key,
