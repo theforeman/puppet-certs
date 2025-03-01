@@ -15,7 +15,7 @@ class certs::foreman (
   String $org_unit = 'PUPPET',
   String $expiration = $certs::expiration,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
-  Stdlib::Absolutepath $server_ca = $certs::katello_server_ca_cert,
+  Stdlib::Absolutepath $server_ca = $certs::ca::server_ca_path,
   String $owner = 'root',
   String $group = 'foreman',
 ) inherits certs {
@@ -55,12 +55,11 @@ class certs::foreman (
     }
 
     file { $ssl_ca_cert:
-      ensure  => file,
-      source  => $server_ca,
-      owner   => 'root',
-      group   => $group,
-      mode    => '0440',
-      require => File[$server_ca],
+      ensure => file,
+      source => $server_ca,
+      owner  => 'root',
+      group  => $group,
+      mode   => '0440',
     }
   }
 }

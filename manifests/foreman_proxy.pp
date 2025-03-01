@@ -18,7 +18,7 @@ class certs::foreman_proxy (
   Stdlib::Absolutepath $foreman_ssl_key = '/etc/foreman-proxy/foreman_ssl_key.pem',
   Stdlib::Absolutepath $foreman_ssl_ca_cert = '/etc/foreman-proxy/foreman_ssl_ca.pem',
   Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
-  Stdlib::Absolutepath $server_ca_cert = $certs::katello_server_ca_cert,
+  Stdlib::Absolutepath $server_ca_cert = $certs::ca::server_ca_path,
   Optional[Stdlib::Absolutepath] $server_cert = $certs::server_cert,
   Optional[Stdlib::Absolutepath] $server_key = $certs::server_key,
   Optional[Stdlib::Absolutepath] $server_cert_req = $certs::server_cert_req,
@@ -26,7 +26,7 @@ class certs::foreman_proxy (
   String $state = $certs::state,
   String $city = $certs::city,
   String $expiration = $certs::expiration,
-  Stdlib::Absolutepath $default_ca_cert = $certs::katello_default_ca_cert,
+  Stdlib::Absolutepath $default_ca_cert = $certs::ca::default_ca_path,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
   String $group = 'foreman-proxy',
   String $owner = 'root',
@@ -121,12 +121,11 @@ class certs::foreman_proxy (
     }
 
     file { $proxy_ca_cert:
-      ensure  => file,
-      source  => $default_ca_cert,
-      owner   => $owner,
-      group   => $group,
-      mode    => '0440',
-      require => File[$default_ca_cert],
+      ensure => file,
+      source => $default_ca_cert,
+      owner  => $owner,
+      group  => $group,
+      mode   => '0440',
     }
 
     certs::keypair { $foreman_proxy_client_cert_name:
@@ -143,12 +142,11 @@ class certs::foreman_proxy (
     }
 
     file { $foreman_ssl_ca_cert:
-      ensure  => file,
-      source  => $server_ca_cert,
-      owner   => $owner,
-      group   => $group,
-      mode    => '0440',
-      require => File[$server_ca_cert],
+      ensure => file,
+      source => $server_ca_cert,
+      owner  => $owner,
+      group  => $group,
+      mode   => '0440',
     }
 
     cert_key_bundle { $foreman_proxy_ssl_client_bundle:

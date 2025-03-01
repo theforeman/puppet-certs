@@ -132,5 +132,21 @@ class certs::apache (
       cert_mode  => '0440',
       require    => $require_cert,
     }
+
+    file { $certs::katello_default_ca_cert:
+      ensure => file,
+      source => $certs::ca::default_ca_path,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+    }
+
+    file { $certs::katello_server_ca_cert:
+      ensure => file,
+      source => $certs::ca::server_ca_path,
+      owner  => 'root',
+      group  => $certs::group,
+      mode   => '0644',
+    }
   }
 }

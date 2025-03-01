@@ -58,22 +58,4 @@ class certs::ca (
       ensure  => absent,
     }
   }
-
-  if $deploy {
-    file { $certs::katello_default_ca_cert:
-      ensure => file,
-      source => $default_ca_path,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0644',
-    }
-
-    file { $katello_server_ca_cert:
-      ensure => file,
-      source => $server_ca_path,
-      owner  => $owner,
-      group  => $group,
-      mode   => '0644',
-    }
-  }
 }
