@@ -41,7 +41,7 @@ class certs::iop_advisor_engine (
 
     $server_cert = "${cert_directory}/server.cert"
     $server_key = "${cert_directory}/server.key"
-    $server_ca_cert = $certs::katello_server_ca_cert
+    $server_ca_cert = $certs::ca::server_ca_path
 
     $client_cert = $certs::foreman_proxy::foreman_ssl_cert
     $client_key = $certs::foreman_proxy::foreman_ssl_key
