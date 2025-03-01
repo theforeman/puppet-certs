@@ -53,10 +53,6 @@ class certs::ca (
       group  => 'root',
       mode   => '0644',
     }
-
-    file { "${certs::ssl_build_dir}/KATELLO-TRUSTED-SSL-CERT":
-      ensure  => absent,
-    }
   }
 
   if $deploy {
