@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 describe 'certs' do
   before(:all) do
-    on default, 'rm -rf /root/ssl-build'
+    on default, 'rm -rf /root/ssl-build /etc/pki/katello'
   end
 
   context 'with default params' do
@@ -42,22 +42,8 @@ describe 'certs' do
       it { should be_encrypted }
     end
 
-    describe x509_certificate('/etc/pki/katello/certs/katello-default-ca.crt') do
-      it { should be_certificate }
-      it { should be_valid }
-      it { should have_purpose 'SSL server CA' }
-      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}/) }
-      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}/) }
-      its(:keylength) { should be >= 4096 }
-    end
-
-    describe x509_certificate('/etc/pki/katello/certs/katello-server-ca.crt') do
-      it { should be_certificate }
-      it { should be_valid }
-      it { should have_purpose 'SSL server CA' }
-      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}/) }
-      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}/) }
-      its(:keylength) { should be >= 4096 }
+    describe file('/etc/pki/katello/certs/katello-default-ca.crt') do
+      it { should_not exist }
     end
 
     describe file('/etc/pki/katello/private/katello-default-ca.key') do
@@ -74,10 +60,6 @@ describe 'certs' do
 
     describe file('/root/ssl-build/katello-default-ca.pwd') do
       it { should exist }
-    end
-
-    describe file('/etc/pki/katello/private/katello-default-ca.pwd') do
-      it { should_not exist }
     end
   end
 

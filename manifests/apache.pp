@@ -123,6 +123,7 @@ class certs::apache (
 
   if $deploy {
     include certs::config::deploy
+    require certs::ca
 
     certs::keypair { $apache_cert_name:
       source_dir => "${certs::ssl_build_dir}/${hostname}",
@@ -135,6 +136,22 @@ class certs::apache (
       cert_group => $group,
       cert_mode  => '0440',
       require    => $require_cert,
+    }
+
+    file { $certs::katello_default_ca_cert:
+      ensure => file,
+      source => $certs::ca::default_ca_path,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+    }
+
+    file { $certs::katello_server_ca_cert:
+      ensure => file,
+      source => $certs::ca::server_ca_path,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
     }
   }
 }
