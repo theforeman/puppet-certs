@@ -27,7 +27,7 @@ describe 'certs::foreman_proxy' do
     describe x509_certificate('/etc/foreman-proxy/ssl_cert.pem') do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
@@ -56,7 +56,7 @@ describe 'certs::foreman_proxy' do
     describe x509_certificate('/etc/foreman-proxy/ssl_ca.pem') do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
@@ -94,7 +94,7 @@ describe 'certs::foreman_proxy' do
     describe x509_certificate('/etc/foreman-proxy/foreman_ssl_ca.pem') do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
@@ -103,7 +103,7 @@ describe 'certs::foreman_proxy' do
     describe x509_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-foreman-proxy.crt") do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
@@ -187,7 +187,7 @@ describe 'certs::foreman_proxy' do
     describe x509_certificate('/etc/foreman-proxy/ssl_cert.pem') do
       it { should be_certificate }
       # Doesn't have to be valid - can be expired since it's a static resource
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/CN = Fake LE Intermediate X1/) }
       its(:subject) { should match_without_whitespace(/CN = example.partial.solutions/) }
       its(:keylength) { should be >= 2048 }
@@ -217,7 +217,7 @@ describe 'certs::foreman_proxy' do
     describe x509_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-foreman-proxy.crt") do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = FOREMAN, OU = SMART_PROXY, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }

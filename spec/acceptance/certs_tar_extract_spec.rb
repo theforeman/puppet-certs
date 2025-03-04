@@ -40,7 +40,7 @@ describe 'certs with tar archive' do
     describe x509_certificate('/etc/pki/katello/certs/katello-apache.crt') do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = foreman-proxy.example.com/) }
       its(:keylength) { should be >= 4096 }
@@ -55,7 +55,7 @@ describe 'certs with tar archive' do
     describe x509_certificate('/root/ssl-build/foreman-proxy.example.com/foreman-proxy.example.com-apache.crt') do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fact('fqdn')}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = foreman-proxy.example.com/) }
       its(:keylength) { should be >= 4096 }
