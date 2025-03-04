@@ -28,7 +28,7 @@ describe 'certs::iop_advisor_engine' do
     describe x509_certificate('/etc/iop-advisor-engine/server.cert') do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{hostname}/) }
       its(:keylength) { should be >= 4096 }
@@ -57,7 +57,7 @@ describe 'certs::iop_advisor_engine' do
     describe x509_certificate("/root/ssl-build/#{hostname}/#{hostname}-iop-advisor-server.crt") do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{hostname}/) }
       its(:keylength) { should be >= 4096 }
@@ -88,7 +88,7 @@ describe 'certs::iop_advisor_engine' do
     describe x509_certificate("/root/ssl-build/#{hostname}/#{hostname}-iop-advisor-server.crt") do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{hostname}/) }
       its(:keylength) { should be >= 4096 }

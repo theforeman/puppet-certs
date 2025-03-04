@@ -49,7 +49,7 @@ describe 'certs' do
     describe x509_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-tomcat.crt") do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
@@ -215,7 +215,7 @@ describe 'certs' do
     describe x509_certificate("/root/ssl-build/localhost/localhost-tomcat.crt") do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = localhost/) }
       its(:keylength) { should be >= 4096 }
@@ -329,7 +329,7 @@ describe 'certs' do
     describe x509_certificate("/root/ssl-build/#{fqdn}/#{fqdn}-tomcat.crt") do
       it { should be_certificate }
       it { should be_valid }
-      it { should have_purpose 'server' }
+      it { should have_purpose 'SSL server' }
       its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
       its(:keylength) { should be >= 4096 }
