@@ -1,15 +1,10 @@
-# Definition: certs::tar_extract
-#
-# This class extracts a tarball
-#
+# @summary This class extracts a tarball
+# @api private
 # Parameters:
 # - The $path of the tarball to extract
 #
-# Actions:
-# - Extracts a tarball
-#
-define certs::tar_extract (
-  Stdlib::Absolutepath $path = $title,
+class certs::tar_extract (
+  Stdlib::Absolutepath $path,
 ) {
   validate_file_exists($path)
 
