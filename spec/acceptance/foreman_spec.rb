@@ -4,6 +4,8 @@ describe 'certs::foreman' do
   fqdn = fact('fqdn')
 
   before(:all) do
+    on default, 'rm -rf /root/ssl-build /etc/pki/katello /etc/foreman'
+
     manifest = <<~MANIFEST
       file { '/etc/foreman':
         ensure => directory,
