@@ -2,6 +2,6 @@
 # @api private
 class certs::install {
   package { 'katello-certs-tools':
-    ensure  => installed,
+    ensure => installed,
   }
 }
