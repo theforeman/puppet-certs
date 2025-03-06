@@ -66,8 +66,10 @@ class certs::apache (
   $apache_cert_name = "${hostname}-apache"
   $apache_cert = "${pki_dir}/certs/katello-apache.crt"
   $apache_key  = "${pki_dir}/private/katello-apache.key"
-  # This variable is unused but considered public API
+
+  # These variables are unused but considered public API
   $apache_ca_cert = $certs::katello_server_ca_cert
+  $apache_client_ca_cert = $certs::katello_default_ca_cert
 
   $apache_cert_path = "${certs::ssl_build_dir}/${hostname}/${apache_cert_name}"
 
