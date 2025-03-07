@@ -14,9 +14,6 @@
 # $server_key::           Path to the ssl key for https
 #                         if not specified, the default CA will generate one
 #
-# $server_cert_req::      Path to the ssl certificate request for https
-#                         if not specified, the default CA will generate one
-#
 # === Advanced parameters:
 #
 # $generate::             Should the generation of the certs be part of the
