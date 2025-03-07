@@ -11,10 +11,8 @@ class certs::ca (
   String $org_unit = $certs::org_unit,
   String $ca_expiration = $certs::ca_expiration,
   Boolean $generate = $certs::generate,
-  Boolean $deploy = $certs::deploy,
   String $owner = $certs::user,
   String $group = $certs::group,
-  Stdlib::Absolutepath $katello_server_ca_cert = $certs::katello_server_ca_cert,
   String $ca_key_password = $certs::ca_key_password,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
 ) {
@@ -69,26 +67,6 @@ class certs::ca (
         source => $server_ca_path,
         order  => '02',
       }
-    }
-  }
-
-  if $deploy {
-    include certs::config::deploy
-
-    file { $certs::katello_default_ca_cert:
-      ensure => file,
-      source => $default_ca_path,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0644',
-    }
-
-    file { $katello_server_ca_cert:
-      ensure => file,
-      source => $server_ca_path,
-      owner  => $owner,
-      group  => $group,
-      mode   => '0644',
     }
   }
 }
