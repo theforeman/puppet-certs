@@ -153,4 +153,8 @@ describe 'certs with tar archive' do
       its(:keylength) { should be >= 2048 }
     end
   end
+
+  describe file('/root/ssl-build/katello-default-ca.pwd') do
+    it { should_not exist }
+  end
 end

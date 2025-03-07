@@ -22,14 +22,18 @@ class certs::ca (
   $server_ca_path = "${certs::ssl_build_dir}/${server_ca_name}.crt"
   $ca_bundle_path = "${certs::ssl_build_dir}/ca-bundle.crt"
 
-  file { $ca_key_password_file:
-    ensure    => file,
-    content   => $ca_key_password,
-    owner     => 'root',
-    group     => 'root',
-    mode      => '0400',
-    show_diff => false,
-  } ~>
+  if $generate {
+    file { $ca_key_password_file:
+      ensure    => file,
+      content   => $ca_key_password,
+      owner     => 'root',
+      group     => 'root',
+      mode      => '0400',
+      show_diff => false,
+      notify    => Ca[$default_ca_name],
+    }
+  }
+
   ca { $default_ca_name:
     ensure        => present,
     common_name   => $ca_common_name,
