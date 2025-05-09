@@ -1,3 +1,319 @@
+## [21.0.0](https://github.com/theforeman/puppet-certs/tree/21.0.0) (2025-05-09)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/20.0.1...21.0.0)
+
+**Breaking changes:**
+
+- Remove unused ca\_cert and ca\_cert\_stripped parameters [\#495](https://github.com/theforeman/puppet-certs/pull/495) ([ekohl](https://github.com/ekohl))
+- Remove cleanup of KATELLO-TRUSTED-SSL-CERT [\#493](https://github.com/theforeman/puppet-certs/pull/493) ([ehelms](https://github.com/ehelms))
+- Drop references to the deployed CA key that is not deployed [\#485](https://github.com/theforeman/puppet-certs/pull/485) ([ehelms](https://github.com/ehelms))
+- Drop certs::foreman from foreman\_proxy\_content tarballs [\#480](https://github.com/theforeman/puppet-certs/pull/480) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- Add apache\_client\_ca\_cert parameter to be used as public API [\#497](https://github.com/theforeman/puppet-certs/pull/497) ([ehelms](https://github.com/ehelms))
+- Split generate and deploy config into separate classes [\#491](https://github.com/theforeman/puppet-certs/pull/491) ([ehelms](https://github.com/ehelms))
+- Bundle default and server CA certificate and use for Foreman client CA [\#490](https://github.com/theforeman/puppet-certs/pull/490) ([ehelms](https://github.com/ehelms))
+- Explicitly set deploy to false for foreman\_proxy\_content class [\#486](https://github.com/theforeman/puppet-certs/pull/486) ([ehelms](https://github.com/ehelms))
+- Cleanup trustore and keystore passwordfiles in pki\_dir [\#484](https://github.com/theforeman/puppet-certs/pull/484) ([ehelms](https://github.com/ehelms))
+- Only create password file when generate is true [\#481](https://github.com/theforeman/puppet-certs/pull/481) ([ehelms](https://github.com/ehelms))
+
+**Fixed bugs:**
+
+- Fix assertion to do actual comparison [\#499](https://github.com/theforeman/puppet-certs/pull/499) ([ekohl](https://github.com/ekohl))
+- don't document server\_cert\_req, it's gone [\#498](https://github.com/theforeman/puppet-certs/pull/498) ([evgeni](https://github.com/evgeni))
+- Remove unused pulp\_pki\_dir variable [\#483](https://github.com/theforeman/puppet-certs/pull/483) ([ekohl](https://github.com/ekohl))
+
+## [20.0.1](https://github.com/theforeman/puppet-certs/tree/20.0.1) (2025-02-14)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/20.0.0...20.0.1)
+
+**Fixed bugs:**
+
+- Regenerate keystore if the keystore is empty [\#477](https://github.com/theforeman/puppet-certs/pull/477) ([ehelms](https://github.com/ehelms))
+
+## [20.0.0](https://github.com/theforeman/puppet-certs/tree/20.0.0) (2025-02-11)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/18.0.2...20.0.0)
+
+**Breaking changes:**
+
+- Drop EL8 support -- Foreman/Katello do not support EL8 anymore [\#475](https://github.com/theforeman/puppet-certs/pull/475) ([ehelms](https://github.com/ehelms))
+- Ensure KATELLO-TRUSTED-SSL-CERT is absent [\#464](https://github.com/theforeman/puppet-certs/pull/464) ([ekohl](https://github.com/ekohl))
+- Drop unused privkey, pubkey and key\_bundle types & providers [\#462](https://github.com/theforeman/puppet-certs/pull/462) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Add class to handle creation of certs for advisor service on localhost [\#474](https://github.com/theforeman/puppet-certs/pull/474) ([ehelms](https://github.com/ehelms))
+
+## [19.1.1](https://github.com/theforeman/puppet-certs/tree/19.1.1) (2024-11-12)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/19.1.0...19.1.1)
+
+**Fixed bugs:**
+
+- Fixes [\#38010](https://projects.theforeman.org/issues/38010) - Include keyalg in keytool for OpenJDK 17 [\#470](https://github.com/theforeman/puppet-certs/pull/470) ([ehelms](https://github.com/ehelms))
+
+## [19.1.0](https://github.com/theforeman/puppet-certs/tree/19.1.0) (2024-11-04)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/19.0.1...19.1.0)
+
+**Implemented enhancements:**
+
+- Merge if/else branch into a single resource declaration & introduce $default\_ca\_path [\#467](https://github.com/theforeman/puppet-certs/pull/467) ([ekohl](https://github.com/ekohl))
+
+## [19.0.1](https://github.com/theforeman/puppet-certs/tree/19.0.1) (2024-09-13)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/19.0.0...19.0.1)
+
+**Fixed bugs:**
+
+- Fixes [\#37817](https://projects.theforeman.org/issues/37817): Only copy server CA in build root if generate is true [\#463](https://github.com/theforeman/puppet-certs/pull/463) ([ehelms](https://github.com/ehelms))
+
+## [19.0.0](https://github.com/theforeman/puppet-certs/tree/19.0.0) (2024-08-12)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/18.0.0...19.0.0)
+
+**Breaking changes:**
+
+- Move keystore and trustore password files [\#457](https://github.com/theforeman/puppet-certs/pull/457) ([ehelms](https://github.com/ehelms))
+- Drop absent file declarations [\#451](https://github.com/theforeman/puppet-certs/pull/451) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- Add AlmaLinux 8 & 9 support [\#454](https://github.com/theforeman/puppet-certs/pull/454) ([archanaserver](https://github.com/archanaserver))
+
+## [18.0.0](https://github.com/theforeman/puppet-certs/tree/18.0.0) (2024-05-15)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.1.1...18.0.0)
+
+**Breaking changes:**
+
+- Remove deploy via provider [\#426](https://github.com/theforeman/puppet-certs/pull/426) ([ehelms](https://github.com/ehelms))
+- Drop RPMs from being included in tarball [\#421](https://github.com/theforeman/puppet-certs/pull/421) ([ehelms](https://github.com/ehelms))
+- Remove all qpid related certificate handling [\#414](https://github.com/theforeman/puppet-certs/pull/414) ([ehelms](https://github.com/ehelms))
+
+**Fixed bugs:**
+
+- Ensure hostname directory exists when copying server cert [\#450](https://github.com/theforeman/puppet-certs/pull/450) ([ehelms](https://github.com/ehelms))
+- Fixes [\#37384](https://projects.theforeman.org/issues/37384) - properly pass fips=false when checking keystore [\#444](https://github.com/theforeman/puppet-certs/pull/444) ([evgeni](https://github.com/evgeni))
+
+**Merged pull requests:**
+
+- Fix tests on EL9 [\#443](https://github.com/theforeman/puppet-certs/pull/443) ([ehelms](https://github.com/ehelms))
+
+## [17.1.1](https://github.com/theforeman/puppet-certs/tree/17.1.1) (2024-04-25)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.0.1...17.1.1)
+
+## [17.0.1](https://github.com/theforeman/puppet-certs/tree/17.0.1) (2024-04-25)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.1.0...17.0.1)
+
+## [17.1.0](https://github.com/theforeman/puppet-certs/tree/17.1.0) (2024-02-19)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/17.0.0...17.1.0)
+
+**Implemented enhancements:**
+
+- Support EL9 [\#442](https://github.com/theforeman/puppet-certs/pull/442) ([ekohl](https://github.com/ekohl))
+- Use automatic compression based on file path for tar [\#440](https://github.com/theforeman/puppet-certs/pull/440) ([ekohl](https://github.com/ekohl))
+
+## [17.0.0](https://github.com/theforeman/puppet-certs/tree/17.0.0) (2023-11-12)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.1.1...17.0.0)
+
+**Breaking changes:**
+
+- Drop Puppet 6 support [\#435](https://github.com/theforeman/puppet-certs/pull/435) ([ekohl](https://github.com/ekohl))
+- Remove default\_ca parameter [\#425](https://github.com/theforeman/puppet-certs/pull/425) ([ehelms](https://github.com/ehelms))
+- puppetlabs/stdlib: Require 9.x [\#411](https://github.com/theforeman/puppet-certs/pull/411) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Mark compatible with puppet-extlib 7.x [\#437](https://github.com/theforeman/puppet-certs/pull/437) ([ekohl](https://github.com/ekohl))
+- Support changing passwords on keystores & truststores [\#428](https://github.com/theforeman/puppet-certs/pull/428) ([ekohl](https://github.com/ekohl))
+- Document certs::apache parameters [\#423](https://github.com/theforeman/puppet-certs/pull/423) ([ekohl](https://github.com/ekohl))
+- Set required params and autorequire [\#422](https://github.com/theforeman/puppet-certs/pull/422) ([ekohl](https://github.com/ekohl))
+- Manage the build\_dir [\#419](https://github.com/theforeman/puppet-certs/pull/419) ([ehelms](https://github.com/ehelms))
+- Remove unused full\_path method [\#418](https://github.com/theforeman/puppet-certs/pull/418) ([ekohl](https://github.com/ekohl))
+- Deploy the CA password file to ssl build directory [\#416](https://github.com/theforeman/puppet-certs/pull/416) ([ehelms](https://github.com/ehelms))
+- Add Puppet 8 support [\#412](https://github.com/theforeman/puppet-certs/pull/412) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Fix some RuboCop flagged issues for Puppet 8 support [\#438](https://github.com/theforeman/puppet-certs/pull/438) ([ekohl](https://github.com/ekohl))
+- Handle more unknown password errors [\#432](https://github.com/theforeman/puppet-certs/pull/432) ([ekohl](https://github.com/ekohl))
+
+## [16.1.1](https://github.com/theforeman/puppet-certs/tree/16.1.1) (2023-10-05)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.1.0...16.1.1)
+
+## [16.1.0](https://github.com/theforeman/puppet-certs/tree/16.1.0) (2023-10-05)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.0.2...16.1.0)
+
+## [16.0.2](https://github.com/theforeman/puppet-certs/tree/16.0.2) (2023-06-19)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.0.1...16.0.2)
+
+**Fixed bugs:**
+
+- Fix bad requires and old Puppet\_X notation [\#408](https://github.com/theforeman/puppet-certs/pull/408) ([coreone](https://github.com/coreone))
+
+## [16.0.1](https://github.com/theforeman/puppet-certs/tree/16.0.1) (2023-05-15)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/16.0.0...16.0.1)
+
+**Fixed bugs:**
+
+- Remove unused puppetlabs-concat dependency [\#406](https://github.com/theforeman/puppet-certs/pull/406) ([ekohl](https://github.com/ekohl))
+
+## [16.0.0](https://github.com/theforeman/puppet-certs/tree/16.0.0) (2022-10-28)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/15.1.1...16.0.0)
+
+**Breaking changes:**
+
+- Drop EL7 support [\#400](https://github.com/theforeman/puppet-certs/pull/400) ([ehelms](https://github.com/ehelms))
+- Refs [\#35005](https://projects.theforeman.org/issues/35005): Drop certs::pulp\_client [\#399](https://github.com/theforeman/puppet-certs/pull/399) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- Update to voxpupuli-test 5 [\#401](https://github.com/theforeman/puppet-certs/pull/401) ([ekohl](https://github.com/ekohl))
+
+**Fixed bugs:**
+
+- Fixes [\#35335](https://projects.theforeman.org/issues/35335) - allow everyone to read the Katello CA certificate [\#403](https://github.com/theforeman/puppet-certs/pull/403) ([evgeni](https://github.com/evgeni))
+
+## [15.1.1](https://github.com/theforeman/puppet-certs/tree/15.1.1) (2022-05-03)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/15.1.0...15.1.1)
+
+**Fixed bugs:**
+
+- Ensure nssdb private key changes when certificate changes [\#397](https://github.com/theforeman/puppet-certs/pull/397) ([ehelms](https://github.com/ehelms))
+
+## [15.1.0](https://github.com/theforeman/puppet-certs/tree/15.1.0) (2022-03-15)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/15.0.0...15.1.0)
+
+**Implemented enhancements:**
+
+- Allow stdlib 8.x, extlib 6.x [\#392](https://github.com/theforeman/puppet-certs/pull/392) ([ekohl](https://github.com/ekohl))
+
+**Fixed bugs:**
+
+- Fixes [\#34598](https://projects.theforeman.org/issues/34598): Disable fips for keytool  [\#394](https://github.com/theforeman/puppet-certs/pull/394) ([ehelms](https://github.com/ehelms))
+
+## [15.0.0](https://github.com/theforeman/puppet-certs/tree/15.0.0) (2022-02-03)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/14.0.0...15.0.0)
+
+**Breaking changes:**
+
+- Fixes [\#34189](https://projects.theforeman.org/issues/34189): Unencrypt CA key when deploying for Candlepin [\#386](https://github.com/theforeman/puppet-certs/pull/386) ([ehelms](https://github.com/ehelms))
+
+**Fixed bugs:**
+
+- Correctly pass the path to the tempfile when adding keystore certificates [\#385](https://github.com/theforeman/puppet-certs/pull/385) ([ehelms](https://github.com/ehelms))
+- Reintroduce $apache\_ca\_cert [\#384](https://github.com/theforeman/puppet-certs/pull/384) ([ekohl](https://github.com/ekohl))
+
+**Merged pull requests:**
+
+- use foreman::repo to setup foreman repos during CI [\#390](https://github.com/theforeman/puppet-certs/pull/390) ([evgeni](https://github.com/evgeni))
+- Mark classes as private using Puppet Strings [\#389](https://github.com/theforeman/puppet-certs/pull/389) ([ekohl](https://github.com/ekohl))
+
+## [14.0.0](https://github.com/theforeman/puppet-certs/tree/14.0.0) (2021-10-29)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/13.0.0...14.0.0)
+
+**Breaking changes:**
+
+- Deploy certificates from build directory and drop the use of RPMs [\#370](https://github.com/theforeman/puppet-certs/pull/370) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- New cert key bundle type [\#380](https://github.com/theforeman/puppet-certs/pull/380) ([ehelms](https://github.com/ehelms))
+- Add types for parameters for all classes [\#377](https://github.com/theforeman/puppet-certs/pull/377) ([ehelms](https://github.com/ehelms))
+- Keep Candlepin CA key password protected [\#376](https://github.com/theforeman/puppet-certs/pull/376) ([ehelms](https://github.com/ehelms))
+
+**Fixed bugs:**
+
+- Allow passing string for hostname to certs::qpid\_router::client [\#379](https://github.com/theforeman/puppet-certs/pull/379) ([ehelms](https://github.com/ehelms))
+
+## [13.0.0](https://github.com/theforeman/puppet-certs/tree/13.0.0) (2021-07-22)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/12.0.0...13.0.0)
+
+**Breaking changes:**
+
+- Drop Puppet 5 support [\#345](https://github.com/theforeman/puppet-certs/pull/345) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- Manage the certs::foreman ssl\_ca\_file [\#375](https://github.com/theforeman/puppet-certs/pull/375) ([ehelms](https://github.com/ehelms))
+- Add owner, group parameters to certs::foreman [\#374](https://github.com/theforeman/puppet-certs/pull/374) ([ehelms](https://github.com/ehelms))
+- Fixes [\#32382](https://projects.theforeman.org/issues/32382): Use certs::foreman client certificate to communicate wi… [\#371](https://github.com/theforeman/puppet-certs/pull/371) ([ehelms](https://github.com/ehelms))
+- Support ensuring certs::keypair cert and key can be absent [\#365](https://github.com/theforeman/puppet-certs/pull/365) ([ehelms](https://github.com/ehelms))
+- Include certs directory tarball [\#352](https://github.com/theforeman/puppet-certs/pull/352) ([ehelms](https://github.com/ehelms))
+- Remove dependency on trusted\_ca [\#350](https://github.com/theforeman/puppet-certs/pull/350) ([ekohl](https://github.com/ekohl))
+- Declare the build directory for all certificate creation [\#346](https://github.com/theforeman/puppet-certs/pull/346) ([ehelms](https://github.com/ehelms))
+- Fixes [\#32511](https://projects.theforeman.org/issues/32511) - Add a puppet type and provider to manage an nssdb [\#344](https://github.com/theforeman/puppet-certs/pull/344) ([wbclark](https://github.com/wbclark))
+- Fixes [\#32637](https://projects.theforeman.org/issues/32637): Add truststore type and provider  [\#336](https://github.com/theforeman/puppet-certs/pull/336) ([ehelms](https://github.com/ehelms))
+- Fixes [\#32631](https://projects.theforeman.org/issues/32631): Add keystore\_certificate provider type [\#335](https://github.com/theforeman/puppet-certs/pull/335) ([ehelms](https://github.com/ehelms))
+- Fixes [\#32506](https://projects.theforeman.org/issues/32506): Add keystore puppet provider type [\#334](https://github.com/theforeman/puppet-certs/pull/334) ([ehelms](https://github.com/ehelms))
+- Fixes [\#32585](https://projects.theforeman.org/issues/32585): Add function to extract Artemis client certificate subj… [\#332](https://github.com/theforeman/puppet-certs/pull/332) ([ehelms](https://github.com/ehelms))
+- Switch Foreman client certificates to root:foreman [\#330](https://github.com/theforeman/puppet-certs/pull/330) ([ehelms](https://github.com/ehelms))
+- Fixes [\#32506](https://projects.theforeman.org/issues/32506): Add an nssdb\_certificate type and provider  [\#327](https://github.com/theforeman/puppet-certs/pull/327) ([ehelms](https://github.com/ehelms))
+- Allow Puppet 7 compatible versions of mods [\#325](https://github.com/theforeman/puppet-certs/pull/325) ([ekohl](https://github.com/ekohl))
+
+**Fixed bugs:**
+
+- certs::foreman should inherit certs, but only inherits certs::params [\#362](https://github.com/theforeman/puppet-certs/issues/362)
+- Refs [\#32506](https://projects.theforeman.org/issues/32506) - Avoid in place modification of array [\#341](https://github.com/theforeman/puppet-certs/pull/341) ([ekohl](https://github.com/ekohl))
+- Fixes [\#32647](https://projects.theforeman.org/issues/32647): Do not show diff on password files [\#337](https://github.com/theforeman/puppet-certs/pull/337) ([ehelms](https://github.com/ehelms))
+
+## [12.0.0](https://github.com/theforeman/puppet-certs/tree/12.0.0) (2021-04-27)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/11.0.0...12.0.0)
+
+**Breaking changes:**
+
+- Remove qpid\_client class and avoid resource defaults in qpid class [\#315](https://github.com/theforeman/puppet-certs/pull/315) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- Refs [\#31574](https://projects.theforeman.org/issues/31574): Compare SHA256 fingerprints when checking truststore [\#323](https://github.com/theforeman/puppet-certs/pull/323) ([ehelms](https://github.com/ehelms))
+- Support Puppet 7 [\#319](https://github.com/theforeman/puppet-certs/pull/319) ([ekohl](https://github.com/ekohl))
+
+**Fixed bugs:**
+
+- Fixes [\#31574](https://projects.theforeman.org/issues/31574): Ensure truststore certificates get updated when they change [\#320](https://github.com/theforeman/puppet-certs/pull/320) ([ehelms](https://github.com/ehelms))
+
+## [11.0.0](https://github.com/theforeman/puppet-certs/tree/11.0.0) (2021-02-19)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/10.1.0...11.0.0)
+
+**Breaking changes:**
+
+- Refs [\#31878](https://projects.theforeman.org/issues/31878) - Split qpid router server and client certificates [\#316](https://github.com/theforeman/puppet-certs/pull/316) ([ehelms](https://github.com/ehelms))
+- Drop creation of mongodb certificates [\#307](https://github.com/theforeman/puppet-certs/pull/307) ([ehelms](https://github.com/ehelms))
+
+## [10.1.0](https://github.com/theforeman/puppet-certs/tree/10.1.0) (2021-01-28)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/10.0.0...10.1.0)
+
+**Implemented enhancements:**
+
+- Convert parameters to static defaults [\#308](https://github.com/theforeman/puppet-certs/pull/308) ([ehelms](https://github.com/ehelms))
+
+**Merged pull requests:**
+
+- Revert "Convert foreman\_proxy\_content.pp parameters to static defaults" [\#310](https://github.com/theforeman/puppet-certs/pull/310) ([ekohl](https://github.com/ekohl))
+- Move cname default back to params.pp due to Kafo improperly handling validation [\#309](https://github.com/theforeman/puppet-certs/pull/309) ([ehelms](https://github.com/ehelms))
+- Removed unused rhsm\_reconfigure\_script [\#306](https://github.com/theforeman/puppet-certs/pull/306) ([ehelms](https://github.com/ehelms))
+
 ## [10.0.0](https://github.com/theforeman/puppet-certs/tree/10.0.0) (2020-10-29)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/9.0.0...10.0.0)
