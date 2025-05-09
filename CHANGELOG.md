@@ -1,5 +1,31 @@
 # Changelog
 
+## [21.0.0](https://github.com/theforeman/puppet-certs/tree/21.0.0) (2025-05-13)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/20.0.1...21.0.0)
+
+**Breaking changes:**
+
+- Remove unused ca\_cert and ca\_cert\_stripped parameters [\#495](https://github.com/theforeman/puppet-certs/pull/495) ([ekohl](https://github.com/ekohl))
+- Remove cleanup of KATELLO-TRUSTED-SSL-CERT [\#493](https://github.com/theforeman/puppet-certs/pull/493) ([ehelms](https://github.com/ehelms))
+- Drop references to the deployed CA key that is not deployed [\#485](https://github.com/theforeman/puppet-certs/pull/485) ([ehelms](https://github.com/ehelms))
+- Drop certs::foreman from foreman\_proxy\_content tarballs [\#480](https://github.com/theforeman/puppet-certs/pull/480) ([ehelms](https://github.com/ehelms))
+
+**Implemented enhancements:**
+
+- Add apache\_client\_ca\_cert parameter to be used as public API [\#497](https://github.com/theforeman/puppet-certs/pull/497) ([ehelms](https://github.com/ehelms))
+- Split generate and deploy config into separate classes [\#491](https://github.com/theforeman/puppet-certs/pull/491) ([ehelms](https://github.com/ehelms))
+- Bundle default and server CA certificate and use for Foreman client CA [\#490](https://github.com/theforeman/puppet-certs/pull/490) ([ehelms](https://github.com/ehelms))
+- Explicitly set deploy to false for foreman\_proxy\_content class [\#486](https://github.com/theforeman/puppet-certs/pull/486) ([ehelms](https://github.com/ehelms))
+- Cleanup trustore and keystore passwordfiles in pki\_dir [\#484](https://github.com/theforeman/puppet-certs/pull/484) ([ehelms](https://github.com/ehelms))
+- Only create password file when generate is true [\#481](https://github.com/theforeman/puppet-certs/pull/481) ([ehelms](https://github.com/ehelms))
+
+**Fixed bugs:**
+
+- Fix assertion to do actual comparison [\#499](https://github.com/theforeman/puppet-certs/pull/499) ([ekohl](https://github.com/ekohl))
+- don't document server\_cert\_req, it's gone [\#498](https://github.com/theforeman/puppet-certs/pull/498) ([evgeni](https://github.com/evgeni))
+- Remove unused pulp\_pki\_dir variable [\#483](https://github.com/theforeman/puppet-certs/pull/483) ([ekohl](https://github.com/ekohl))
+
 ## [20.0.1](https://github.com/theforeman/puppet-certs/tree/20.0.1) (2025-02-14)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/20.0.0...20.0.1)
