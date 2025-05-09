@@ -24,7 +24,7 @@ else
         def has_cert?(file_path)
           target_cert = OpenSSL::X509::Certificate.new(@runner.get_file_content(file_path).stdout)
           content.any? do |actual_cert|
-            target_cert = actual_cert
+            target_cert == actual_cert
           end
         end
 
