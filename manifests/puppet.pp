@@ -13,7 +13,6 @@ class certs::puppet (
   String $city = $certs::city,
   String $expiration = $certs::expiration,
   Stdlib::Absolutepath $ca_key_password_file = $certs::ca_key_password_file,
-  Stdlib::Absolutepath $server_ca = $certs::katello_server_ca_cert,
   Stdlib::Absolutepath $pki_dir = $certs::pki_dir,
   String $owner = 'root',
   String $group = 'puppet',
@@ -40,6 +39,7 @@ class certs::puppet (
 
   if $deploy {
     include certs::config::deploy
+    require certs::ca
 
     file { "${pki_dir}/puppet":
       ensure => directory,
@@ -62,12 +62,11 @@ class certs::puppet (
     }
 
     file { $ssl_ca_cert:
-      ensure  => file,
-      source  => $server_ca,
-      owner   => $owner,
-      group   => $group,
-      mode    => '0440',
-      require => File[$server_ca],
+      ensure => file,
+      source => $certs::ca::server_ca_path,
+      owner  => $owner,
+      group  => $group,
+      mode   => '0440',
     }
   }
 }
