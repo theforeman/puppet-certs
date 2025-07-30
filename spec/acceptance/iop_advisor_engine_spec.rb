@@ -108,4 +108,29 @@ describe 'certs::iop_advisor_engine' do
       it { should_not exist }
     end
   end
+
+  context 'with generate false and deploy false' do
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+          class { 'certs::iop_advisor_engine':
+            generate => false,
+            deploy => false
+          }
+        PUPPET
+      end
+    end
+
+    describe file('/etc/iop-advisor-engine') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/iop-advisor-engine/server.cert') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/iop-advisor-engine/server.key') do
+      it { should_not exist }
+    end
+  end
 end
