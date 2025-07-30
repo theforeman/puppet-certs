@@ -36,35 +36,46 @@ class certs::iop_advisor_engine (
     build_dir     => $certs::ssl_build_dir,
   }
 
-  if $deploy {
-    $cert_directory = '/etc/iop-advisor-engine'
+  $cert_directory = '/etc/iop-advisor-engine'
 
-    $server_cert = "${cert_directory}/server.cert"
-    $server_key = "${cert_directory}/server.key"
-    $server_ca_cert = $certs::katello_server_ca_cert
+  $server_cert = "${cert_directory}/server.cert"
+  $server_key = "${cert_directory}/server.key"
+  $server_ca_cert = $certs::katello_server_ca_cert
 
-    $client_cert = $certs::foreman_proxy::foreman_ssl_cert
-    $client_key = $certs::foreman_proxy::foreman_ssl_key
-    $client_ca_cert = $certs::foreman_proxy::foreman_ssl_ca_cert
+  $client_cert = $certs::foreman_proxy::foreman_ssl_cert
+  $client_key = $certs::foreman_proxy::foreman_ssl_key
+  $client_ca_cert = $certs::foreman_proxy::foreman_ssl_ca_cert
 
-    file { $cert_directory:
-      ensure => directory,
-      mode   => '0755',
-      owner  => $owner,
-      group  => $group,
-    }
+  $directory_ensure = $deploy ? {
+    true  => 'directory',
+    false => 'absent',
+  }
 
-    certs::keypair { $server_cert_name:
-      source_dir => "${certs::ssl_build_dir}/${hostname}",
-      key_file   => $server_key,
-      key_owner  => $owner,
-      key_group  => $group,
-      key_mode   => $private_key_mode,
-      cert_file  => $server_cert,
-      cert_owner => $owner,
-      cert_group => $group,
-      cert_mode  => $public_key_mode,
-      require    => Cert[$server_cert_name],
-    }
+  $keypair_ensure = $deploy ? {
+    true  => 'present',
+    false => 'absent',
+  }
+
+  file { $cert_directory:
+    ensure => $directory_ensure,
+    mode   => '0755',
+    owner  => $owner,
+    group  => $group,
+    force  => true,
+  }
+
+  certs::keypair { $server_cert_name:
+    source_dir  => "${certs::ssl_build_dir}/${hostname}",
+    key_ensure  => $keypair_ensure,
+    key_file    => $server_key,
+    key_owner   => $owner,
+    key_group   => $group,
+    key_mode    => $private_key_mode,
+    cert_ensure => $keypair_ensure,
+    cert_file   => $server_cert,
+    cert_owner  => $owner,
+    cert_group  => $group,
+    cert_mode   => $public_key_mode,
+    require     => Cert[$server_cert_name],
   }
 }
