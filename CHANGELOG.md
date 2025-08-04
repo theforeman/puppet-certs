@@ -1,6 +1,15 @@
 # Changelog
 
-## [21.0.0](https://github.com/theforeman/puppet-certs/tree/21.0.0) (2025-05-13)
+## [21.1.0](https://github.com/theforeman/puppet-certs/tree/21.1.0) (2025-08-04)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/21.0.0...21.1.0)
+
+**Implemented enhancements:**
+
+- Let deploy control existence of deployed certs for iop\_advisor\_engine [\#502](https://github.com/theforeman/puppet-certs/pull/502) ([ehelms](https://github.com/ehelms))
+- Add certs for IoP [\#501](https://github.com/theforeman/puppet-certs/pull/501) ([ehelms](https://github.com/ehelms))
+
+## [21.0.0](https://github.com/theforeman/puppet-certs/tree/21.0.0) (2025-05-09)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/20.0.1...21.0.0)
 
