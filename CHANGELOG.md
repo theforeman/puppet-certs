@@ -1,6 +1,14 @@
 # Changelog
 
-## [21.1.0](https://github.com/theforeman/puppet-certs/tree/21.1.0) (2025-08-04)
+## [21.2.0](https://github.com/theforeman/puppet-certs/tree/21.2.0) (2025-11-05)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/21.1.0...21.2.0)
+
+**Implemented enhancements:**
+
+- Add class to configure generating certificates [\#449](https://github.com/theforeman/puppet-certs/pull/449) ([ehelms](https://github.com/ehelms))
+
+## [21.1.0](https://github.com/theforeman/puppet-certs/tree/21.1.0) (2025-08-07)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/21.0.0...21.1.0)
 
