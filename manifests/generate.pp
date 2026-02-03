@@ -12,12 +12,15 @@
 #
 # $puppet::   Generates certificates needed by Puppet
 #
+# $iop::   Generates certificates needed by IOP
+#
 class certs::generate (
   Boolean $apache = false,
   Boolean $foreman = false,
   Boolean $candlepin = false,
   Boolean $foreman_proxy = false,
   Boolean $puppet = false,
+  Boolean $iop = false,
 ) {
   class { 'certs::apache':
     generate => $apache,
@@ -42,6 +45,11 @@ class certs::generate (
 
   class { 'certs::puppet':
     generate => $puppet,
+    deploy   => false,
+  }
+
+  class { 'certs::iop':
+    generate => $iop,
     deploy   => false,
   }
 }
