@@ -1,5 +1,13 @@
 # Changelog
 
+## [21.3.0](https://github.com/theforeman/puppet-certs/tree/21.3.0) (2026-04-29)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/21.2.0...21.3.0)
+
+**Implemented enhancements:**
+
+- Add iop to the generate class [\#505](https://github.com/theforeman/puppet-certs/pull/505) ([ehelms](https://github.com/ehelms))
+
 ## [21.2.0](https://github.com/theforeman/puppet-certs/tree/21.2.0) (2025-11-05)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/21.1.0...21.2.0)
