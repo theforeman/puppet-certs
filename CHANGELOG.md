@@ -1,5 +1,13 @@
 # Changelog
 
+## [21.4.0](https://github.com/theforeman/puppet-certs/tree/21.4.0) (2026-05-11)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/21.3.0...21.4.0)
+
+**Implemented enhancements:**
+
+- puppet/extlib: Allow 8.x [\#507](https://github.com/theforeman/puppet-certs/pull/507) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [21.3.0](https://github.com/theforeman/puppet-certs/tree/21.3.0) (2026-04-29)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/21.2.0...21.3.0)
