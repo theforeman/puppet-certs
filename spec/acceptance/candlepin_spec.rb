@@ -311,6 +311,59 @@ describe 'certs' do
     end
   end
 
+  context 'with explicit keystore_password and truststore_password' do
+    keystore_password = 'MyExplicitKeystorePass1!'
+    truststore_password = 'MyExplicitTruststorePass1!'
+
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-PUPPET
+        user { 'tomcat':
+          ensure => present,
+        }
+
+        ['/usr/share/tomcat/conf', '/etc/candlepin/certs'].each |$dir| {
+          exec { "mkdir -p ${dir}":
+            creates => $dir,
+            path    => ['/bin', '/usr/bin'],
+          }
+        }
+
+        package { 'java-17-openjdk-headless':
+          ensure => installed,
+        }
+
+        class { 'certs::candlepin':
+          keystore_password   => '#{keystore_password}',
+          truststore_password => '#{truststore_password}',
+        }
+        PUPPET
+      end
+    end
+
+    describe file(keystore_password_file) do
+      it { should be_file }
+      its(:content) { should eq keystore_password }
+    end
+
+    describe file(truststore_password_file) do
+      it { should be_file }
+      its(:content) { should eq truststore_password }
+    end
+
+    describe command("keytool -list -keystore /etc/candlepin/certs/keystore -storepass '#{keystore_password}'") do
+      its(:exit_status) { should eq 0 }
+      its(:stdout) { should match(/^Keystore type: PKCS12$/i) }
+      its(:stdout) { should match(/^Your keystore contains 1 entry$/) }
+    end
+
+    describe command("keytool -list -keystore /etc/candlepin/certs/truststore -storepass '#{truststore_password}'") do
+      its(:exit_status) { should eq 0 }
+      its(:stdout) { should match(/^Keystore type: PKCS12$/i) }
+      its(:stdout) { should match(/^Your keystore contains 2 entries$/) }
+    end
+  end
+
   context 'with deploy false' do
     before(:context) do
       on default, 'rm -rf /root/ssl-build /etc/candlepin'
