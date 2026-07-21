@@ -311,6 +311,65 @@ describe 'certs' do
     end
   end
 
+  context 'updates keystore and truststore when passwords change' do
+    initial_keystore_password = 'InitialKeystorePass1!'
+    initial_truststore_password = 'InitialTruststorePass1!'
+    updated_keystore_password = 'UpdatedKeystorePass1!'
+    updated_truststore_password = 'UpdatedTruststorePass1!'
+
+    def candlepin_manifest(keystore_pass, truststore_pass)
+      <<-PUPPET
+      user { 'tomcat':
+        ensure => present,
+      }
+
+      ['/usr/share/tomcat/conf', '/etc/candlepin/certs'].each |$dir| {
+        exec { "mkdir -p ${dir}":
+          creates => $dir,
+          path    => ['/bin', '/usr/bin'],
+        }
+      }
+
+      package { 'java-17-openjdk-headless':
+        ensure => installed,
+      }
+
+      class { 'certs::candlepin':
+        keystore_password   => '#{keystore_pass}',
+        truststore_password => '#{truststore_pass}',
+      }
+      PUPPET
+    end
+
+    it 'rebuilds keystores to accept the new passwords and reject the old ones' do
+      apply_manifest(candlepin_manifest(initial_keystore_password, initial_truststore_password), catch_failures: true)
+
+      initial_keystore_result = on default, "keytool -list -keystore /etc/candlepin/certs/keystore -storepass '#{initial_keystore_password}'"
+      expect(initial_keystore_result.exit_code).to eq(0)
+      initial_truststore_result = on default, "keytool -list -keystore /etc/candlepin/certs/truststore -storepass '#{initial_truststore_password}'"
+      expect(initial_truststore_result.exit_code).to eq(0)
+
+      apply_manifest(candlepin_manifest(updated_keystore_password, updated_truststore_password), catch_failures: true)
+
+      expect(on(default, "cat #{keystore_password_file}").output.strip).to eq(updated_keystore_password)
+      expect(on(default, "cat #{truststore_password_file}").output.strip).to eq(updated_truststore_password)
+
+      updated_keystore_result = on default, "keytool -list -keystore /etc/candlepin/certs/keystore -storepass '#{updated_keystore_password}'"
+      expect(updated_keystore_result.exit_code).to eq(0)
+      expect(updated_keystore_result.stdout).to match(/^Your keystore contains 1 entry$/)
+
+      updated_truststore_result = on default, "keytool -list -keystore /etc/candlepin/certs/truststore -storepass '#{updated_truststore_password}'"
+      expect(updated_truststore_result.exit_code).to eq(0)
+      expect(updated_truststore_result.stdout).to match(/^Your keystore contains 2 entries$/)
+
+      old_keystore_result = on default, "keytool -list -keystore /etc/candlepin/certs/keystore -storepass '#{initial_keystore_password}'", acceptable_exit_codes: [0, 1]
+      expect(old_keystore_result.exit_code).to eq(1)
+
+      old_truststore_result = on default, "keytool -list -keystore /etc/candlepin/certs/truststore -storepass '#{initial_truststore_password}'", acceptable_exit_codes: [0, 1]
+      expect(old_truststore_result.exit_code).to eq(1)
+    end
+  end
+
   context 'with explicit keystore_password and truststore_password' do
     keystore_password = 'MyExplicitKeystorePass1!'
     truststore_password = 'MyExplicitTruststorePass1!'
