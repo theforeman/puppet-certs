@@ -173,6 +173,35 @@ describe 'certs' do
       it { should be_grouped_into 'tomcat' }
     end
 
+    describe x509_certificate('/etc/candlepin/certs/tomcat.crt') do
+      it { should be_certificate }
+      it { should be_valid }
+      it { should have_purpose 'SSL server' }
+      its(:issuer) { should match_without_whitespace(/C = US, ST = North Carolina, L = Raleigh, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:subject) { should match_without_whitespace(/C = US, ST = North Carolina, O = Katello, OU = SomeOrgUnit, CN = #{fqdn}/) }
+      its(:keylength) { should be >= 4096 }
+    end
+
+    describe file('/etc/candlepin/certs/tomcat.crt') do
+      it { should be_file }
+      it { should be_mode 440 }
+      it { should be_owned_by 'root' }
+      it { should be_grouped_into 'tomcat' }
+    end
+
+    describe x509_private_key('/etc/candlepin/certs/tomcat.key') do
+      it { should_not be_encrypted }
+      it { should be_valid }
+      it { should have_matching_certificate('/etc/candlepin/certs/tomcat.crt') }
+    end
+
+    describe file('/etc/candlepin/certs/tomcat.key') do
+      it { should be_file }
+      it { should be_mode 440 }
+      it { should be_owned_by 'root' }
+      it { should be_grouped_into 'tomcat' }
+    end
+
     describe command("keytool -list -keystore /etc/candlepin/certs/keystore -storepass $(cat #{keystore_password_file})") do
       its(:exit_status) { should eq 0 }
       its(:stdout) { should match(/^Keystore type: PKCS12$/i) }
@@ -354,6 +383,14 @@ describe 'certs' do
     end
 
     describe file('/etc/candlepin/certs/candlepin-ca.key') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/candlepin/certs/tomcat.crt') do
+      it { should_not exist }
+    end
+
+    describe file('/etc/candlepin/certs/tomcat.key') do
       it { should_not exist }
     end
   end
