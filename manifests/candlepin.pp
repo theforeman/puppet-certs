@@ -29,6 +29,8 @@ class certs::candlepin (
   $artemis_alias = 'artemis-client'
   $artemis_client_dn = $certs::foreman::client_dn
   $tomcat_cert_name = "${hostname}-tomcat"
+  $tomcat_cert = "${certs::candlepin_certs_dir}/tomcat.crt"
+  $tomcat_key = "${certs::candlepin_certs_dir}/tomcat.key"
 
   cert { $tomcat_cert_name:
     ensure        => present,
@@ -69,6 +71,19 @@ class certs::candlepin (
       require           => $certs::default_ca,
       key_password_file => $ca_key_password_file,
       key_decrypt       => true,
+    }
+
+    certs::keypair { $tomcat_cert_name:
+      source_dir => "${certs::ssl_build_dir}/${hostname}",
+      key_file   => $tomcat_key,
+      key_owner  => $user,
+      key_group  => $group,
+      key_mode   => '0440',
+      cert_file  => $tomcat_cert,
+      cert_owner => $user,
+      cert_group => $group,
+      cert_mode  => '0440',
+      require    => Cert[$tomcat_cert_name],
     }
 
     file { $keystore_password_path:
