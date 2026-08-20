@@ -12,6 +12,6 @@ file { '/etc/pulp':
   mode   => '0770',
 }
 
-package { 'java-17-openjdk-headless':
+package { 'jre-25-headless':
   ensure => installed,
 }
