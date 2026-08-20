@@ -11,3 +11,7 @@ file { '/etc/pulp':
   owner  => 'root',
   mode   => '0770',
 }
+
+package { 'java-17-openjdk-headless':
+  ensure => installed,
+}
