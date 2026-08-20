@@ -17,9 +17,11 @@ define certs::tar_create (
   $foreman_proxy_certificates = "ssl-build/${foreman_proxy_fqdn}/*.crt"
   $foreman_proxy_keys = "ssl-build/${foreman_proxy_fqdn}/*.key"
 
+  # lint:ignore:exec_idempotency
   exec { "generate ${path}":
     cwd     => '/root',
     path    => ['/usr/bin', '/bin'],
     command => "tar -caf ${path} ${ca_certificates} ${foreman_proxy_certificates} ${foreman_proxy_keys}",
   }
+  # lint:endignore
 }

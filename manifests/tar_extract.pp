@@ -13,9 +13,11 @@ define certs::tar_extract (
 ) {
   validate_file_exists($path)
 
+  # lint:ignore:exec_idempotency
   exec { "extract ${path}":
     cwd     => '/root',
     path    => ['/usr/bin', '/bin'],
     command => "tar -xaf ${path}",
   }
+  # lint:endignore
 }
