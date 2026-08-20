@@ -7,10 +7,6 @@ describe 'certs' do
         <<-PUPPET
         $keystore_password_file = '/etc/pki/keystore_password-file'
 
-        package { 'java-17-openjdk-headless':
-          ensure => installed,
-        }
-
         file { $keystore_password_file:
           ensure    => file,
           content   => 'testpassword',
@@ -49,10 +45,6 @@ describe 'certs' do
         let(:manifest) do
           <<-PUPPET
           $keystore_password_file = '/etc/pki/keystore_password-file'
-
-          package { 'java-11-openjdk-headless':
-            ensure => installed,
-          }
 
           file { $keystore_password_file:
             ensure    => file,
@@ -114,10 +106,6 @@ describe 'certs' do
           <<-PUPPET
           $keystore_password_file = '/etc/pki/keystore_password-file'
 
-          package { 'java-11-openjdk-headless':
-            ensure => installed,
-          }
-
           file { $keystore_password_file:
             ensure    => file,
             content   => 'other-password',
@@ -163,10 +151,6 @@ describe 'certs' do
       let(:manifest) do
         <<-PUPPET
         $keystore_password_file = '/etc/pki/keystore_password-file'
-
-        package { 'java-17-openjdk-headless':
-          ensure => installed,
-        }
 
         file { $keystore_password_file:
           ensure    => file,

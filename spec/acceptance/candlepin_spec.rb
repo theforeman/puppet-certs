@@ -37,10 +37,6 @@ describe 'certs' do
           }
         }
 
-        package { 'java-17-openjdk-headless':
-          ensure => installed,
-        }
-
         include certs::candlepin
         PUPPET
       end
@@ -271,10 +267,6 @@ describe 'certs' do
         }
       }
 
-      package { 'java-17-openjdk-headless':
-        ensure => installed,
-      }
-
       include certs::candlepin
       PUPPET
     end
@@ -311,9 +303,6 @@ describe 'certs' do
           creates => $dir,
           path    => ['/bin', '/usr/bin'],
         }
-      }
-      package { 'java-17-openjdk-headless':
-        ensure => installed,
       }
       include certs::candlepin
       EOS
