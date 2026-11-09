@@ -1,5 +1,18 @@
 # Changelog
 
+## [22.0.0](https://github.com/theforeman/puppet-certs/tree/22.0.0) (2026-11-09)
+
+[Full Changelog](https://github.com/theforeman/puppet-certs/compare/21.4.0...22.0.0)
+
+**Breaking changes:**
+
+- Switch from puppet to OpenVox 8 [\#512](https://github.com/theforeman/puppet-certs/pull/512) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Deploy tomcat certs [\#509](https://github.com/theforeman/puppet-certs/pull/509) ([ehelms](https://github.com/ehelms))
+- Add EL 10 support [\#510](https://github.com/theforeman/puppet-certs/pull/510) ([ekohl](https://github.com/ekohl))
+
 ## [21.4.0](https://github.com/theforeman/puppet-certs/tree/21.4.0) (2026-05-11)
 
 [Full Changelog](https://github.com/theforeman/puppet-certs/compare/21.3.0...21.4.0)
