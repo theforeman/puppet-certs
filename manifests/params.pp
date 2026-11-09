@@ -17,4 +17,8 @@ class certs::params {
   $candlepin_truststore             = "${candlepin_certs_dir}/truststore"
   $candlepin_ca_cert                = "${candlepin_certs_dir}/candlepin-ca.crt"
   $candlepin_ca_key                 = "${candlepin_certs_dir}/candlepin-ca.key"
+
+  # Generate and cache the password on the master once
+  # In multi-puppetmaster setups, the user should specify their own
+  $ca_key_password = extlib::cache_data('foreman_cache_data', 'ca_key_password', extlib::random_password(24))
 }
